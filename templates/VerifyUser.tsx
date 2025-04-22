@@ -1,0 +1,250 @@
+import {
+  Body,
+  Button,
+  Column,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Link,
+  Preview,
+  Row,
+  Section,
+  Text,
+} from "@react-email/components";
+import * as React from "react";
+
+export default function VerifyUser({
+  name,
+  verifyUrl,
+}: {
+  name: string;
+  verifyUrl: string;
+}) {
+  return (
+    <Html>
+      <Head />
+      <Body style={main}>
+        <Preview>Confirm your email address</Preview>
+        <Container style={container}>
+          <Section style={logoContainer}>
+            <Img
+              src={`https://res.cloudinary.com/dvm9wuu3f/image/upload/v1741172718/logo_gqnslm.png`}
+              width="70"
+              height="70"
+              alt="Slack"
+            />
+          </Section>
+
+          <Heading style={h1}>Confirm your email address</Heading>
+
+          <Text style={nameText}>Dear {name}</Text>
+
+          <Text style={heroText}>
+            Your account verification link is below - please click below to
+            verify your acount.
+          </Text>
+
+          <Button style={button} href={verifyUrl}>
+            Verify Email
+          </Button>
+
+          <Text style={text}>
+            If you didn't request this email, there's nothing to worry about,
+            you can safely ignore it.
+          </Text>
+
+          <Section>
+            <Row style={footerLogos}>
+              <Column style={{ width: "66%" }}>
+                <Img
+                  src={`https://res.cloudinary.com/dvm9wuu3f/image/upload/v1741172718/logo_gqnslm.png`}
+                  width="70"
+                  height="70"
+                  alt="Slack"
+                />
+              </Column>
+              <Column>
+                <Section>
+                  <Row>
+                    <Column>
+                      <Link href="https://twitter.com">
+                        <Img
+                          src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+                          width="20"
+                          height="20"
+                          alt="Twitter"
+                          style={socialMediaIcon}
+                        />
+                      </Link>
+                    </Column>
+                    <Column>
+                      <Link href="https://facebook.com">
+                        <Img
+                          src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                          width="20"
+                          height="20"
+                          alt="Facebook"
+                          style={socialMediaIcon}
+                        />
+                      </Link>
+                    </Column>
+                    <Column>
+                      <Link href="https://linkedin.com">
+                        <Img
+                          src="https://cdn-icons-png.flaticon.com/512/733/733561.png"
+                          width="20"
+                          height="20"
+                          alt="LinkedIn"
+                          style={socialMediaIcon}
+                        />
+                      </Link>
+                    </Column>
+                  </Row>
+                </Section>
+              </Column>
+            </Row>
+          </Section>
+
+          <Section>
+            <Link
+              style={footerLink}
+              href="https://slackhq.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Our blog
+            </Link>
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <Link
+              style={footerLink}
+              href="https://slack.com/legal"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Policies
+            </Link>
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <Link
+              style={footerLink}
+              href="https://slack.com/help"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Help center
+            </Link>
+            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            <Link
+              style={footerLink}
+              href="https://slack.com/community"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-auth="NotApplicable"
+              data-linkindex="6"
+            >
+              Slack Community
+            </Link>
+            <Text style={footerText}>
+              ©{new Date().getFullYear()} Versatile Synergy. <br />
+              7th Floor, Mostafa Bin Abdullatif, O-14 Chedder Cheese Tower
+              Marasi Drive Business Bay Dubai <br />
+              <br />
+              All rights reserved.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+
+const footerText = {
+  fontSize: "12px",
+  color: "#b7b7b7",
+  lineHeight: "15px",
+  textAlign: "left" as const,
+  marginBottom: "50px",
+};
+
+const button = {
+  backgroundColor: "#386264",
+  color: "#ffffff",
+  padding: "12px 20px",
+  textDecoration: "none",
+  borderRadius: "5px",
+  display: "inline-block",
+};
+
+const footerLink = {
+  color: "#b7b7b7",
+  textDecoration: "underline",
+};
+
+const footerLogos = {
+  marginBottom: "32px",
+  paddingLeft: "8px",
+  paddingRight: "8px",
+  display: "block",
+};
+
+const socialMediaIcon = {
+  display: "inline",
+  marginLeft: "32px",
+};
+
+const main = {
+  backgroundColor: "#ffffff",
+  margin: "0 auto",
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+};
+
+const container = {
+  margin: "0 auto",
+  padding: "0px 20px",
+};
+
+const logoContainer = {
+  marginTop: "32px",
+};
+
+const h1 = {
+  color: "#1d1c1d",
+  fontSize: "25px",
+  fontWeight: "700",
+  margin: "30px 0",
+  padding: "0",
+  lineHeight: "42px",
+};
+
+const heroText = {
+  fontSize: "15px",
+  lineHeight: "28px",
+  marginBottom: "30px",
+};
+const nameText = {
+  fontSize: "15px",
+  lineHeight: "28px",
+  marginBottom: "30px",
+  fontWeight: "bold",
+};
+
+const codeBox = {
+  background: "rgb(245, 244, 245)",
+  borderRadius: "4px",
+  marginBottom: "30px",
+  padding: "40px 10px",
+};
+
+const confirmationCodeText = {
+  fontSize: "30px",
+  textAlign: "center" as const,
+  verticalAlign: "middle",
+};
+
+const text = {
+  color: "#000",
+  fontSize: "14px",
+  lineHeight: "24px",
+};

@@ -1,0 +1,127 @@
+"use client";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import AppSidebar from "@/components/app-sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import { Bell, Mail, UserRound } from "lucide-react";
+import ProfileDropdown from "./ProfileDropdown";
+import { useEffect, useState } from "react";
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const [segmentNames, setSegmentNames] = useState<(string | null)[]>([]);
+
+  const excludedRoutes = [
+    "/",
+    "/auth/login",
+    "/auth/forgot-pin",
+    "/auth/set-pin",
+    "/auth/reset-pin",
+    "/auth/verify-user",
+    "/auth/verify-reset-pin",
+  ];
+
+  useEffect(() => {
+    const fetchSegmentNames = async () => {
+      const names: (string | null)[] = [];
+
+      for (let i = 0; i < pathSegments.length; i++) {
+        const current = pathSegments[i];
+        const prev = pathSegments[i - 1];
+
+        // If the segment is an ID and there's a known parent like 'users' or 'products'
+        if (i > 0 && /^[a-f\d]{24}$/i.test(current)) {
+          try {
+            const res = await fetch(`/api/${prev}/${current}`);
+            const data = await res.json();
+
+            if (prev === "users" && data.user) {
+              names.push(`${data.user.firstName} ${data.user.lastName}`);
+            }
+          } catch (err) {
+            names.push(current); // fallback on error
+          }
+        } else {
+          names.push(current);
+        }
+      }
+
+      setSegmentNames(names);
+    };
+
+    fetchSegmentNames();
+  }, [pathname]);
+
+  // Check if the current route is in the excluded list
+  if (excludedRoutes.includes(pathname)) {
+    return <>{children}</>;
+  }
+
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <div className="flex justify-between w-full me-32">
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {pathSegments.map((segment, index) => {
+                    const href =
+                      "/" + pathSegments.slice(0, index + 1).join("/");
+                    const isLast = index === pathSegments.length - 1;
+                    const name = segmentNames[index] || segment;
+
+                    const formattedSegment = name
+                      .replace(/-/g, " ")
+                      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+                    return (
+                      <BreadcrumbItem key={href}>
+                        {!isLast ? (
+                          <>
+                            <BreadcrumbLink asChild>
+                              <Link href={href}>{formattedSegment}</Link>
+                            </BreadcrumbLink>
+                            <BreadcrumbSeparator />
+                          </>
+                        ) : (
+                          <BreadcrumbPage>{formattedSegment}</BreadcrumbPage>
+                        )}
+                      </BreadcrumbItem>
+                    );
+                  })}
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            <div className="flex gap-6">
+              <Mail />
+              <ProfileDropdown />
+            </div>
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
