@@ -5,6 +5,7 @@ import { serialize } from "cookie";
 import { IncomingForm } from "formidable";
 import type { NextApiRequest } from "next";
 import { Readable } from "stream";
+import { v2 as cloudinary } from "cloudinary";
 
 export async function sendNotification(
   to: string,
@@ -55,6 +56,8 @@ export async function setCookies(
     email: string;
     role: string;
     portfolioId: string;
+    firstName: string;
+    lastName: string;
   },
   cookieName: string
 ) {
@@ -66,10 +69,11 @@ export async function setCookies(
       email: user.email,
       role: user.role,
       portfolioId: user.portfolioId,
+      name: `${user.firstName} ${user.lastName}`,
     },
     jwtSecret,
     {
-      expiresIn: "1h",
+      expiresIn: "1d",
     }
   );
 
@@ -114,4 +118,35 @@ export async function parseForm(
       resolve({ fields, files });
     });
   });
+}
+
+export async function processTiptapImages(html: string): Promise<string> {
+  const imgTagRegex = /<img[^>]+src="([^">]+)"/g;
+  let match: RegExpExecArray | null;
+  const uploads: { original: string; uploaded: string }[] = [];
+
+  // Find all base64 images
+  while ((match = imgTagRegex.exec(html)) !== null) {
+    const src = match[1];
+    if (src.startsWith("data:image")) {
+      try {
+        const result = await cloudinary.uploader.upload(src, {
+          folder: "products/description",
+        });
+        uploads.push({ original: src, uploaded: result.secure_url });
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+      }
+    } else if (src.includes("res.cloudinary.com")) {
+      continue;
+    }
+  }
+
+  // Replace all base64 src with Cloudinary URLs
+  let updatedHtml = html;
+  for (const { original, uploaded } of uploads) {
+    updatedHtml = updatedHtml.replace(original, uploaded);
+  }
+
+  return updatedHtml;
 }

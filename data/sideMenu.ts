@@ -31,11 +31,6 @@ export const sideMenu = [
         url: "/dashboard/investments",
       },
       {
-        title: "Categories",
-        icon: Book,
-        url: "/dashboard/categories",
-      },
-      {
         title: "User Subscriptions",
         icon: CalendarCheck,
         url: "/dashboard/user-subscriptions",
@@ -43,17 +38,17 @@ export const sideMenu = [
           {
             title: "Call Requests",
             icon: Phone,
-            url: "/dashboard/subscriptions/call-requests",
-          },
-          {
-            title: "Subscriptions",
-            icon: CalendarCheck,
-            url: "/dashboard/user-subscriptions/subscriptions",
+            url: "/dashboard/user-subscriptions/call-requests",
           },
           {
             title: "Commitments",
             icon: Shield,
             url: "/dashboard/user-subscriptions/commitments",
+          },
+          {
+            title: "Subscriptions",
+            icon: CalendarCheck,
+            url: "/dashboard/user-subscriptions/subscriptions",
           },
           {
             title: "Capital Calls",
@@ -127,17 +122,17 @@ export const sideMenu = [
           {
             title: "Call Requests",
             icon: Phone,
-            url: "/dashboard/subscriptions/call-requests",
-          },
-          {
-            title: "Subscriptions",
-            icon: CalendarCheck,
-            url: "/dashboard/user-subscriptions/subscriptions",
+            url: "/dashboard/user-subscriptions/call-requests",
           },
           {
             title: "Commitments",
             icon: Shield,
             url: "/dashboard/user-subscriptions/commitments",
+          },
+          {
+            title: "Subscriptions",
+            icon: CalendarCheck,
+            url: "/dashboard/user-subscriptions/subscriptions",
           },
           {
             title: "Capital Calls",

@@ -55,6 +55,22 @@ export async function DELETE(
       return sendErrorResponse(404, "User not found");
     }
 
+    // setTimeout(() => {
+    //   console.log(
+    //     "[ALL SOCKETS]",
+    //     Array.from((globalThis as any).io.sockets.sockets.values()).map(
+    //       (s: any) => s.data
+    //     )
+    //   );
+
+    //   (globalThis as any).io?.emit("new-notification", {
+    //     title: "User deleted",
+    //     message: `none.`,
+    //     type: "user",
+    //     timestamp: new Date(),
+    //   });
+    // }, 1000);
+
     return sendSuccessResponse(200, "User deleted successfully");
   } catch (error) {
     return sendErrorResponse(500, "Internal server error", error);

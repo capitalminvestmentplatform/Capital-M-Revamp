@@ -16,15 +16,18 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Bell, Mail, UserRound } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
 import { useEffect, useState } from "react";
+import { getLoggedInUser } from "@/utils/client";
+import NotificationBell from "./NotificationBell";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const loggedInUser = getLoggedInUser();
+  const email = loggedInUser ? loggedInUser.email : null;
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const [segmentNames, setSegmentNames] = useState<(string | null)[]>([]);
@@ -45,16 +48,31 @@ export default function DashboardLayout({
 
       for (let i = 0; i < pathSegments.length; i++) {
         const current = pathSegments[i];
-        const prev = pathSegments[i - 1];
+        let prev = pathSegments[i - 1];
 
         // If the segment is an ID and there's a known parent like 'users' or 'products'
         if (i > 0 && /^[a-f\d]{24}$/i.test(current)) {
           try {
-            const res = await fetch(`/api/${prev}/${current}`);
-            const data = await res.json();
+            let url = "";
 
-            if (prev === "users" && data.user) {
-              names.push(`${data.user.firstName} ${data.user.lastName}`);
+            if (prev === "investments") url = `/api/products/${current}`;
+            else if (
+              ["subscriptions", "capital-calls", "receipts"].includes(prev)
+            )
+              url = `/api/user-subscriptions/${prev}/${current}`;
+            else url = `/api/${prev}/${current}`;
+
+            const res = await fetch(url);
+            const response = await res.json();
+            if (response.statusCode !== 200) {
+              throw new Error(response.message);
+            }
+            const data = response.data;
+
+            if (prev === "users") {
+              names.push(`${data.firstName} ${data.lastName}`);
+            } else {
+              names.push(data.title);
             }
           } catch (err) {
             names.push(current); // fallback on error
@@ -74,7 +92,6 @@ export default function DashboardLayout({
   if (excludedRoutes.includes(pathname)) {
     return <>{children}</>;
   }
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -115,7 +132,8 @@ export default function DashboardLayout({
               </Breadcrumb>
             </div>
             <div className="flex gap-6">
-              <Mail />
+              <NotificationBell email={email || ""} />
+
               <ProfileDropdown />
             </div>
           </div>

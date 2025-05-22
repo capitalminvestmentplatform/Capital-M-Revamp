@@ -3,33 +3,19 @@ import Notification from "@/models/Notification";
 import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { loggedIn } from "@/utils/server";
 
 export async function GET() {
   try {
     await connectToDatabase();
 
-    const userId = (await cookies()).get("userId")?.value;
-
-    if (!userId) {
-      return sendErrorResponse(400, "User ID is required");
-    }
-
-    // Fetch user to get their email (since notifications use email in 'to' field)
-    const user = (await User.findById(userId).lean()) as {
-      email: string;
-    } | null;
-    if (!user) {
-      return sendErrorResponse(404, "User not found");
-    }
-
-    // Fetch notifications addressed to the user's email
-    const notifications = await Notification.find({ to: user.email })
+    const notifications = await Notification.find()
       .sort({ createdAt: -1 })
       .lean();
 
     return sendSuccessResponse(
       200,
-      "notifications fetched successfully",
+      "Notifications fetched successfully",
       notifications
     );
   } catch (error) {
@@ -52,6 +38,48 @@ export async function POST(req: Request) {
     await newNotification.save();
 
     return sendSuccessResponse(201, "Notification sent successfully");
+  } catch (error) {
+    return sendErrorResponse(500, "Internal server error", error);
+  }
+}
+
+export async function PATCH() {
+  try {
+    await connectToDatabase();
+
+    const decoded: any = await loggedIn();
+
+    const user = await User.findById(decoded.id).lean();
+    console.log(user, "user");
+    if (!user || !decoded.email) {
+      return sendErrorResponse(404, "User not found");
+    }
+
+    await Notification.updateMany(
+      { to: decoded.email, read: false },
+      { $set: { read: true } }
+    );
+
+    return sendSuccessResponse(200, "All notifications marked as read");
+  } catch (error) {
+    return sendErrorResponse(500, "Internal server error", error);
+  }
+}
+export async function DELETE() {
+  try {
+    await connectToDatabase();
+
+    const decoded: any = await loggedIn();
+
+    const user = await User.findById(decoded.id).lean();
+    console.log(user, "user");
+    if (!user || !decoded.email) {
+      return sendErrorResponse(404, "User not found");
+    }
+
+    await Notification.deleteMany({ to: decoded.email });
+
+    return sendSuccessResponse(200, "All notifications deleted successfully");
   } catch (error) {
     return sendErrorResponse(500, "Internal server error", error);
   }

@@ -10,13 +10,14 @@ export function TeamSwitcher() {
     <SidebarMenu>
       <SidebarMenuItem className="flex justify-center">
         <Link href={"/"}>
-          <Image
-            src="/images/company/logo-1.png"
-            alt="brand"
-            width={70}
-            height={70}
-            className="my-7"
-          />
+          <div className="relative w-[70px] h-[70px]">
+            <Image
+              src="/images/company/logo-1.png"
+              alt="brand"
+              fill
+              className="object-contain"
+            />
+          </div>
         </Link>
       </SidebarMenuItem>
     </SidebarMenu>

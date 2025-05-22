@@ -66,6 +66,9 @@ const UserSchema = new Schema(
       type: Date,
       default: null, // Expiry time for the reset token
     },
+    image: {
+      type: String,
+    },
     createdAt: {
       type: Date,
       default: Date.now,

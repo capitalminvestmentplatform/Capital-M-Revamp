@@ -40,7 +40,6 @@ const UsersPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    setLoading(true);
     try {
       const res = await fetch(`/api/users/${id}`, {
         method: "DELETE",
@@ -55,31 +54,44 @@ const UsersPage = () => {
       }
       fetchUsers();
       toast.success("User deleted successfully");
+      return true;
     } catch (error) {
       setError((error as Error).message);
+      return false;
     } finally {
-      setLoading(false);
     }
   };
-
-  if (loading) return <p>Loading users...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
       <div className="my-10 flex justify-end">
         <Link
           href={`${pathname}/add`}
-          className="bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md me-20"
+          className="bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md"
         >
           Add new user
         </Link>
       </div>
-      <DataTable
-        tableCols={["Client code", "Name", "Email", "Phone", "Role", "Actions"]}
-        tableRows={users}
-        handleDelete={handleDelete}
-      />
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">{error}</p>
+      ) : users.length === 0 ? (
+        <p className="text-center text-gray-500">No users available</p>
+      ) : (
+        <DataTable
+          tableCols={[
+            "Client code",
+            "Name",
+            "Email",
+            "Phone",
+            "Role",
+            "Actions",
+          ]}
+          tableRows={users}
+          handleDelete={handleDelete}
+        />
+      )}
     </div>
   );
 };

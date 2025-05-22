@@ -2,6 +2,9 @@ import mongoose, { Schema, Document, models } from "mongoose";
 
 const ProductSchema = new Schema(
   {
+    productId: {
+      type: String,
+    },
     title: { type: String },
     tagline: { type: String },
     description: { type: String },
@@ -10,9 +13,12 @@ const ProductSchema = new Schema(
       ref: "Category",
     },
     status: {
-      type: String,
-      enum: ["active", "inactive"],
-      default: "active",
+      type: Boolean,
+      default: true,
+    },
+    isPublished: {
+      type: Boolean,
+      default: false,
     },
     currentValue: {
       type: Number,
@@ -53,13 +59,25 @@ const ProductSchema = new Schema(
     area: {
       type: String,
     },
+    isDraft: {
+      type: Boolean,
+      default: false,
+    },
 
     // ✅ Media fields
     galleryImages: [{ type: String }], // multiple image URLs
     featuredImage: { type: String }, // main image URL
     video: { type: String }, // video URL or path
     docs: [{ type: String }], // document URLs or file paths
+    terms: { type: String }, // terms and conditions URL or path
+    faqs: [
+      {
+        question: { type: String },
+        answer: { type: String },
+      },
+    ],
   },
+
   { timestamps: true }
 );
 

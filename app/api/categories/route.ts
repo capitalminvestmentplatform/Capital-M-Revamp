@@ -17,3 +17,28 @@ export async function GET() {
     return sendErrorResponse(500, "Internal server error", error);
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    await connectToDatabase();
+
+    const body = await req.json();
+    const { name } = body;
+
+    if (!name) {
+      return sendErrorResponse(400, "Category name is required");
+    }
+
+    const existingCategory = await Category.findOne({ name });
+
+    if (existingCategory) {
+      return sendErrorResponse(409, "Category already exists");
+    }
+
+    const category = await Category.create({ name });
+
+    return sendSuccessResponse(201, "Category created successfully!", category);
+  } catch (error) {
+    return sendErrorResponse(500, "Internal server error", error);
+  }
+}

@@ -9,6 +9,24 @@ interface EmailResponse {
   message: string;
 }
 
+async function fetchPdfAsBase64(pdfUrl: string): Promise<string> {
+  const res = await fetch(pdfUrl);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch PDF from Cloudinary");
+  }
+
+  const arrayBuffer = await res.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  const header = buffer.toString("utf8", 0, 5); // should be '%PDF-'
+  if (!header.startsWith("%PDF-")) {
+    throw new Error("Fetched file is not a valid PDF");
+  }
+
+  return buffer.toString("base64");
+}
+
 export async function POST(req: Request, res: Response): Promise<Response> {
   const { to, subject, content }: EmailRequest = await req.json();
 

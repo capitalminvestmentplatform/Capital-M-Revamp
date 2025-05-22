@@ -1,19 +1,16 @@
 import {
   Body,
   Button,
-  Column,
   Container,
   Head,
-  Heading,
   Html,
   Img,
-  Link,
   Preview,
-  Row,
   Section,
   Text,
 } from "@react-email/components";
 import * as React from "react";
+import Footer from "./Footer";
 
 export default function Welcome({
   name,
@@ -53,117 +50,12 @@ export default function Welcome({
             help!
           </Text>
 
-          <Section>
-            <Row style={footerLogos}>
-              <Column style={{ width: "66%" }}>
-                <Img
-                  src={`https://res.cloudinary.com/dvm9wuu3f/image/upload/v1741172718/logo_gqnslm.png`}
-                  width="70"
-                  height="70"
-                  alt="Versatile Synergy"
-                />
-              </Column>
-              <Column>
-                <Section>
-                  <Row>
-                    <Column>
-                      <Link href="https://twitter.com">
-                        <Img
-                          src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
-                          width="20"
-                          height="20"
-                          alt="Twitter"
-                          style={socialMediaIcon}
-                        />
-                      </Link>
-                    </Column>
-                    <Column>
-                      <Link href="https://facebook.com">
-                        <Img
-                          src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
-                          width="20"
-                          height="20"
-                          alt="Facebook"
-                          style={socialMediaIcon}
-                        />
-                      </Link>
-                    </Column>
-                    <Column>
-                      <Link href="https://linkedin.com">
-                        <Img
-                          src="https://cdn-icons-png.flaticon.com/512/733/733561.png"
-                          width="20"
-                          height="20"
-                          alt="LinkedIn"
-                          style={socialMediaIcon}
-                        />
-                      </Link>
-                    </Column>
-                  </Row>
-                </Section>
-              </Column>
-            </Row>
-          </Section>
-
-          <Section>
-            <Link
-              style={footerLink}
-              href="https://slackhq.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Our blog
-            </Link>
-            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            <Link
-              style={footerLink}
-              href="https://slack.com/legal"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Policies
-            </Link>
-            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            <Link
-              style={footerLink}
-              href="https://slack.com/help"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Help center
-            </Link>
-            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-            <Link
-              style={footerLink}
-              href="https://slack.com/community"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-auth="NotApplicable"
-              data-linkindex="6"
-            >
-              Slack Community
-            </Link>
-            <Text style={footerText}>
-              ©{new Date().getFullYear()} Versatile Synergy. <br />
-              7th Floor, Mostafa Bin Abdullatif, O-14 Chedder Cheese Tower
-              Marasi Drive Business Bay Dubai <br />
-              <br />
-              All rights reserved.
-            </Text>
-          </Section>
+          <Footer />
         </Container>
       </Body>
     </Html>
   );
 }
-
-const footerText = {
-  fontSize: "12px",
-  color: "#b7b7b7",
-  lineHeight: "15px",
-  textAlign: "left" as const,
-  marginBottom: "50px",
-};
 
 const button = {
   backgroundColor: "#386264",
@@ -172,23 +64,6 @@ const button = {
   textDecoration: "none",
   borderRadius: "5px",
   display: "inline-block",
-};
-
-const footerLink = {
-  color: "#b7b7b7",
-  textDecoration: "underline",
-};
-
-const footerLogos = {
-  marginBottom: "32px",
-  paddingLeft: "8px",
-  paddingRight: "8px",
-  display: "block",
-};
-
-const socialMediaIcon = {
-  display: "inline",
-  marginLeft: "32px",
 };
 
 const main = {
@@ -205,15 +80,6 @@ const container = {
 
 const logoContainer = {
   marginTop: "32px",
-};
-
-const h1 = {
-  color: "#1d1c1d",
-  fontSize: "25px",
-  fontWeight: "700",
-  margin: "30px 0",
-  padding: "0",
-  lineHeight: "42px",
 };
 
 const heroText = {

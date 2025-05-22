@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { accountVerificationEmail, welcomeEmail } from "@/templates/emails";
 import { loggedIn, sendNotification } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { socket } from "@/app/socket";
 
 export async function getUsers() {
   try {
@@ -69,11 +70,17 @@ export async function createUser(req: Request) {
     if (password !== confirmPassword) {
       return sendErrorResponse(400, "Passwords do not match");
     }
-
     // Check if the user already exists
-    const existingUser = await User.findOne({
-      $or: [{ email }, { clientCode }],
-    });
+    let existingUser = null;
+    if (role === "Admin") {
+      existingUser = await User.findOne({
+        $or: [{ email }],
+      });
+    } else {
+      existingUser = await User.findOne({
+        $or: [{ email }, { clientCode }],
+      });
+    }
 
     if (existingUser) {
       return sendErrorResponse(409, "User already exists");
@@ -85,12 +92,12 @@ export async function createUser(req: Request) {
     }
     const portfolio = portfolios.find((p: any) => p.name.includes(clientCode));
 
-    if (!portfolio) {
-      return sendErrorResponse(
-        404,
-        "Portfolio against provided client code not found"
-      );
-    }
+    // if (!portfolio) {
+    //   return sendErrorResponse(
+    //     404,
+    //     "Portfolio against provided client code not found"
+    //   );
+    // }
 
     const jwtSecret = process.env.JWT_SECRET as string;
     const verificationToken = jwt.sign(
@@ -111,7 +118,7 @@ export async function createUser(req: Request) {
       password, // Store PIN as plain text (ensure database security measures)
       role,
       verificationToken,
-      portfolioId: portfolio.portfolio_id,
+      portfolioId: portfolio.portfolio_id ? portfolio.portfolio_id : undefined,
     });
 
     await newUser.save();
@@ -132,11 +139,19 @@ export async function createUser(req: Request) {
     });
 
     for (const admin of admins) {
-      await sendNotification(admin.email, {
+      const notify = {
         title: "New User Created",
         message: `A new user ${firstName} ${lastName} has been registered.`,
         type: "info",
-      });
+      };
+      await sendNotification(admin.email, notify);
+
+      setTimeout(() => {
+        (globalThis as any).io?.emit("new-notification", {
+          ...notify,
+          timestamp: new Date(),
+        });
+      }, 1000);
     }
 
     return sendSuccessResponse(201, "User created successfully!", newUser);

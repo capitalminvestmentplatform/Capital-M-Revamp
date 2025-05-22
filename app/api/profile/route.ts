@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { loggedIn } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { uploadFileToCloudinary } from "@/lib/upload";
 
 export async function GET() {
   try {

@@ -1,9 +1,28 @@
 export interface InvestmentProps {
-  title: string;
-  category: string;
+  _id: string;
   status: string;
-  tagline: string;
-  expectedValue: number;
   investmentDuration: number;
+  productId: string;
+  title: string;
+  tagline: string;
+  description: string;
+  category: string;
+  currentValue: number;
+  expectedValue: number;
+  projectedReturn: number; // Added this property
+  minInvestment: number;
+  subscriptionFee: number;
+  managementFee: number;
+  performanceFee: number;
+  activationDate: string;
+  expirationDate: string;
   commitmentDeadline: string;
+  state: string;
+  area: string;
+  terms: string;
+  galleryImages: string[];
+  featuredImage: string;
+  faqs: string[];
+  docs: string[];
+  video: string;
 }

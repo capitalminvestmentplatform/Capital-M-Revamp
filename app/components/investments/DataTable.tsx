@@ -25,7 +25,7 @@ const DataTable: React.FC<DataTableProps> = ({
   handleDelete,
 }) => {
   const loggedInUser = getLoggedInUser();
-  const id = loggedInUser ? loggedInUser.id : null;
+  const role = loggedInUser ? loggedInUser.role : null;
   if (tableRows.length === 0) {
     return <p className="text-center text-gray-500">No data available</p>;
   }
@@ -42,23 +42,34 @@ const DataTable: React.FC<DataTableProps> = ({
       <TableBody>
         {tableRows.map((row, index) => (
           <TableRow key={index}>
-            <TableCell>{row.clientCode ? row.clientCode : "-"}</TableCell>
+            <TableCell>{row.productId ? row.productId : "-"}</TableCell>
             <TableCell>
-              {row.firstName} {row.lastName}
+              <Link
+                href={`/dashboard/investments/${row._id}`}
+                className="text-blue-500 hover:underline"
+              >
+                {row.title ? row.title : "-"}
+              </Link>
             </TableCell>
-            <TableCell>{row.email}</TableCell>
-            <TableCell>{row.phone}</TableCell>
-            <TableCell className="capitalize">{row.role}</TableCell>
+            <TableCell>{row.category ? row.category : "-"}</TableCell>
+            <TableCell>
+              {row.expectedValue
+                ? `AED ${row.expectedValue.toLocaleString()}`
+                : "-"}
+            </TableCell>
+            <TableCell className="capitalize">
+              {row.investmentDuration ? `${row.investmentDuration} years` : "-"}
+            </TableCell>
+            <TableCell>{row.status ? "Active" : "InActive"}</TableCell>
             <TableCell className="flex gap-2">
-              {row._id !== id && (
+              {role === "Admin" && (
                 <>
-                  {" "}
                   <Trash
                     className="cursor-pointer"
                     size={16}
                     onClick={() => handleDelete(row._id)}
                   />{" "}
-                  <Link href={`/dashboard/users/${row._id}`}>
+                  <Link href={`/dashboard/investments/${row._id}/edit`}>
                     <Pencil className="cursor-pointer" size={16} />
                   </Link>
                 </>

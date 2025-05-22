@@ -12,11 +12,12 @@ import Link from "next/link";
 
 import React from "react";
 import { getLoggedInUser } from "@/utils/client";
+import { ConfirmModal } from "@/app/components/modals/ConfirmModal";
 
 interface DataTableProps {
   tableCols: string[]; // Array of column headers
   tableRows: Record<string, any>[]; // Array of objects with dynamic keys
-  handleDelete: (userId: string) => void;
+  handleDelete: (userId: string) => Promise<boolean>;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -52,12 +53,14 @@ const DataTable: React.FC<DataTableProps> = ({
             <TableCell className="flex gap-2">
               {row._id !== id && (
                 <>
-                  {" "}
-                  <Trash
-                    className="cursor-pointer"
-                    size={16}
-                    onClick={() => handleDelete(row._id)}
-                  />{" "}
+                  <ConfirmModal
+                    title="Delete User?"
+                    description="Are you sure you want to delete this user? This action cannot be undone."
+                    onConfirm={() => handleDelete(row._id)}
+                  >
+                    <Trash size={16} className="text-red-600 cursor-pointer" />
+                  </ConfirmModal>
+
                   <Link href={`/dashboard/users/${row._id}`}>
                     <Pencil className="cursor-pointer" size={16} />
                   </Link>

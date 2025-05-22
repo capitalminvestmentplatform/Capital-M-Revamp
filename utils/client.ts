@@ -11,7 +11,59 @@ type TokenPayload = {
   role: string; // optional, adjust as needed
   email: string; // optional, adjust as needed
   portfolioId: number; // optional, adjust as needed
+  name: string;
   // ... other claims if needed
+};
+
+export const convertImageUrlToBase64 = async (
+  url: string
+): Promise<string | null> => {
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    const blob = await res.blob();
+
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Failed to convert image to base64:", error);
+    return null;
+  }
+};
+
+export const uploadFileToCloudinary = async (
+  file: File,
+  folder: string
+): Promise<string | null> => {
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "upload_preset",
+    process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || ""
+  );
+  formData.append("folder", folder);
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+    return data.secure_url;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    return null;
+  }
 };
 
 export const getLoggedInUser = (): TokenPayload | null => {
