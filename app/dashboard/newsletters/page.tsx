@@ -1,0 +1,108 @@
+"use client";
+import { getLoggedInUser, uploadFileToCloudinary } from "@/utils/client";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import DataTable from "./DataTable";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const NewsLetterPage = () => {
+  const pathname = usePathname(); // Get the current path
+
+  const loggedInUser = getLoggedInUser();
+  const role = loggedInUser ? loggedInUser.role : null;
+  const isAdmin = loggedInUser?.role === "Admin";
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [newsletters, setNewsletters] = useState([]);
+
+  useEffect(() => {
+    fetchNewsletters();
+  }, []);
+
+  const fetchNewsletters = async () => {
+    try {
+      const res = await fetch("/api/newsletters");
+
+      const response = await res.json();
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+
+      const newsletters = response.data;
+      setNewsletters(newsletters);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteNewsletter = async (id: string) => {
+    try {
+      const res = await fetch(`/api/newsletters/${id}`, {
+        method: "DELETE",
+        credentials: "include", // Ensure cookies are sent if authentication is needed
+      });
+
+      const response = await res.json();
+
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+      toast.success(response.message);
+      fetchNewsletters();
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const filteredNewsletters =
+    newsletters.length > 0
+      ? newsletters.filter((receipt: any) => {
+          if (isAdmin) return true; // Admin sees all
+          return receipt.email === loggedInUser?.email; // Others see their own
+        })
+      : [];
+
+  const tableCols =
+    role === "Admin"
+      ? ["Subject", "Category", "Investment Title", "Action"]
+      : ["Subject", "Category", "Investment Title"];
+
+  return (
+    <div>
+      <div className="my-10 flex justify-end">
+        {role === "Admin" && (
+          <Link
+            href={`${pathname}/add`}
+            className="bg-primaryBG hover:bg-primaryBG text-white text-sm px-5 py-2 rounded-md lg:me-20"
+          >
+            Add newsletter
+          </Link>
+        )}
+      </div>
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">{error}</p>
+      ) : newsletters.length === 0 ? (
+        <p className="text-center text-gray-500">No Newsletter available</p>
+      ) : (
+        <DataTable
+          tableCols={tableCols}
+          tableRows={filteredNewsletters || []}
+          handleDelete={handleDeleteNewsletter}
+        />
+      )}
+    </div>
+  );
+};
+
+export default NewsLetterPage;

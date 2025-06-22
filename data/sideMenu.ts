@@ -67,31 +67,26 @@ export const sideMenu = [
         icon: StickyNote,
         url: "/dashboard/statements",
       },
-      // {
-      //   title: "Panda Connect",
-      //   icon: Activity,
-      //   url: "/dashboard/panda-connect",
-      // },
-      {
-        title: "Newsletters",
-        icon: Newspaper,
-        url: "/dashboard/newsletters",
-      },
       {
         title: "Distribution Notices",
         icon: Files,
         url: "/dashboard/distribution-notices",
       },
       {
+        title: "Newsletters",
+        icon: Newspaper,
+        url: "/dashboard/newsletters",
+      },
+      {
         title: "KYC",
         icon: BookCheck,
         url: "/dashboard/kyc",
       },
-      {
-        title: "All Documents",
-        icon: FileStack,
-        url: "/dashboard/documents",
-      },
+      // {
+      //   title: "All Documents",
+      //   icon: FileStack,
+      //   url: "/dashboard/documents",
+      // },
       {
         title: "Users",
         icon: Users,
@@ -152,15 +147,25 @@ export const sideMenu = [
         url: "/dashboard/statements",
       },
       {
+        title: "Distribution Notices",
+        icon: Files,
+        url: "/dashboard/distribution-notices",
+      },
+      {
         title: "Newsletters",
         icon: Newspaper,
         url: "/dashboard/newsletters",
       },
       {
-        title: "All Documents",
-        icon: FileStack,
-        url: "/dashboard/documents",
+        title: "KYC",
+        icon: BookCheck,
+        url: "/dashboard/kyc",
       },
+      // {
+      //   title: "All Documents",
+      //   icon: FileStack,
+      //   url: "/dashboard/documents",
+      // },
     ],
   },
 ];

@@ -11,6 +11,130 @@ import CapitalCallSendToClient from "./CapitalCallSendToClient";
 import ReceiptSendToClient from "./ReceiptSendToClient";
 import CallRequestAdmin from "./CallRequestAdmin";
 import SignedSubscriptionSendToClient from "./SignedSubscriptionSendToClient";
+import DistributionNotice from "./DistributionNotice";
+import Statement from "./Statement";
+import KYC from "./KYC";
+import NewsLetter from "./NewsLetter";
+
+export async function newsletterEmail(
+  payload: {
+    name: string;
+    email: string;
+    category: string;
+    investmentTitle: string;
+    subject: string;
+    description: string;
+  },
+  subject: string
+) {
+  const {
+    name,
+    email,
+    category,
+    description,
+    investmentTitle,
+    subject: newsletterTitle,
+  } = payload;
+
+  const emailHtml = await render(
+    React.createElement(NewsLetter, {
+      name,
+      category,
+      investmentTitle,
+      description,
+      newsletterTitle,
+    })
+  );
+
+  return sendEmail(email, subject, emailHtml);
+}
+export async function kycEmail(
+  payload: {
+    name: string;
+    email: string;
+    isAdmin?: boolean;
+  },
+  subject: string
+) {
+  const { name, email, isAdmin } = payload;
+
+  const emailHtml = await render(
+    React.createElement(KYC, {
+      name,
+      isAdmin,
+    })
+  );
+
+  return sendEmail(email, subject, emailHtml);
+}
+export async function statementEmail(
+  payload: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    clientCode: string;
+    month: string;
+    year: number;
+    attachment: {
+      file: string;
+      name: string;
+    };
+  },
+  subject: string
+) {
+  const { firstName, lastName, email, clientCode, month, year, attachment } =
+    payload;
+
+  const name = `${firstName} ${lastName}`;
+  const emailHtml = await render(
+    React.createElement(Statement, {
+      name,
+      clientCode,
+      month,
+      year,
+    })
+  );
+
+  return sendEmail(email, subject, emailHtml, attachment);
+}
+
+export async function distributionNoticeEmail(
+  payload: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    clientCode: string;
+    commitmentName: string;
+    distributionAmount: number;
+    attachment: {
+      file: string;
+      name: string;
+    };
+  },
+  subject: string
+) {
+  const {
+    firstName,
+    lastName,
+    email,
+    clientCode,
+    commitmentName,
+    distributionAmount,
+    attachment,
+  } = payload;
+
+  const name = `${firstName} ${lastName}`;
+  const emailHtml = await render(
+    React.createElement(DistributionNotice, {
+      name,
+      clientCode,
+      commitmentName,
+      distributionAmount,
+    })
+  );
+
+  return sendEmail(email, subject, emailHtml, attachment);
+}
 
 export async function receiptSendToClientEmail(
   payload: {
@@ -369,10 +493,17 @@ async function sendEmail(
 
     const pdf = directUrl;
     const pdfName = attachment?.name;
+    let payload = "";
+    if (attachment?.file) {
+      payload = JSON.stringify({ to, subject, content, pdf, pdfName });
+    } else {
+      payload = JSON.stringify({ to, subject, content });
+    }
+
     const response = await fetch(`http://localhost:3000/api/brevo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ to, subject, content, pdf, pdfName }),
+      body: payload,
     });
 
     if (!response.ok) {

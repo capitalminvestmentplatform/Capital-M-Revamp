@@ -20,9 +20,9 @@ const LoginPage = () => {
   } = useLoginForm();
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="grid lg:grid-cols-10 h-screen w-full">
       {/* Left side panel */}
-      <div className="bg-heroBackground w-4/6 bg-cover bg-center h-full px-16 py-10 flex flex-col justify-between">
+      <div className="bg-heroBackground lg:col-span-7 bg-cover bg-center h-full px-16 py-10 flex flex-col justify-between">
         <Image
           src="/images/company/logo.png"
           alt="brand"
@@ -44,8 +44,11 @@ const LoginPage = () => {
       </div>
 
       {/* Login Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="w-2/6 h-full p-16">
-        <h1 className="text-4xl font-bold mt-10 mb-10">Access Portal</h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="lg:col-span-3 h-full w-full px-16 py-5 lg:py-16"
+      >
+        <h1 className="text-4xl font-bold lg:mt-10 mb-10">Access Portal</h1>
 
         {/* Email Field */}
         <div className="relative mb-7">

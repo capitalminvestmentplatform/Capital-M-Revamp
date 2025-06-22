@@ -44,8 +44,12 @@ const Investment: React.FC<InvestmentEmailProps> = ({
           <Text style={nameText}>Dear {name}</Text>
 
           <Text style={heroText}>
-            We are excited to announce a new investment opportunity{" "}
-            <b>{title}</b>. Log in to your account to view and subscribe.
+            We are excited to announce a new investment opportunity. Log in to
+            your account to view and subscribe.
+          </Text>
+
+          <Text style={text}>
+            Investment Title: <span className="font-bold">{title}</span>
           </Text>
 
           <Text style={text}>

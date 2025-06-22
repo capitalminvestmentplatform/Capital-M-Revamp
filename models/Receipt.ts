@@ -21,12 +21,6 @@ const ReceiptSchema = new Schema(
       ref: "User",
     },
 
-    status: {
-      type: String,
-      enum: ["Created", "In Progress", "Completed"],
-      default: "Created",
-    },
-
     pdf: {
       type: String,
     },

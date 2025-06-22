@@ -36,7 +36,6 @@ export async function PUT(
       {
         send: true,
         pdf,
-        status: "In Progress",
         bankName,
         accountName,
         IBAN,
@@ -52,7 +51,7 @@ export async function PUT(
     }
 
     const notify = {
-      title: "New Capital Call",
+      title: "You've Got a New Capital Call",
       message: `New Capital Call has been sent to you against product: ${title}`,
       type: "info",
     };
@@ -87,7 +86,7 @@ export async function PUT(
         branch,
         attachment: {
           file: pdf,
-          name: `Capital Call - ${monthYear}`,
+          name: `Capital Call - ${monthYear}.pdf`,
         },
       },
       `New Capital Call has been sent to you - Capital M`

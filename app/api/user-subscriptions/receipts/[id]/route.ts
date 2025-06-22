@@ -49,7 +49,7 @@ export async function GET(
       })
       .populate({
         path: "commitmentId",
-        select: "commitmentAmount",
+        select: "commitmentAmount status",
       })
       .lean();
 
@@ -66,7 +66,8 @@ export async function GET(
       clientCode: userId?.clientCode || "",
       phone: userId?.phone || "",
       commitmentAmount: commitmentId?.commitmentAmount || 0,
-      commitmentDeadline: commitmentId?.commitmentDeadline || 0,
+      status: commitmentId?.status || 0,
+      commitmentDeadline: pId?.commitmentDeadline || 0,
       title: pId?.title || "",
       productId: pId?.productId || "",
     };

@@ -24,7 +24,7 @@ const SignedSubscriptionSendToClient: React.FC<
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Signed Subscription received for ${title} - Capital M</Preview>
+        <Preview>Signed Subscription received for {title} - Capital M</Preview>
         <Container style={container}>
           <Section style={logoContainer}>
             <Img
@@ -38,18 +38,12 @@ const SignedSubscriptionSendToClient: React.FC<
           <Text style={nameText}>Dear {username}</Text>
 
           <Text style={text}>
-            <span>{"Investment Details:"}</span>
+            <span>Investment Details:</span>
           </Text>
 
           <Text style={text}>
             Investment Title:{" "}
             <span style={{ fontWeight: "bold" }}>{title}</span>
-          </Text>
-
-          <Text style={text}>
-            <span>
-              To access your subscription, just click the button below:
-            </span>
           </Text>
 
           <Button style={button} href={subscriptionUrl}>

@@ -59,7 +59,7 @@ const ForgotPinPage = () => {
         toast.error(response.message);
         throw new Error(response.message);
       }
-      toast.success("Please check your email");
+      toast.success(response.message);
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -67,8 +67,8 @@ const ForgotPinPage = () => {
     }
   };
   return (
-    <div className="flex h-screen w-full">
-      <div className="bg-heroBackground w-4/6 bg-cover bg-center h-full px-16 py-10 flex flex-col justify-between">
+    <div className="grid lg:grid-cols-10 h-screen w-full">
+      <div className="lg:col-span-7 bg-heroBackground bg-cover bg-center h-full px-16 py-10 flex flex-col justify-between">
         <Image
           src="/images/company/logo.png"
           alt="brand"
@@ -88,7 +88,10 @@ const ForgotPinPage = () => {
           </p>
         </div>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-2/6 h-full p-16">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="lg:col-span-3 h-full w-full px-16 py-5 lg:py-16"
+      >
         <h1 className="text-4xl font-bold mt-10 mb-10">Reset your pin</h1>
         <div className="relative mb-7">
           <Label htmlFor="email">Enter your Email/Client code</Label>

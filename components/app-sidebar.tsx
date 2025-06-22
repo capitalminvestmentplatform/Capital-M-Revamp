@@ -18,7 +18,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
     firstName: string;
     lastName: string;
     email: string;
-    avatar: string;
+    image: string;
   } | null>(null);
 
   const [menu, setMenu] = useState<

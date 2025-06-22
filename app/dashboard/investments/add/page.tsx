@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { fetchCategories } from "../../../../utils/client";
 import { investmentSchema } from "../../../components/investments/InvestmentSchema";
 import { InvestmentForm } from "../../../components/investments/InvestmentForm";
+import { uploadFileToCloudinary } from "@/utils/client";
 
 const AddInvestmentPage = () => {
   const form = useForm({
@@ -58,72 +59,66 @@ const AddInvestmentPage = () => {
       status: isDraft ? false : data.status, // ✅ Auto-set status = false if saving as draft
     };
     try {
-      const formData = new FormData();
       if (isDraft) {
         setLoadingAction("draft");
       } else {
         setLoadingAction("publish");
       }
 
-      // Append all scalar fields
-      const scalarKeys = [
-        "title",
-        "tagline",
-        "description",
-        "investmentType",
-        "expectedValue",
-        "currentValue",
-        "activationDate",
-        "commitmentDeadline",
-        "expirationDate",
-        "projectedReturn",
-        "investmentDuration",
-        "minInvestment",
-        "state",
-        "area",
-        "category",
-        "subscriptionFee",
-        "managementFee",
-        "performanceFee",
-        "terms",
-        "status",
-        "isDraft",
-      ];
-
-      scalarKeys.forEach((key) => {
-        const value = formattedData[key];
-        if (value !== undefined && value !== null) {
-          formData.append(key, value);
-        }
-      });
-
-      // Single files
+      // Upload featured image
       if (formattedData.featuredImage instanceof File) {
-        formData.append("featuredImage", formattedData.featuredImage);
-      }
-      if (formattedData.video instanceof File) {
-        formData.append("video", formattedData.video);
-      }
-
-      // Multiple files
-      ["galleryImages", "docs"].forEach((key) => {
-        const files = formattedData[key] as File[];
-        if (Array.isArray(files)) {
-          files.forEach((file) => {
-            if (file instanceof File) {
-              formData.append(key, file);
-            }
-          });
+        const uploadedUrl = await uploadFileToCloudinary(
+          formattedData.featuredImage,
+          "investments/featured"
+        );
+        if (uploadedUrl) {
+          formattedData.featuredImage = uploadedUrl;
         }
-      });
+      }
 
-      // JSON field
-      formData.append("faqs", JSON.stringify(formattedData.faqs));
+      // Upload video
+      if (formattedData.video instanceof File) {
+        const uploadedUrl = await uploadFileToCloudinary(
+          formattedData.video,
+          "investments/videos"
+        );
+        if (uploadedUrl) {
+          formattedData.video = uploadedUrl;
+        }
+      }
 
-      // 🚀 Submit
+      // Upload gallery images
+      if (Array.isArray(formattedData.galleryImages)) {
+        const galleryUrls = await Promise.all(
+          formattedData.galleryImages.map(async (file: any) =>
+            (typeof window !== "undefined" && file instanceof window.File) ||
+            (file && file.constructor && file.constructor.name === "File")
+              ? await uploadFileToCloudinary(file, "investments/gallery")
+              : file
+          )
+        );
+        formattedData.galleryImages = galleryUrls.filter(Boolean);
+      }
+
+      // Upload docs
+      if (Array.isArray(formattedData.docs)) {
+        const docUrls = await Promise.all(
+          formattedData.docs.map(async (file: any) =>
+            (typeof window !== "undefined" && file instanceof window.File) ||
+            (file && file.constructor && file.constructor.name === "File")
+              ? await uploadFileToCloudinary(file, "investments/docs")
+              : file
+          )
+        );
+        formattedData.docs = docUrls.filter(Boolean);
+      }
+
       const res = await fetch("/api/products", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({
+          ...formattedData,
+          faqs: JSON.stringify(formattedData.faqs),
+        }),
       });
 
       const response = await res.json();

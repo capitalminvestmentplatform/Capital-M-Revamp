@@ -60,19 +60,7 @@ const CapitalCallSendToClient: React.FC<CapitalCallSendToClientEmailProps> = ({
           </Text>
 
           <Text style={text}>
-            <span>
-              {
-                "To subscribe and participate in this opportunity, please click on below button:"
-              }
-            </span>
-          </Text>
-
-          <Button style={button} href={capitalCallUrl}>
-            View
-          </Button>
-
-          <Text style={text}>
-            <span>{"Please find below details of payment due:"}</span>
+            <span>Please find below details of payment due:</span>
           </Text>
 
           <Text style={text}>
@@ -106,6 +94,10 @@ const CapitalCallSendToClient: React.FC<CapitalCallSendToClientEmailProps> = ({
           <Text style={text}>
             Branch: <span style={{ fontWeight: "bold" }}>{branch}</span>
           </Text>
+
+          <Button style={button} href={capitalCallUrl}>
+            View Capital Call
+          </Button>
           <Text style={text}>
             If you have any questions, feel free to reach out. We're here to
             help!

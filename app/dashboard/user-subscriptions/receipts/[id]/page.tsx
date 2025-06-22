@@ -44,8 +44,8 @@ const ReceiptPage = () => {
       const result = await response.json();
 
       if (result.statusCode !== 200) {
-        toast.error(result.message || "Failed to fetch capital call");
-        throw new Error(result.message || "Failed to fetch capital call");
+        toast.error(result.message);
+        throw new Error(result.message);
       }
       const receipt = result.data;
       setReceipt(receipt);
@@ -81,7 +81,7 @@ const ReceiptPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
       }
       setTimeout(() => {
         router.push("/dashboard/user-subscriptions/receipts");
@@ -175,7 +175,7 @@ const ReceiptPage = () => {
 
   return (
     <div className="mt-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap gap-10 items-center justify-between">
         <p className="text-2xl">Receipt</p>
 
         <div className="flex items-center gap-3">
@@ -225,7 +225,7 @@ const ReceiptPage = () => {
         className="mt-10 mb-5"
       />
 
-      <div className="grid grid-cols-2 mb-10">
+      <div className="grid lg:grid-cols-2 mb-10">
         <div>
           <p className="text-xl font-semibold mb-5">{username}</p>
           <p className="text-sm mb-2">
@@ -283,7 +283,7 @@ const ReceiptPage = () => {
         </div>
       </div>
       <hr className="mb-10" />
-      <div className="grid grid-cols-3 mb-10">
+      <div className="grid lg:grid-cols-3 mb-10">
         <div className="">
           <div className="bg-primaryBG px-5 py-2 text-white">
             <p className="text-xl">Customer Detail</p>

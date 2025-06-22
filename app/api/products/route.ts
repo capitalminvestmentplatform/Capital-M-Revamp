@@ -47,99 +47,68 @@ export async function GET() {
     return sendErrorResponse(500, "Internal server error", error);
   }
 }
-
 export async function POST(req: Request) {
   try {
     await connectToDatabase();
     const decoded: any = await loggedIn();
 
-    const { fields, files } = await parseForm(req);
+    const body = await req.json();
 
-    const isDraft = fields.isDraft?.[0] === "true";
-    const status = isDraft ? false : fields.status?.[0] === "true";
+    const {
+      title,
+      tagline,
+      description,
+      category: categoryName,
+      isDraft,
+      status,
+      currentValue,
+      expectedValue,
+      projectedReturn,
+      minInvestment,
+      subscriptionFee,
+      managementFee,
+      performanceFee,
+      activationDate,
+      expirationDate,
+      commitmentDeadline,
+      investmentDuration,
+      state,
+      area,
+      terms,
+      featuredImage,
+      video,
+      galleryImages = [],
+      docs = [],
+      faqs = [],
+    } = body;
 
-    const cleanField = (field: any) => {
-      if (Array.isArray(field)) {
-        const value = field[0];
-        return value === "" ? undefined : value;
-      }
-      return field === "" ? undefined : field;
-    };
+    const finalStatus = isDraft ? false : status;
 
     // 1. Find category
-    const categoryName = cleanField(fields.category);
     const category = await Category.findOne({ name: categoryName });
     if (!category) {
       return sendErrorResponse(404, "Category not found");
     }
 
-    const rawDescription = cleanField(fields.description);
-
-    let cleanedDescription = rawDescription;
-    if (typeof rawDescription === "string") {
-      cleanedDescription = await processTiptapImages(rawDescription);
-    }
-
-    const featuredImage = await uploadFileToCloudinary(
-      files.featuredImage?.[0] || files.featuredImage,
-      "products/featured"
-    );
-
-    // 2. Upload media files
-
-    // ✅ Gallery Images
-    let galleryImages: string[] = [];
-    if (files.galleryImages) {
-      const gallery = Array.isArray(files.galleryImages)
-        ? files.galleryImages
-        : [files.galleryImages];
-
-      const hasValidGallery = gallery.some(
-        (file: any) => file && file.filepath && file.originalFilename
+    // 2. Process description if needed
+    let cleanedDescription = description;
+    if (typeof cleanedDescription === "string") {
+      cleanedDescription = await processTiptapImages(
+        cleanedDescription,
+        "investments/description"
       );
-
-      if (hasValidGallery) {
-        galleryImages = await uploadMultipleFilesToCloudinary(
-          gallery,
-          "products/gallery"
-        );
-      }
     }
 
-    // ✅ Video
-    let video: string | null = null;
-    const rawVideo = files.video?.[0] || files.video;
-    if (rawVideo?.filepath && rawVideo.originalFilename) {
-      video = await uploadFileToCloudinary(rawVideo, "products/videos");
-    }
-
-    // ✅ Docs
-    let docs: string[] = [];
-    if (files.docs) {
-      const docList = Array.isArray(files.docs) ? files.docs : [files.docs];
-
-      const hasValidDocs = docList.some(
-        (file: any) => file && file.filepath && file.originalFilename
-      );
-
-      if (hasValidDocs) {
-        docs = await uploadMultipleFilesToCloudinary(docList, "products/docs");
-      }
-    }
-
-    // ✅ Clean FAQs
-    const faqsRaw = fields.faqs
-      ? JSON.parse(fields.faqs[0] || fields.faqs)
-      : [];
-    const faqs = Array.isArray(faqsRaw)
-      ? faqsRaw.filter((faq) => faq.question?.trim() || faq.answer?.trim())
+    // 3. Clean FAQs
+    const cleanedFaqs = Array.isArray(faqs)
+      ? faqs.filter((faq) => faq.question?.trim() || faq.answer?.trim())
       : [];
 
-    // Generate productId
+    // 4. Generate productId
     const categoryPrefix = categoryName.slice(0, 2).toUpperCase();
     const now = new Date();
-    const year = String(now.getFullYear()).slice(-2); // e.g. "25"
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // e.g. "04"
+    const year = String(now.getFullYear()).slice(-2);
+    const month = String(now.getMonth() + 1).padStart(2, "0");
     const productCount = await Product.countDocuments({});
     const rawCount = productCount + 1;
 
@@ -154,53 +123,52 @@ export async function POST(req: Request) {
 
     const productId = `${categoryPrefix}${year}${month}${paddedCount}`;
 
-    // 3. Create product
+    // 5. Create product
     const newProduct = new Product({
       productId,
-      title: cleanField(fields.title),
-      tagline: cleanField(fields.tagline),
+      title,
+      tagline,
       description: cleanedDescription,
       category: category._id,
       isDraft,
-      isPublished: isDraft ? false : true,
-      status,
-      currentValue: cleanField(fields.currentValue),
-      expectedValue: cleanField(fields.expectedValue),
-      projectedReturn: cleanField(fields.projectedReturn),
-      minInvestment: cleanField(fields.minInvestment),
-      subscriptionFee: cleanField(fields.subscriptionFee),
-      managementFee: cleanField(fields.managementFee),
-      performanceFee: cleanField(fields.performanceFee),
-      activationDate: cleanField(fields.activationDate),
-      expirationDate: cleanField(fields.expirationDate),
-      commitmentDeadline: cleanField(fields.commitmentDeadline),
-      investmentDuration: cleanField(fields.investmentDuration),
-      state: cleanField(fields.state),
-      area: cleanField(fields.area),
-      terms: cleanField(fields.terms),
+      isPublished: !isDraft,
+      status: finalStatus,
+      currentValue,
+      expectedValue,
+      projectedReturn,
+      minInvestment,
+      subscriptionFee,
+      managementFee,
+      performanceFee,
+      activationDate,
+      expirationDate,
+      commitmentDeadline,
+      investmentDuration,
+      state,
+      area,
+      terms,
+      featuredImage: featuredImage || null,
+      video: video || null,
       galleryImages,
-      featuredImage,
-      video,
       docs,
-      faqs,
+      faqs: cleanedFaqs,
     });
 
     await newProduct.save();
 
     const productObject = newProduct.toObject();
-    productObject.category = categoryName;
+    productObject.category = category.name;
 
-    const users = await User.find({
-      email: { $ne: decoded.email },
-    });
+    const users = await User.find({ email: { $ne: decoded.email } });
 
     if (!isDraft) {
       for (const user of users) {
         const notify = {
-          title: "New Investment Opportunity",
+          title: "Ready for Your Next Investment?",
           message: `New investment ${productObject.title} has launched in the system. Check it out.`,
           type: "info",
         };
+
         await sendNotification(user.email, notify);
 
         setTimeout(() => {
@@ -211,7 +179,6 @@ export async function POST(req: Request) {
         }, 1000);
 
         const { firstName, lastName, email } = user;
-        const { title, projectedReturn, investmentDuration } = productObject;
         const investmentId = productObject._id;
 
         await newInvestmentEmail(
@@ -219,9 +186,9 @@ export async function POST(req: Request) {
             firstName,
             lastName,
             email,
-            title,
-            projectedReturn,
-            investmentDuration,
+            title: productObject.title,
+            projectedReturn: productObject.projectedReturn,
+            investmentDuration: productObject.investmentDuration,
             investmentId,
           },
           "New Investment Opportunity - Capital M"
@@ -231,7 +198,7 @@ export async function POST(req: Request) {
 
     return sendSuccessResponse(
       201,
-      "Product added successfully!",
+      "Investment added successfully!",
       productObject
     );
   } catch (error) {

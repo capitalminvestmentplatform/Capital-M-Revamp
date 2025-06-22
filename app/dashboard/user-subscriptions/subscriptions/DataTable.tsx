@@ -34,11 +34,8 @@ interface DataTableProps {
 const DataTable: React.FC<DataTableProps> = ({
   tableCols,
   tableRows,
-  handleDelete,
-  handleAccept,
   createCapitalCall,
   capitalLoadingIndex,
-  acceptLoadingIndex,
 }) => {
   const loggedInUser = getLoggedInUser();
   const role = loggedInUser ? loggedInUser.role : null;
@@ -111,7 +108,7 @@ const DataTable: React.FC<DataTableProps> = ({
               )}
             </TableCell>
             <TableCell>
-              {row.sign ? (
+              {row.signedSubscription ? (
                 <Link
                   href={row.signedSubscription}
                   target="_blank"
@@ -184,15 +181,6 @@ const DataTable: React.FC<DataTableProps> = ({
               <div className="flex gap-2">
                 {role === "Admin" ? (
                   <>
-                    {/* <ConfirmModal
-                      title="Delete Subscription?"
-                      description="Are you sure you want to delete this subscription? This action cannot be undone."
-                      onConfirm={() => handleDelete(row._id)}
-                    >
-                      <button className="bg-white/80 p-1 rounded hover:bg-red-200">
-                        <Trash size={16} className="text-red-600" />
-                      </button>
-                    </ConfirmModal> */}
                     <Link
                       href={`/dashboard/user-subscriptions/subscriptions/${row._id}`}
                       className="bg-white/80 p-1 rounded hover:bg-green-200"
@@ -200,15 +188,6 @@ const DataTable: React.FC<DataTableProps> = ({
                       <Pencil size={16} className="text-primaryBG" />
                     </Link>
                   </>
-                ) : row.status === "Created" ? (
-                  <Button
-                    className={`px-2 py-1 h-7 text-xs text-white rounded-md ${acceptLoadingIndex === index ? "bg-gray-300 text-gray-500" : "bg-primaryBG hover:bg-primaryBG"}`}
-                    disabled={acceptLoadingIndex === index}
-                    type="button"
-                    onClick={() => handleAccept(row._id, index)}
-                  >
-                    {acceptLoadingIndex === index ? "Accepting..." : "Accept"}
-                  </Button>
                 ) : (
                   <Link
                     href={`/dashboard/user-subscriptions/subscriptions/${row._id}`}

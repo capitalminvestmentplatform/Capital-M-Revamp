@@ -11,7 +11,7 @@ export async function GET() {
     const capitalCalls = await CapitalCall.find()
       .populate({
         path: "commitmentId",
-        select: "commitmentAmount", // grab raw fields
+        select: "commitmentAmount status", // grab raw fields
       })
       .populate({
         path: "userId",
@@ -36,12 +36,13 @@ export async function GET() {
         thumbnail: pId?.featuredImage || "",
         productId: pId?.productId || "",
         commitmentAmount: commitmentId?.commitmentAmount || 0,
+        status: commitmentId?.status,
       };
     });
 
     return sendSuccessResponse(
       200,
-      "capital calls fetched successfully!",
+      "Capital calls fetched successfully!",
       formattedCapitalCalls
     );
   } catch (error) {

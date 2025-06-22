@@ -29,7 +29,7 @@ export async function PUT(
 
     return sendSuccessResponse(
       200,
-      "Commitment updated successfully",
+      "Subscription initiated successfully",
       updatedCommitment
     );
   } catch (error) {

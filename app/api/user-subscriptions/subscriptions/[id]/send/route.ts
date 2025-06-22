@@ -31,7 +31,7 @@ export async function PUT(
     const { email, username, productId, title } = await req.json();
 
     const notify = {
-      title: "New Subscription",
+      title: "You've Got a New Subscription",
       message: `New subscription is added for your signature against product: ${title}`,
       type: "info",
     };

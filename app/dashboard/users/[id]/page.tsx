@@ -130,7 +130,7 @@ const EditUserPage = () => {
         throw new Error(response.message);
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(response.message);
       reset(); // Reset form on success
       getUserProfile(); // Refresh user profile data
     } catch (error: any) {
@@ -157,7 +157,7 @@ const EditUserPage = () => {
         throw new Error(response.message);
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(response.message);
       reset(); // Reset form on success
     } catch (error: any) {
       // toast.error(error.message || "Something went wrong");

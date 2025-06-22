@@ -25,7 +25,7 @@ const SubscriptionSendToClient: React.FC<
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Subscription received for ${title} - Capital M</Preview>
+        <Preview>Subscription received for {title} - Capital M</Preview>
         <Container style={container}>
           <Section style={logoContainer}>
             <Img
@@ -58,16 +58,16 @@ const SubscriptionSendToClient: React.FC<
             <span style={{ fontWeight: "bold" }}>{productId}</span>
           </Text>
 
-          <Text style={text}>
+          {/* <Text style={text}>
             <span>To access your receipt, just click the button below:</span>
           </Text>
 
           <Button style={button} href={subscriptionUrl}>
             SIGN SUBSCRIPTION FORM
-          </Button>
+          </Button> */}
 
           <Text style={nameText}>
-            OR follow below instructions for manual subscription:
+            Follow below instructions for manual subscription:
           </Text>
 
           <Text style={text}>

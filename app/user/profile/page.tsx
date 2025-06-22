@@ -144,7 +144,7 @@ const ProfilePage = () => {
         throw new Error(response.message);
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(response.message);
       reset(); // Reset form on success
       getUserProfile(); // Refresh user profile data
     } catch (error: any) {
@@ -171,7 +171,7 @@ const ProfilePage = () => {
         throw new Error(response.message);
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(response.message);
     } catch (error: any) {
       // toast.error(error.message || "Something went wrong");
     } finally {
@@ -276,8 +276,8 @@ const ProfilePage = () => {
                   state={loadingEditProfile}
                 />
               </form>
-              <div className="flex gap-5">
-                <div className="w-1/2">
+              <div className="lg:flex gap-5">
+                <div className="lg:w-1/2">
                   <form onSubmit={handlePinSubmit(onPinSubmit)}>
                     <div
                     //  className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4"
@@ -344,7 +344,7 @@ const ProfilePage = () => {
                     />
                   </form>
                 </div>
-                <div className="w-1/2">
+                <div className="lg:w-1/2">
                   <form>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                       <div className="relative">

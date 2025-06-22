@@ -9,16 +9,16 @@ export function NavUser({
     firstName: string;
     lastName: string;
     email: string;
-    avatar: string;
+    image: string;
   };
 }) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <div className="flex gap-5 my-5">
-          <Avatar className="h-8 w-8 rounded-lg">
-            <AvatarImage src={user.avatar} alt={user.firstName} />
-            <AvatarFallback className="rounded-lg">
+          <Avatar className="h-8 w-8 rounded-full">
+            <AvatarImage src={user.image} alt={user.firstName} />
+            <AvatarFallback className="rounded-full bg-primaryBG text-white">
               {user.firstName?.charAt(0) || ""} {user.lastName?.charAt(0) || ""}
             </AvatarFallback>
           </Avatar>

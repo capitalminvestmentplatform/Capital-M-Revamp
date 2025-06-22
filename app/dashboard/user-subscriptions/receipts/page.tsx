@@ -74,7 +74,7 @@ const ReceiptsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
       }
 
       fetchReceipts();
@@ -98,7 +98,7 @@ const ReceiptsPage = () => {
         toast.error(response.message);
         throw new Error(response.message);
       }
-      toast.success("Receipt deleted successfully");
+      toast.success(response.message);
       return true;
     } catch (error) {
       return false;

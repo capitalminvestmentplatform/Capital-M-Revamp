@@ -104,12 +104,12 @@ const CommitmentsPage = () => {
       const response = await res.json();
 
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Failed to add commitment.");
+        toast.error(response.message);
         return false;
       }
 
       fetchCommitments();
-      toast.success("Commitment added successfully!");
+      toast.success(response.message);
 
       return true;
     } catch (error) {
@@ -133,11 +133,11 @@ const CommitmentsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
         return false;
       }
       fetchCommitments();
-      toast.success("Updated successfully");
+      toast.success(response.message);
       return true;
     } catch (err) {
       toast.error("Something went wrong");
@@ -159,7 +159,7 @@ const CommitmentsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
         return false;
       }
 
@@ -188,11 +188,11 @@ const CommitmentsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 201) {
-        toast.error(response.message || "failed");
+        toast.error(response.message);
         return false;
       }
       handleInitiate(id, index);
-      toast.success("Subscription created successfully");
+      toast.success(response.message);
 
       return true;
     } catch (err) {
@@ -210,14 +210,13 @@ const CommitmentsPage = () => {
       const response = await res.json();
       if (response.statusCode !== 200) {
         toast.error(response.message);
-        throw new Error(response.message);
+        return false;
       }
 
       toast.success(response.message);
       fetchCommitments(); // Refresh the investments list
       return true;
     } catch (error) {
-      setError((error as Error).message);
       return false;
     }
   };

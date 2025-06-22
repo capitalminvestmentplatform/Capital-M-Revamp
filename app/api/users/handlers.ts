@@ -140,7 +140,7 @@ export async function createUser(req: Request) {
 
     for (const admin of admins) {
       const notify = {
-        title: "New User Created",
+        title: "Say Hello to a New Member",
         message: `A new user ${firstName} ${lastName} has been registered.`,
         type: "info",
       };

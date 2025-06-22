@@ -53,7 +53,7 @@ const UsersPage = () => {
         throw new Error(response.message);
       }
       fetchUsers();
-      toast.success("User deleted successfully");
+      toast.success(response.message);
       return true;
     } catch (error) {
       setError((error as Error).message);

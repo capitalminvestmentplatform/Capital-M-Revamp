@@ -57,12 +57,12 @@ export default function NotificationBell({ email }: { email: string }) {
                     notif.read ? "text-gray-500" : "text-gray-800 font-medium"
                   }`}
                 >
-                  <p>
-                    {notif.title}{" "}
-                    <span className="text-xs text-primaryBG font-semibold ml-2">
+                  <div className="flex justify-between">
+                    <p>{notif.title}</p>
+                    <p className="text-primaryBG font-semibold">
                       {getRelativeTime(notif.createdAt)}
-                    </span>
-                  </p>
+                    </p>
+                  </div>
                   <p className="text-xs">{notif.message}</p>
                 </div>
               ))}

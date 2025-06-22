@@ -18,11 +18,6 @@ const CapitalCallSchema = new Schema(
       ref: "User",
     },
 
-    status: {
-      type: String,
-      enum: ["Created", "In Progress", "Completed"],
-      default: "Created",
-    },
     message: {
       type: String,
       default: "",

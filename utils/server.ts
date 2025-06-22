@@ -120,7 +120,10 @@ export async function parseForm(
   });
 }
 
-export async function processTiptapImages(html: string): Promise<string> {
+export async function processTiptapImages(
+  html: string,
+  folder: string
+): Promise<string> {
   const imgTagRegex = /<img[^>]+src="([^">]+)"/g;
   let match: RegExpExecArray | null;
   const uploads: { original: string; uploaded: string }[] = [];
@@ -131,7 +134,7 @@ export async function processTiptapImages(html: string): Promise<string> {
     if (src.startsWith("data:image")) {
       try {
         const result = await cloudinary.uploader.upload(src, {
-          folder: "products/description",
+          folder,
         });
         uploads.push({ original: src, uploaded: result.secure_url });
       } catch (err) {

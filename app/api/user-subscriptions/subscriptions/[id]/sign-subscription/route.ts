@@ -64,7 +64,7 @@ export async function PUT(
         subscriptionId,
         attachment: {
           file: signedSubscription,
-          name: `Confirmation of subscription - ${monthYear}`,
+          name: `Confirmation of subscription - ${monthYear}.pdf`,
         },
       },
       `Confirmation of subscription - Capital M`
@@ -72,7 +72,7 @@ export async function PUT(
 
     return sendSuccessResponse(
       200,
-      "Added signatures successfully",
+      "Signatures added successfully",
       updatedSubscription
     );
   } catch (error) {

@@ -8,7 +8,7 @@ export interface SubscriptionProps {
   createdAt: Date;
   projectedReturn: number;
   commitmentAmount: number;
-  projectDuration: number;
+  investmentDuration: number;
   title: string;
   statements: string;
   terms: string;

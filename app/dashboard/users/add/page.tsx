@@ -61,20 +61,20 @@ const AddUserPage = () => {
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/users", {
+      const res = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const response = await res.json();
 
-      if (!response.ok) {
-        toast.error(result.error || "Failed to add user");
-        throw new Error(result.error || "Failed to add user");
+      if (response.statusCode !== 201) {
+        toast.error(response.message);
+        return false;
       }
 
-      toast.success("User added successfully");
+      toast.success(response.message);
       reset(); // Reset form on success
 
       setTimeout(() => {
@@ -90,9 +90,9 @@ const AddUserPage = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="p-6 bg-white rounded-lg shadow"
+      className="p-3 lg:p-6 bg-white rounded-lg shadow"
     >
-      <div className="grid gap-4">
+      <div className="lg:grid gap-4">
         <div>
           <Label>Username</Label>
           <Input {...register("username")} placeholder="Enter username" />
@@ -193,7 +193,7 @@ const AddUserPage = () => {
           )}
         </div>
 
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <Label>Client Code</Label>
           <Input
             {...register("clientCode")}

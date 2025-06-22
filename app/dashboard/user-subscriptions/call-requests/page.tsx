@@ -79,12 +79,12 @@ const CallRequestsPage = () => {
       const response = await res.json();
 
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Failed to add call requests.");
+        toast.error(response.message);
         return false;
       }
 
       fetchCallRequests();
-      toast.success("Call Request added successfully!");
+      toast.success(response.message);
 
       return true;
     } catch (error) {

@@ -11,7 +11,7 @@ export async function GET() {
     const receipts = await Receipt.find()
       .populate({
         path: "commitmentId",
-        select: "commitmentAmount", // grab raw fields
+        select: "commitmentAmount status", // grab raw fields
       })
       .populate({
         path: "userId",
@@ -36,6 +36,7 @@ export async function GET() {
         thumbnail: pId?.featuredImage || "",
         productId: pId?.productId || "",
         commitmentAmount: commitmentId?.commitmentAmount || 0,
+        status: commitmentId?.status,
       };
     });
 

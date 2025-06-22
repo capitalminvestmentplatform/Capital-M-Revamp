@@ -15,7 +15,7 @@ export async function GET() {
     const subscriptions = await Subscription.find()
       .populate({
         path: "commitmentId",
-        select: "commitmentAmount", // grab raw fields
+        select: "commitmentAmount status", // grab raw fields
       })
       .populate({
         path: "userId",
@@ -40,12 +40,13 @@ export async function GET() {
         thumbnail: pId?.featuredImage || "",
         productId: pId?.productId || "",
         commitmentAmount: commitmentId?.commitmentAmount || 0,
+        status: commitmentId?.status,
       };
     });
 
     return sendSuccessResponse(
       200,
-      "subscriptions fetched successfully!",
+      "Subscriptions fetched successfully!",
       formattedSubscriptions
     );
   } catch (error) {

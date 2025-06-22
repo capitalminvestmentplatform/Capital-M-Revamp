@@ -14,7 +14,7 @@ export async function GET() {
     const commitments = await Commitment.find()
       .populate({
         path: "userId",
-        select: "firstName lastName clientCode email", // grab raw fields
+        select: "_id firstName lastName clientCode email", // grab raw fields
       })
       .populate({
         path: "pId",
@@ -30,6 +30,7 @@ export async function GET() {
       return {
         ...rest,
         username: `${userId?.firstName || ""} ${userId?.lastName || ""}`.trim(),
+        userId: userId?._id || "",
         email: userId?.email || "",
         clientCode: userId?.clientCode || "",
         title: pId?.title || "",
@@ -90,7 +91,7 @@ export async function POST(req: Request) {
     await commitment.save();
 
     const notify = {
-      title: "New Commitment",
+      title: "You've Got a New Commitment",
       message: `New commitment is added for the product: ${title}${decoded.role === "Admin" ? "." : ` by ${firstName} ${lastName}.`}`,
       type: "info",
     };

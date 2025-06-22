@@ -76,13 +76,7 @@ export async function PUT(
   try {
     await connectToDatabase();
 
-    const {
-      fields,
-      files,
-    }: {
-      fields: Record<string, string[] | string>;
-      files: Record<string, any>;
-    } = await parseForm(req);
+    const body = await req.json();
     const productId = params.id;
 
     let product = await Product.findById(productId);
@@ -90,78 +84,87 @@ export async function PUT(
       return sendErrorResponse(404, "Product not found");
     }
 
-    product = product.toObject(); // Convert to plain object
+    // Destructure and clean input
+    const {
+      title,
+      tagline,
+      description,
+      category: categoryName,
+      currentValue,
+      expectedValue,
+      projectedReturn,
+      minInvestment,
+      subscriptionFee,
+      managementFee,
+      performanceFee,
+      activationDate,
+      expirationDate,
+      commitmentDeadline,
+      investmentDuration,
+      state,
+      area,
+      terms,
+      featuredImage,
+      video,
+      galleryImages = [],
+      docs = [],
+      faqs = [],
+      status,
+      isDraft,
+    } = body;
 
-    // Upload media if new files are sent
-    const updatedData: any = {
-      ...Object.fromEntries(
-        Object.entries(fields).map(([key, val]) => [
-          key,
-          Array.isArray(val) ? val[0] : val,
-        ])
-      ),
-    };
-
-    // ✅ Convert category name to ObjectId
-    if (updatedData.category) {
-      const foundCategory = await Category.findOne({
-        name: updatedData.category,
-      });
-      if (!foundCategory) {
+    // Convert category name to ObjectId
+    let categoryId = product.category;
+    if (categoryName) {
+      const categoryDoc = await Category.findOne({ name: categoryName });
+      if (!categoryDoc) {
         return sendErrorResponse(404, "Category not found");
       }
-      updatedData.category = foundCategory._id;
+      categoryId = categoryDoc._id;
     }
 
-    // ✅ Clean base64 images in description
-    if (updatedData.description) {
-      updatedData.description = await processTiptapImages(
-        updatedData.description
+    // Process tiptap description
+    let cleanedDescription = description;
+    if (typeof cleanedDescription === "string") {
+      cleanedDescription = await processTiptapImages(
+        cleanedDescription,
+        "investments/description"
       );
     }
 
-    if (files.featuredImage) {
-      updatedData.featuredImage = await uploadFileToCloudinary(
-        files.featuredImage[0],
-        "products/featured"
-      );
-    }
-
-    if (files.video) {
-      updatedData.video = await uploadFileToCloudinary(
-        files.video[0],
-        "products/videos"
-      );
-    }
-
-    if (files.galleryImages) {
-      const gallery = Array.isArray(files.galleryImages)
-        ? files.galleryImages
-        : [files.galleryImages];
-      const uploadedGalleryImages = await uploadMultipleFilesToCloudinary(
-        gallery,
-        "products/gallery"
-      );
-      updatedData.galleryImages = [
-        ...product.galleryImages,
-        ...uploadedGalleryImages,
-      ];
-    }
-
-    if (files.docs) {
-      const docs = Array.isArray(files.docs) ? files.docs : [files.docs];
-      const uploadedDocs = await uploadMultipleFilesToCloudinary(
-        docs,
-        "products/docs"
-      );
-
-      updatedData.docs = [...product.docs, ...uploadedDocs];
-    }
-    const faqs = fields.faqs
-      ? JSON.parse(Array.isArray(fields.faqs) ? fields.faqs[0] : fields.faqs)
+    // Filter valid FAQs
+    const cleanedFaqs = Array.isArray(faqs)
+      ? faqs.filter((faq) => faq.question?.trim() || faq.answer?.trim())
       : [];
 
-    updatedData.faqs = faqs;
+    // Prepare updated payload
+    const updatedData = {
+      title,
+      tagline,
+      description: cleanedDescription,
+      category: categoryId,
+      currentValue,
+      expectedValue,
+      projectedReturn,
+      minInvestment,
+      subscriptionFee,
+      managementFee,
+      performanceFee,
+      activationDate,
+      expirationDate,
+      commitmentDeadline,
+      investmentDuration,
+      state,
+      area,
+      terms,
+      featuredImage: featuredImage || null,
+      video: video || null,
+      galleryImages,
+      docs,
+      faqs: cleanedFaqs,
+      status,
+      isDraft,
+    };
 
     await Product.findByIdAndUpdate(productId, updatedData, { new: true });
 

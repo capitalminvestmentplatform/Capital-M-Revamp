@@ -47,17 +47,12 @@ const ReceiptSendToClient: React.FC<ReceiptSendToClientEmailProps> = ({
 
           <Text style={heroText}>
             Congratulations on your successful subscription to the investment
-            opportunity {title} through Capital M! We are delighted to have you
-            as a valued investor. This email serves as confirmation of your
-            payment.
+            opportunity through Capital M! We are delighted to have you as a
+            valued investor. This email serves as confirmation of your payment.
           </Text>
 
-          <Button style={button} href={receiptUrl}>
-            View
-          </Button>
-
           <Text style={text}>
-            <span>{"Receipt Details:"}</span>
+            <span>Receipt Details:</span>
           </Text>
 
           <Text style={text}>
@@ -107,6 +102,10 @@ const ReceiptSendToClient: React.FC<ReceiptSendToClientEmailProps> = ({
             your investment journey and look forward to assisting you in
             achieving your financial objectives.
           </Text>
+
+          <Button style={button} href={receiptUrl}>
+            View Receipt
+          </Button>
 
           <Footer />
         </Container>

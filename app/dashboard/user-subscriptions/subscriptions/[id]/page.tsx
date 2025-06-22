@@ -76,8 +76,8 @@ const SubscriptionPage = () => {
 
       if (result.statusCode !== 200) {
         setError(result.message);
-        toast.error(result.message || "Failed to fetch subscription");
-        throw new Error(result.message || "Failed to fetch subscription");
+        toast.error(result.message);
+        throw new Error(result.message);
       }
       const subscription = result.data;
       // loadSignatureCanvas();
@@ -111,7 +111,7 @@ const SubscriptionPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
       }
 
       toast.success(response.message);
@@ -264,13 +264,14 @@ const SubscriptionPage = () => {
     send,
     username,
     email,
+    clientCode,
     phone,
     productId,
     commitmentDeadline,
     createdAt,
     projectedReturn,
     commitmentAmount,
-    projectDuration,
+    investmentDuration,
     title,
     subscriptionFee,
     managementFee,
@@ -287,7 +288,7 @@ const SubscriptionPage = () => {
 
   return (
     <div className="mt-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap gap-10 items-center justify-between">
         <p className="text-2xl">Subscription Agreement</p>
 
         <div className="flex items-center gap-3">
@@ -339,7 +340,7 @@ const SubscriptionPage = () => {
         className="mt-10 mb-5"
       />
 
-      <div className="grid grid-cols-2 mb-10">
+      <div className="grid lg:grid-cols-2 mb-10">
         <div>
           <p className="text-xl font-semibold mb-5">{username}</p>
           <p className="text-sm mb-2">
@@ -347,6 +348,9 @@ const SubscriptionPage = () => {
           </p>
           <p className="text-sm mb-2">
             Email: <span className="font-semibold">{email}</span>{" "}
+          </p>
+          <p className="text-sm mb-2">
+            Client Code: <span className="font-semibold">{clientCode}</span>{" "}
           </p>
         </div>
         <div>
@@ -382,8 +386,8 @@ const SubscriptionPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 mb-10">
-        <div className="col-span-2">
+      <div className="grid lg:grid-cols-3 mb-10">
+        <div className="lg:col-span-2">
           <div className="bg-primaryBG px-5 py-2 text-white">
             <p className="text-xl">Investment Details</p>
           </div>
@@ -408,7 +412,7 @@ const SubscriptionPage = () => {
             </div>
             <div className="flex items-center gap-2 px-5 py-10">
               <p className="">Project Duration:</p>
-              <p className="font-semibold">{projectDuration} years</p>
+              <p className="font-semibold">{investmentDuration} years</p>
             </div>
           </div>
         </div>

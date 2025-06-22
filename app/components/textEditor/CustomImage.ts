@@ -5,6 +5,9 @@ export const CustomImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
+      src: {
+        default: null,
+      },
       width: {
         default: "100%",
         renderHTML: (attributes) => {
@@ -14,7 +17,7 @@ export const CustomImage = Image.extend({
         },
       },
       align: {
-        default: "center", // default alignment
+        default: "center",
         parseHTML: (element) => element.getAttribute("data-align") || "center",
         renderHTML: (attributes) => {
           return {

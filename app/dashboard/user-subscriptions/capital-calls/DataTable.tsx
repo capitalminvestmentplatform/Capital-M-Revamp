@@ -150,12 +150,12 @@ const DataTable: React.FC<DataTableProps> = ({
                   ) : (
                     <Button
                       className={`${
-                        receiptLoadingIndex === index
+                        receiptLoadingIndex === index || !row.send
                           ? "bg-gray-300 text-gray-500"
                           : "bg-primaryBG hover:bg-primaryBG text-white"
                       } font-normal text-xs px-2 py-1 rounded-md h-7`}
                       type="button"
-                      disabled={receiptLoadingIndex === index}
+                      disabled={receiptLoadingIndex === index || !row.send}
                       onClick={() => createReceipt(row._id, index)}
                     >
                       {receiptLoadingIndex === index ? "Creating" : "Create"}

@@ -96,3 +96,26 @@ body {
 .nextjs-toast {
   display: none !important;
 }
+
+td,
+th {
+  white-space: nowrap;
+}
+
+/* globals.css or Tailwind layer */
+.react-select__control {
+  /* @apply rounded-lg border border-input bg-background text-sm shadow-sm min-h-[37px] border-[#e6e6e6]; */
+  font-size: small !important;
+  min-height: 37px !important;
+  border: 1px solid #e6e6e6 !important;
+  border-radius: 0.4rem !important; /* Tailwind's --radius */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.react-select__multi-value {
+  @apply bg-primary/10 text-primary;
+}
+
+.react-select__menu {
+  @apply z-50;
+}

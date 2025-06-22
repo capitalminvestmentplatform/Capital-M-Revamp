@@ -83,7 +83,7 @@ const Home = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-4xl px-4">
             <div className="flex flex-wrap">
-              <div className="lg:w-6/12">
+              <div className="w-1/2 lg:w-6/12">
                 <h5 className="text-lg font-semibold">Address</h5>
                 <p className="mb-5">
                   7th floor, O14 Tower, Al Abraj St, Business Bay Dubai, AE,
@@ -95,7 +95,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="lg:w-6/12">
+              <div className="w-1/2 lg:w-6/12">
                 <h5 className="text-lg font-semibold">About us</h5>
                 <p>Family Investment Office of Mostafa Bin Abdullatif</p>
               </div>

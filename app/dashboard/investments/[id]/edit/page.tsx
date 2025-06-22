@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { fetchCategories } from "@/utils/client";
+import { fetchCategories, uploadFileToCloudinary } from "@/utils/client";
 import { investmentSchema } from "../../../../components/investments/InvestmentSchema";
 import { toast } from "sonner";
 import { InvestmentForm } from "../../../../components/investments/InvestmentForm";
@@ -52,8 +52,8 @@ const EditInvestmentPage = () => {
       const result = await response.json();
 
       if (result.statusCode !== 200) {
-        toast.error(result.message || "Failed to fetch investment");
-        throw new Error(result.message || "Failed to fetch investment");
+        toast.error(result.message);
+        throw new Error(result.message);
       }
 
       const product = result.data;
@@ -97,8 +97,6 @@ const EditInvestmentPage = () => {
         galleryImages: product.galleryImages,
         docs: product.docs,
       });
-
-      console.log("product", product);
     } catch (err: any) {
       toast.error("Failed to fetch investment data.");
       console.error(err);
@@ -114,59 +112,94 @@ const EditInvestmentPage = () => {
   };
 
   const onSubmit = async (data: any, isDraft: boolean = false) => {
-    const formattedData = {
-      ...data,
-      expectedValue: +data.expectedValue,
-      currentValue: +data.currentValue,
-      projectedReturn: +data.projectedReturn,
-      investmentDuration: +data.investmentDuration,
-      minInvestment: +data.minInvestment,
-      subscriptionFee: +data.subscriptionFee,
-      managementFee: +data.managementFee,
-      performanceFee: +data.performanceFee,
-      isDraft,
-      status: isDraft ? false : data.status, // ✅ Auto-set status = false if saving as draft
-    };
     try {
       if (isDraft) {
         setLoadingAction("draft");
       } else {
         setLoadingAction("publish");
       }
-      const formData = new FormData();
 
-      for (const [key, value] of Object.entries(formattedData)) {
-        if (key === "galleryImages" || key === "docs") {
-          (value as File[]).forEach((file: File) => {
-            if (file instanceof File) formData.append(key, file);
-          });
-        } else if (key === "video" || key === "featuredImage") {
-          if (value && value instanceof File) {
-            formData.append(key, value);
-          }
-        } else if (key === "faqs") {
-          formData.append("faqs", JSON.stringify(value));
-        } else {
-          formData.append(key, value as any);
-        }
+      // Upload featuredImage if it's a File
+      let featuredImage = data.featuredImage;
+      if (featuredImage instanceof File) {
+        featuredImage = await uploadFileToCloudinary(
+          featuredImage,
+          "products/featured"
+        );
       }
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
+
+      // Upload video if it's a File
+      let video = data.video;
+      if (video instanceof File) {
+        video = await uploadFileToCloudinary(video, "products/videos");
       }
+
+      // Upload galleryImages if any are Files
+      let galleryImages: string[] = [];
+      if (Array.isArray(data.galleryImages)) {
+        const uploaded = await Promise.all(
+          data.galleryImages.map(async (item: any) =>
+            item instanceof File
+              ? await uploadFileToCloudinary(item, "products/gallery")
+              : item
+          )
+        );
+        galleryImages = uploaded.filter(Boolean);
+      }
+
+      // Upload docs if any are Files
+      let docs: string[] = [];
+      if (Array.isArray(data.docs)) {
+        const uploaded = await Promise.all(
+          data.docs.map(async (item: any) =>
+            item instanceof File
+              ? await uploadFileToCloudinary(item, "products/docs")
+              : item
+          )
+        );
+        docs = uploaded.filter(Boolean);
+      }
+
+      // Format final data
+      const formattedData = {
+        ...data,
+        featuredImage,
+        video,
+        galleryImages,
+        docs,
+        faqs: Array.isArray(data.faqs)
+          ? data.faqs.filter(
+              (faq: any) => faq.question?.trim() || faq.answer?.trim()
+            )
+          : [],
+        expectedValue: +data.expectedValue,
+        currentValue: +data.currentValue,
+        projectedReturn: +data.projectedReturn,
+        investmentDuration: +data.investmentDuration,
+        minInvestment: +data.minInvestment,
+        subscriptionFee: +data.subscriptionFee,
+        managementFee: +data.managementFee,
+        performanceFee: +data.performanceFee,
+        isDraft,
+        status: isDraft ? false : data.status,
+      };
+
+      // Submit via PUT
       const res = await fetch(`/api/products/${id}`, {
         method: "PUT",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedData),
       });
 
       const response = await res.json();
 
       if (!res.ok) throw new Error(response.message);
 
-      toast.success("Investment updated successfully");
+      toast.success(response.message);
 
-      // setTimeout(() => {
-      //   router.push("/dashboard/investments");
-      // }, 2000);
+      setTimeout(() => {
+        router.push("/dashboard/investments");
+      }, 2000);
     } catch (error: any) {
       toast.error(error.message);
     } finally {

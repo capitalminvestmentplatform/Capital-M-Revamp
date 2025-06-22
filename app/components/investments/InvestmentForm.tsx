@@ -69,19 +69,19 @@ export const InvestmentForm = ({
 
   return (
     <form
-      className="grid grid-cols-[70%_30%] gap-4"
+      className="grid lg:grid-cols-[70%_30%] gap-4"
       onSubmit={handleSubmit((data) => onSubmit(data, false), onError)} // ✅ default: not a draft
     >
       <div>
         {/* Main Left Section */}
-        <div className="flex gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <InvestmentField
             name="title"
             label="Title"
             placeholder="Enter title"
             register={register}
             errors={errors}
-            classes="w-1/2"
+            classes="lg:w-1/2"
           />
           <InvestmentField
             name="tagline"
@@ -89,7 +89,7 @@ export const InvestmentForm = ({
             placeholder="Enter tagline"
             register={register}
             errors={errors}
-            classes="w-1/2"
+            classes="lg:w-1/2"
           />
         </div>
 
@@ -103,7 +103,7 @@ export const InvestmentForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-5">
+        <div className="grid lg:grid-cols-3 gap-4 mt-5">
           <InvestmentField
             name="investmentType"
             label="Investment Type"
@@ -129,7 +129,7 @@ export const InvestmentForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-5">
+        <div className="grid lg:grid-cols-3 gap-4 mt-5">
           <InvestmentField
             name="activationDate"
             label="Activation Date"
@@ -158,7 +158,12 @@ export const InvestmentForm = ({
 
         <Tabs defaultValue="thumbnail" className="mx-auto mt-5">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="thumbnail">Thumbnail (1200x675)</TabsTrigger>
+            <TabsTrigger value="thumbnail" className="lg:hidden">
+              Thumbnail
+            </TabsTrigger>
+            <TabsTrigger value="thumbnail" className="hidden lg:block">
+              Thumbnail (1200x675)
+            </TabsTrigger>
             <TabsTrigger value="gallery">Gallery Images</TabsTrigger>
             <TabsTrigger value="video">Video</TabsTrigger>
           </TabsList>
@@ -195,7 +200,12 @@ export const InvestmentForm = ({
         <Tabs defaultValue="document" className="mx-auto mt-5">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="document">Documents</TabsTrigger>
-            <TabsTrigger value="terms">Terms & Conditions</TabsTrigger>
+            <TabsTrigger value="terms" className="lg:hidden">
+              Terms
+            </TabsTrigger>
+            <TabsTrigger value="terms" className="hidden lg:block">
+              Terms & Conditions
+            </TabsTrigger>
             <TabsTrigger value="faqs">FAQs</TabsTrigger>
           </TabsList>
           <TabsContent value="document">
@@ -311,14 +321,14 @@ export const InvestmentForm = ({
           type="number"
         />
 
-        <div className="flex gap-4 mt-5">
+        <div className="flex flex-col lg:flex-row gap-4 mt-5">
           <InvestmentField
             name="state"
             label="State"
             placeholder="Enter State"
             register={register}
             errors={errors}
-            classes="w-1/2"
+            classes="lg:w-1/2"
           />
           <InvestmentField
             name="area"
@@ -326,7 +336,7 @@ export const InvestmentForm = ({
             placeholder="Enter Area"
             register={register}
             errors={errors}
-            classes="w-1/2"
+            classes="lg:w-1/2"
           />
         </div>
 

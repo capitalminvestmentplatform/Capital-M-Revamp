@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import Commitment from "@/models/Commitment";
 import Receipt from "@/models/Receipt";
 import { receiptSendToClientEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
@@ -31,7 +32,6 @@ export async function PUT(
       {
         send: true,
         pdf,
-        status: "In Progress",
       },
       { new: true }
     );
@@ -40,8 +40,15 @@ export async function PUT(
       return sendErrorResponse(404, "Receipt not found");
     }
 
+    // Update associated commitment status to "Completed"
+    if (updatedReceipt.commitmentId) {
+      await Commitment.findByIdAndUpdate(updatedReceipt.commitmentId, {
+        status: "Completed",
+      });
+    }
+
     const notify = {
-      title: "New Receipt",
+      title: "You've Got a New Receipt",
       message: `New Receipt has been sent to you against product: ${title}`,
       type: "info",
     };
@@ -73,7 +80,7 @@ export async function PUT(
         id,
         attachment: {
           file: pdf,
-          name: `Receipt - ${monthYear}`,
+          name: `Receipt - ${monthYear}.pdf`,
         },
       },
       `New Receipt has been sent to you - Capital M`

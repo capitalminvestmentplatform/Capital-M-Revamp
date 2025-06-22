@@ -11,9 +11,6 @@ export async function PUT(
 
     const updatedSubscription = await Subscription.findByIdAndUpdate(
       params.id,
-      {
-        status: "In Progress",
-      },
       { new: true }
     );
 

@@ -121,16 +121,6 @@ const DataTable: React.FC<DataTableProps> = ({
               <div className="flex gap-2">
                 {role === "Admin" && (
                   <>
-                    {/* <ConfirmModal
-                      title="Delete Commitment?"
-                      description="Are you sure you want to delete this commitment? This action cannot be undone."
-                      onConfirm={() => handleDelete(row._id)}
-                    >
-                      <button className="bg-white/80 p-1 rounded hover:bg-red-200">
-                        <Trash size={16} className="text-red-600" />
-                      </button>
-                    </ConfirmModal> */}
-
                     <EditCommitmentModal
                       defaultValues={{
                         _id: row._id,
@@ -139,11 +129,19 @@ const DataTable: React.FC<DataTableProps> = ({
                         message: row.message,
                       }}
                       onUpdate={async (data) => {
-                        console.log("updates");
                         const result = await handleEdit(data);
                         return result;
                       }}
                     />
+                    <ConfirmModal
+                      title="Delete Commitment?"
+                      description="Are you sure you want to delete this commitment? This action cannot be undone."
+                      onConfirm={() => handleDelete(row._id)}
+                    >
+                      <button className="bg-white/80 p-1 rounded hover:bg-red-200">
+                        <Trash size={16} className="text-red-600" />
+                      </button>
+                    </ConfirmModal>
                   </>
                 )}
               </div>

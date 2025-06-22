@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     await callRequest.save();
 
     const notify = {
-      title: "New Call Request",
+      title: "Someone Wants to Connect!",
       message: `New call request is added for the product: ${title} by ${firstName} ${lastName}.`,
       type: "info",
     };

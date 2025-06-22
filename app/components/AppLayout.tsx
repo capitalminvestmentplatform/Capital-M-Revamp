@@ -54,7 +54,7 @@ export default function DashboardLayout({
         if (i > 0 && /^[a-f\d]{24}$/i.test(current)) {
           try {
             let url = "";
-
+            console.log(prev, "prev", current);
             if (prev === "investments") url = `/api/products/${current}`;
             else if (
               ["subscriptions", "capital-calls", "receipts"].includes(prev)
@@ -71,6 +71,8 @@ export default function DashboardLayout({
 
             if (prev === "users") {
               names.push(`${data.firstName} ${data.lastName}`);
+            } else if (prev === "newsletters") {
+              names.push(data.subject);
             } else {
               names.push(data.title);
             }
@@ -87,6 +89,67 @@ export default function DashboardLayout({
 
     fetchSegmentNames();
   }, [pathname]);
+  const getMobilePageTitle = (
+    segments: string[],
+    segmentNames: (string | null)[]
+  ) => {
+    const last = segments[segments.length - 1];
+    const secondLast = segments[segments.length - 2];
+
+    if (
+      segments.length >= 3 &&
+      segments[1] === "investments" &&
+      /^[a-f\d]{24}$/i.test(segments[2])
+    ) {
+      if (last === "edit") {
+        return "Edit Investment";
+      }
+      return "Investment Details";
+    }
+    // Subscription Details
+    if (
+      segments.length >= 3 &&
+      segments[1] === "subscriptions" &&
+      /^[a-f\d]{24}$/i.test(segments[2])
+    ) {
+      return "Subscription Details";
+    }
+
+    // Capital Call Details
+    if (
+      segments.length >= 3 &&
+      segments[1] === "capital-calls" &&
+      /^[a-f\d]{24}$/i.test(segments[2])
+    ) {
+      return "Capital Call Details";
+    }
+
+    // Receipt Details
+    if (
+      segments.length >= 3 &&
+      segments[1] === "receipts" &&
+      /^[a-f\d]{24}$/i.test(segments[2])
+    ) {
+      return "Receipt Details";
+    }
+
+    // User Details
+    if (
+      segments.length >= 3 &&
+      segments[1] === "users" &&
+      /^[a-f\d]{24}$/i.test(segments[2])
+    ) {
+      return "User Details";
+    }
+
+    // Fallback to enriched name if available
+    const lastName = segmentNames[segments.length - 1];
+    return lastName
+      ? lastName
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      : last.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  };
 
   // Check if the current route is in the excluded list
   if (excludedRoutes.includes(pathname)) {
@@ -97,11 +160,11 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex justify-between w-full me-32">
+          <div className="flex items-center justify-between w-full me-8 lg:me-32">
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <Breadcrumb>
+              <Breadcrumb className="hidden sm:flex">
                 <BreadcrumbList>
                   {pathSegments.map((segment, index) => {
                     const href =
@@ -130,6 +193,9 @@ export default function DashboardLayout({
                   })}
                 </BreadcrumbList>
               </Breadcrumb>
+              <div className="sm:hidden text-lg font-medium px-4">
+                {getMobilePageTitle(pathSegments, segmentNames)}
+              </div>
             </div>
             <div className="flex gap-6">
               <NotificationBell email={email || ""} />

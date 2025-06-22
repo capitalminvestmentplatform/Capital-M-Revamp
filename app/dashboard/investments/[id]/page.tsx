@@ -57,8 +57,8 @@ const InvestmentPage = () => {
       const result = await response.json();
 
       if (result.statusCode !== 200) {
-        toast.error(result.message || "Failed to fetch investment");
-        throw new Error(result.message || "Failed to fetch investment");
+        toast.error(result.message);
+        throw new Error(result.message);
       }
       const investment = result.data;
       setInvestment(investment);
@@ -82,11 +82,11 @@ const InvestmentPage = () => {
       const response = await res.json();
 
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Failed to add commitment.");
+        toast.error(response.message);
         return false;
       }
 
-      toast.success("Commitment added successfully!");
+      toast.success(response.message);
 
       return true;
     } catch (error) {
@@ -109,11 +109,11 @@ const InvestmentPage = () => {
       const response = await res.json();
 
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Failed to add call requests.");
+        toast.error(response.message);
         return false;
       }
 
-      toast.success("Call Request added successfully!");
+      toast.success(response.message);
 
       return true;
     } catch (error) {
@@ -175,10 +175,10 @@ const InvestmentPage = () => {
         </div>
       </div>
       {/* Grid Section */}
-      <div className="grid grid-cols-3 gap-6 mt-8">
+      <div className="grid lg:grid-cols-3 gap-6 mt-8">
         {/* Left Column (70%) */}
-        <div className="col-span-2">
-          <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="lg:col-span-2">
+          <div className="bg-white p-3 lg:p-6 rounded-lg shadow-md">
             <Tabs defaultValue="gallery" className="mx-auto">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="gallery">Gallery Images</TabsTrigger>
@@ -188,7 +188,7 @@ const InvestmentPage = () => {
 
               {/* Gallery Images Tab */}
               <TabsContent value="gallery">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid lg:grid-cols-2 gap-4">
                   {galleryImages?.map((image, index) => (
                     <div
                       key={index}
@@ -236,7 +236,7 @@ const InvestmentPage = () => {
               </TabsContent>
             </Tabs>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-3 lg:p-6 rounded-lg shadow-md">
             <Tabs defaultValue="description" className="mx-auto">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="description">Description</TabsTrigger>
@@ -260,7 +260,7 @@ const InvestmentPage = () => {
         </div>
 
         {/* Right Column (30%) */}
-        <div className="col-span-1">
+        <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="!mb-3 bg-gray-200 flex gap-2 justify-between items-center text-sm text-muted-foreground border p-2">
               <p className="text-gray-600">Investment ID:</p>

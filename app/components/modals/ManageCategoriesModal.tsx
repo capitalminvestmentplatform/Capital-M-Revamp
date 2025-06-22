@@ -48,10 +48,13 @@ export const ManageCategoriesModal = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newCategory }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to add category");
+      const response = await res.json();
 
-      toast.success("Category added.");
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+      toast.success(response.message);
       setNewCategory("");
       fetchCategories(); // Refresh categories
     } catch (error: any) {
@@ -74,10 +77,13 @@ export const ManageCategoriesModal = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: editingName }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to edit category");
+      const response = await res.json();
 
-      toast.success("Category updated.");
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+      toast.success(response.message);
       setEditingId(null);
       fetchCategories(); // Refresh categories
     } catch (error: any) {
@@ -92,10 +98,13 @@ export const ManageCategoriesModal = ({
       const res = await fetch(`/api/categories/${id}`, {
         method: "DELETE",
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to delete category");
+      const response = await res.json();
 
-      toast.success("Category deleted.");
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+      toast.success(response.message);
       fetchCategories(); // Refresh categories
       return true;
     } catch (error: any) {

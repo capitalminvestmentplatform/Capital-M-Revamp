@@ -44,9 +44,8 @@ const CommitmentUser: React.FC<CommitmentUserEmailProps> = ({
           <Text style={nameText}>Dear {name}</Text>
 
           <Text style={heroText}>
-            Please be informed that we have received your commitment for
-            <b> {title}</b>. We will process your request and reach out to you
-            soon.
+            Please be informed that we have received your commitment. We will
+            process your request and reach out to you soon.
           </Text>
 
           <Text style={text}>
@@ -61,7 +60,12 @@ const CommitmentUser: React.FC<CommitmentUserEmailProps> = ({
           </Text>
 
           <Text style={text}>
-            Product ID: <span style={{ fontWeight: "bold" }}>{productId}</span>
+            Investment Title:{" "}
+            <span style={{ fontWeight: "bold" }}>{title}</span>
+          </Text>
+          <Text style={text}>
+            Investment ID:{" "}
+            <span style={{ fontWeight: "bold" }}>{productId}</span>
           </Text>
 
           <Button

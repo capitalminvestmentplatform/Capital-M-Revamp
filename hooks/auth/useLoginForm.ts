@@ -35,7 +35,7 @@ export const useLoginForm = () => {
         return;
       }
 
-      toast.success("Login successful");
+      toast.success(res.message);
       setUser(res.data);
 
       setTimeout(() => {

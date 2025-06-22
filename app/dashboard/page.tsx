@@ -97,8 +97,10 @@ const DashboardPage: React.FC = () => {
 
       toast.success(response.message);
       fetchInvestments(); // Refresh the investments list
+      return true;
     } catch (error) {
       setError((error as Error).message);
+      return false;
     }
   };
 

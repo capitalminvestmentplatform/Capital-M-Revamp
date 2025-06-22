@@ -2,6 +2,8 @@ interface EmailRequest {
   to: string;
   subject: string;
   content: string;
+  pdf?: string;
+  pdfName?: string;
 }
 
 interface EmailResponse {
@@ -19,25 +21,19 @@ async function fetchPdfAsBase64(pdfUrl: string): Promise<string> {
   const arrayBuffer = await res.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const header = buffer.toString("utf8", 0, 5); // should be '%PDF-'
-  if (!header.startsWith("%PDF-")) {
-    throw new Error("Fetched file is not a valid PDF");
-  }
-
   return buffer.toString("base64");
 }
 
 export async function POST(req: Request, res: Response): Promise<Response> {
-  const { to, subject, content }: EmailRequest = await req.json();
+  const { to, subject, content, pdf, pdfName }: EmailRequest = await req.json();
 
   try {
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "api-key": process.env.BREVO_API_KEY as string,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    let base64 = "";
+    let payload = "";
+    if (pdf) {
+      base64 = await fetchPdfAsBase64(pdf);
+      console.log("Base64 length:", base64.length);
+      payload = JSON.stringify({
         sender: {
           email: "no-reply@capitalm.ae",
           name: "Capital M Investment Platform",
@@ -45,7 +41,33 @@ export async function POST(req: Request, res: Response): Promise<Response> {
         to: [{ email: to }],
         subject: subject,
         htmlContent: content,
-      }),
+        attachment: pdf
+          ? [
+              {
+                name: pdfName,
+                content: base64,
+              },
+            ]
+          : null,
+      });
+    } else {
+      payload = JSON.stringify({
+        sender: {
+          email: "no-reply@capitalm.ae",
+          name: "Capital M Investment Platform",
+        },
+        to: [{ email: to }],
+        subject: subject,
+        htmlContent: content,
+      });
+    }
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": process.env.BREVO_API_KEY as string,
+        "Content-Type": "application/json",
+      },
+      body: payload,
     });
 
     const data: EmailResponse = await response.json();

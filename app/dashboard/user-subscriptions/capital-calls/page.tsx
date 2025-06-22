@@ -54,7 +54,7 @@ const CapitalCallsPage = () => {
         toast.error(response.message);
         throw new Error(response.message);
       }
-      toast.success("Capital Call deleted successfully");
+      toast.success(response.message);
       return true;
     } catch (error) {
       return false;
@@ -76,14 +76,14 @@ const CapitalCallsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
         throw new Error(response.message);
       }
 
       setTimeout(() => {
         router.push(`/dashboard/user-subscriptions/receipts`);
       }, 1000);
-      toast.success("Receipt created successfully");
+      toast.success(response.message);
     } catch (err) {
       toast.error("Something went wrong");
     }

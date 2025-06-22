@@ -54,7 +54,7 @@ const SubscriptionsPage = () => {
         toast.error(response.message);
         throw new Error(response.message);
       }
-      toast.success("Subscription deleted successfully");
+      toast.success(response.message);
       return true;
     } catch (error) {
       return false;
@@ -83,7 +83,7 @@ const SubscriptionsPage = () => {
       setTimeout(() => {
         router.push(`/dashboard/user-subscriptions/subscriptions/${id}`);
       }, 1000);
-      toast.success("Subscription accepted successfully");
+      toast.success(response.message);
     } catch (err) {
       toast.error("Something went wrong");
     }
@@ -103,14 +103,14 @@ const SubscriptionsPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 201) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
         throw new Error(response.message);
       }
 
       setTimeout(() => {
         router.push(`/dashboard/user-subscriptions/capital-calls`);
       }, 1000);
-      toast.success("Subscription accepted successfully");
+      toast.success(response.message);
     } catch (err) {
       toast.error("Something went wrong");
     }

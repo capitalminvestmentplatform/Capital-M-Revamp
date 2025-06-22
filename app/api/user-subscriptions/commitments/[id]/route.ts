@@ -15,11 +15,17 @@ export async function DELETE(
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const commitment = await Commitment.findByIdAndDelete(params.id);
+    const commitment = await Commitment.findById(params.id);
 
     if (!commitment) {
       return sendErrorResponse(404, "Commitment not found");
     }
+
+    if (commitment.status !== "Pending") {
+      return sendErrorResponse(400, "Only pending commitments can be deleted");
+    }
+
+    await Commitment.findByIdAndDelete(params.id);
 
     return sendSuccessResponse(200, "Commitment deleted successfully");
   } catch (error) {

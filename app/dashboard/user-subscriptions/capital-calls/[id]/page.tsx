@@ -78,8 +78,8 @@ const CapitalCallPage = () => {
       const result = await response.json();
 
       if (result.statusCode !== 200) {
-        toast.error(result.message || "Failed to fetch capital call");
-        throw new Error(result.message || "Failed to fetch capital call");
+        toast.error(result.message);
+        throw new Error(result.message);
       }
       const capitalCall = result.data;
       setCapitalCall(capitalCall);
@@ -124,7 +124,7 @@ const CapitalCallPage = () => {
 
       const response = await res.json();
       if (response.statusCode !== 200) {
-        toast.error(response.message || "Update failed");
+        toast.error(response.message);
       }
       setTimeout(() => {
         router.push("/dashboard/user-subscriptions/capital-calls");
@@ -209,6 +209,7 @@ const CapitalCallPage = () => {
     commitmentAmount,
     title,
     pdf,
+    clientCode,
   } = capitalCall;
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
@@ -217,7 +218,7 @@ const CapitalCallPage = () => {
 
   return (
     <div className="mt-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap gap-10 items-center justify-between">
         <p className="text-2xl">Capital Call</p>
 
         <div className="flex items-center gap-3">
@@ -267,7 +268,7 @@ const CapitalCallPage = () => {
         className="mt-10 mb-5"
       />
 
-      <div className="grid grid-cols-2 mb-10">
+      <div className="grid lg:grid-cols-2 mb-10">
         <div>
           <p className="text-xl font-semibold mb-5">{username}</p>
           <p className="text-sm mb-2">
@@ -278,6 +279,9 @@ const CapitalCallPage = () => {
           </p>
           <p className="text-sm mb-2">
             Email: <span className="font-semibold">{email}</span>{" "}
+          </p>
+          <p className="text-sm mb-2">
+            Client Code: <span className="font-semibold">{clientCode}</span>{" "}
           </p>
           <p className="text-sm mb-2">
             Commitment Amount:{" "}
