@@ -13,12 +13,12 @@ import Category from "@/models/Category";
 // Accepts productId from the route like: /api/products/[id]
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const productId = context.params.id;
+    const { id } = await params;
+    const productId = id;
 
     const product = await Product.findById(productId)
       .populate("category", "name")
@@ -46,12 +46,12 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const productId = params.id;
+    const { id } = await params;
+    const productId = id;
 
     const updated = await Product.findByIdAndUpdate(
       productId,
@@ -71,13 +71,14 @@ export async function DELETE(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
     const body = await req.json();
-    const productId = params.id;
+    const { id } = await params;
+    const productId = id;
 
     let product = await Product.findById(productId);
     if (!product) {

@@ -6,18 +6,18 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
     let updatedCommitment = await Commitment.findByIdAndUpdate(
-      params.id,
+      id,
       {
         status: "In Progress",
       },

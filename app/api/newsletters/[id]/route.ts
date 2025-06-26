@@ -10,9 +10,11 @@ import { NextRequest } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+    const newsletterId = id;
     await connectToDatabase();
 
     const decoded: any = await loggedIn();
@@ -20,7 +22,7 @@ export async function DELETE(
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const newsletter = await NewsLetter.findByIdAndDelete(params.id);
+    const newsletter = await NewsLetter.findByIdAndDelete(newsletterId);
 
     if (!newsletter) {
       return sendErrorResponse(404, "Newsletter not found");
@@ -34,12 +36,12 @@ export async function DELETE(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const newsletterId = params.id;
+    const { id } = await params;
+    const newsletterId = id;
 
     const newsletter = await NewsLetter.findById(newsletterId)
       .populate({
@@ -77,13 +79,14 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
     const { subject, description, category, pId, users } = await req.json();
-    const newsletterId = params.id;
+    const { id } = await params;
+    const newsletterId = id;
 
     const newsletter = await NewsLetter.findById(newsletterId);
     if (!newsletter) {

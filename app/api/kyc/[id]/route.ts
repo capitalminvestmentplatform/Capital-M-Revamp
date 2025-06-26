@@ -5,12 +5,12 @@ import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const { id } = await params;
     const { searchParams } = new URL(req.url);
     const field = searchParams.get("field");
 
@@ -46,12 +46,12 @@ export async function DELETE(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const { id } = await params;
 
     const { nationalId, nationalPassport, residenceProof } = await req.json();
 

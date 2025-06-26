@@ -7,12 +7,12 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = context.params;
+    const { id } = await params;
     if (!ObjectId.isValid(id)) {
       return sendErrorResponse(400, "Invalid user ID");
     }
@@ -31,12 +31,12 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = context.params;
+    const { id } = await params;
 
     if (!ObjectId.isValid(id)) {
       return sendErrorResponse(400, "Invalid user ID");

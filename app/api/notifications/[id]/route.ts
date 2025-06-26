@@ -5,13 +5,14 @@ import { NextRequest } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
+    const notificationId = id;
     const notification = await Notification.findByIdAndUpdate(
-      params.id,
+      notificationId,
       { read: true },
       { new: true }
     );
@@ -32,12 +33,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const notification = await Notification.findByIdAndDelete(params.id);
+    const { id } = await params;
+    const notificationId = id;
+    const notification = await Notification.findByIdAndDelete(notificationId);
 
     if (!notification) {
       return sendErrorResponse(404, "Notification not found");

@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/db";
 import Category from "@/models/Category";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {

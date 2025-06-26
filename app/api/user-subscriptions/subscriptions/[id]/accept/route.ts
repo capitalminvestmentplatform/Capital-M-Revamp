@@ -5,15 +5,14 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const updatedSubscription = await Subscription.findByIdAndUpdate(
-      params.id,
-      { new: true }
-    );
+    const { id } = await params;
+    const updatedSubscription = await Subscription.findByIdAndUpdate(id, {
+      new: true,
+    });
 
     if (!updatedSubscription) {
       return sendErrorResponse(404, "Subscription not found");

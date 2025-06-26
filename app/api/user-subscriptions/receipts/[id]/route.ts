@@ -9,17 +9,17 @@ import { NextRequest } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const receipt = await Receipt.findByIdAndDelete(params.id);
+    const receipt = await Receipt.findByIdAndDelete(id);
 
     if (!receipt) {
       return sendErrorResponse(404, "Receipt not found");
@@ -32,12 +32,12 @@ export async function DELETE(
 }
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const receiptId = params.id;
+    const { id } = await params;
+    const receiptId = id;
 
     const receipt = await Receipt.findById(receiptId)
       .populate({

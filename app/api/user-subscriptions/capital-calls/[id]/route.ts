@@ -8,17 +8,18 @@ import { NextRequest } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
+    const capitalCallId = id;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const capitalCall = await CapitalCall.findByIdAndDelete(params.id);
+    const capitalCall = await CapitalCall.findByIdAndDelete(capitalCallId);
 
     if (!capitalCall) {
       return sendErrorResponse(404, "Capital Call not found");
@@ -31,12 +32,12 @@ export async function DELETE(
 }
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const capitalCallId = params.id;
+    const { id } = await params;
+    const capitalCallId = id;
 
     const capitalCall = await CapitalCall.findById(capitalCallId)
       .populate({

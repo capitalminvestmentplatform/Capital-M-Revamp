@@ -6,17 +6,17 @@ import { NextRequest } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const commitment = await Commitment.findById(params.id);
+    const commitment = await Commitment.findById(id);
 
     if (!commitment) {
       return sendErrorResponse(404, "Commitment not found");
@@ -26,7 +26,7 @@ export async function DELETE(
       return sendErrorResponse(400, "Only pending commitments can be deleted");
     }
 
-    await Commitment.findByIdAndDelete(params.id);
+    await Commitment.findByIdAndDelete(id);
 
     return sendSuccessResponse(200, "Commitment deleted successfully");
   } catch (error) {
@@ -36,11 +36,11 @@ export async function DELETE(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
@@ -50,7 +50,7 @@ export async function PUT(
     const { phone, commitmentAmount, message } = body;
 
     const updatedCommitment = await Commitment.findByIdAndUpdate(
-      params.id,
+      id,
       {
         phone,
         commitmentAmount: +commitmentAmount,

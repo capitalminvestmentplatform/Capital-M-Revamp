@@ -5,12 +5,12 @@ import Statement from "@/models/Statement";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const { id } = await params;
 
     const notice = await Statement.findById(id);
     if (!notice) {

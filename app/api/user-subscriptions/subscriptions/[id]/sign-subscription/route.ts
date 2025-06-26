@@ -9,15 +9,15 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
     const decoded: any = await loggedIn();
     const { sign, username, title, signedSubscription } = await req.json();
-
+    const { id } = await params;
     const updatedSubscription = await Subscription.findByIdAndUpdate(
-      params.id,
+      id,
       {
         sign,
         signedSubscription,
@@ -55,7 +55,7 @@ export async function PUT(
       month: "short",
       year: "numeric",
     }); // e.g., "Dec 2025"
-    const subscriptionId = params.id;
+    const subscriptionId = id;
 
     await signedSubscriptionSendToClientEmail(
       {

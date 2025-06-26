@@ -8,11 +8,11 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
@@ -29,7 +29,7 @@ export async function PUT(
     } = await req.json();
 
     const updatedReceipt = await Receipt.findByIdAndUpdate(
-      params.id,
+      id,
       {
         send: true,
         pdf,
@@ -62,7 +62,6 @@ export async function PUT(
         timestamp: new Date(),
       });
     }, 1000);
-    const id = params.id;
 
     const date = new Date();
     const monthYear = date.toLocaleString("en-US", {

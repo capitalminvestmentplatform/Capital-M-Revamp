@@ -8,17 +8,17 @@ import { NextRequest } from "next/server";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
-    const subscription = await Subscription.findByIdAndDelete(params.id);
+    const subscription = await Subscription.findByIdAndDelete(id);
 
     if (!subscription) {
       return sendErrorResponse(404, "Subscription not found");
@@ -32,12 +32,12 @@ export async function DELETE(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
-    const subscriptionId = params.id;
+    const { id } = await params;
+    const subscriptionId = id;
 
     const subscription = await Subscription.findById(subscriptionId)
       .populate({

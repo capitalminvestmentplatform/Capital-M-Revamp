@@ -7,18 +7,18 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
-
+    const { id } = await params;
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
       return sendErrorResponse(403, "Unauthorized access");
     }
 
     const updatedSubscription = await Subscription.findByIdAndUpdate(
-      params.id,
+      id,
       {
         send: true,
       },
@@ -45,7 +45,7 @@ export async function PUT(
         timestamp: new Date(),
       });
     }, 1000);
-    const subscriptionId = params.id;
+    const subscriptionId = id;
     await subscriptionSendToClientEmail(
       {
         username,

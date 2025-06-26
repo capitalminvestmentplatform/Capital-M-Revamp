@@ -7,10 +7,11 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
+    const { id } = await params;
 
     const decoded: any = await loggedIn();
     if (!decoded || decoded.role !== "Admin") {
@@ -33,7 +34,7 @@ export async function PUT(
     } = await req.json();
 
     const updatedCapitalCall = await CapitalCall.findByIdAndUpdate(
-      params.id,
+      id,
       {
         send: true,
         pdf,
@@ -65,7 +66,7 @@ export async function PUT(
         timestamp: new Date(),
       });
     }, 1000);
-    const capitalCallId = params.id;
+    const capitalCallId = id;
     const date = new Date();
     const monthYear = date.toLocaleString("en-US", {
       month: "short",

@@ -5,12 +5,12 @@ import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const { id } = await params;
 
     const { distributionAmount, distributionDate, description, pdf } =
       await req.json();
@@ -45,12 +45,12 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const { id } = await params;
 
     const notice = await DistributionNotice.findById(id);
     if (!notice) {
