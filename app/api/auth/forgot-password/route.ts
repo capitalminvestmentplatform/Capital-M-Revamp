@@ -3,8 +3,9 @@ import { connectToDatabase } from "@/lib/db";
 import crypto from "crypto";
 import { forgotPasswordEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const { email } = await req.json();

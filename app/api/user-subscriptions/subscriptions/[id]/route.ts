@@ -2,11 +2,12 @@ import { connectToDatabase } from "@/lib/db";
 import Subscription from "@/models/Subscription";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { loggedIn } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 // Accepts subscriptionId from the route like: /api/products/[id]
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

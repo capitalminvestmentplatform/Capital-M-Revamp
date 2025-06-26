@@ -2,12 +2,13 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { setCookies } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
 const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const { email, password } = await req.json();

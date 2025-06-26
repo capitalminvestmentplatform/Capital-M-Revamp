@@ -4,6 +4,7 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { loggedIn } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -23,7 +24,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const { to, title, message, type } = await req.json();

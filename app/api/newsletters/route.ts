@@ -7,6 +7,7 @@ import User from "@/models/User";
 import { newsletterEmail, statementEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { processTiptapImages, sendNotification } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -44,7 +45,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { subject, description, category, pId, users } = await req.json();
 

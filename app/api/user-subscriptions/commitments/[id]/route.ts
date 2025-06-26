@@ -2,9 +2,10 @@ import { connectToDatabase } from "@/lib/db";
 import Commitment from "@/models/Commitment";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { loggedIn } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -34,7 +35,7 @@ export async function DELETE(
 }
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

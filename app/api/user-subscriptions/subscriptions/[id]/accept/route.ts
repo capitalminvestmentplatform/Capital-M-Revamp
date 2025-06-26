@@ -1,9 +1,10 @@
 import { connectToDatabase } from "@/lib/db";
 import Subscription from "@/models/Subscription";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

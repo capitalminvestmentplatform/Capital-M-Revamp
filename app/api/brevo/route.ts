@@ -1,3 +1,5 @@
+import { NextRequest } from "next/server";
+
 interface EmailRequest {
   to: string;
   subject: string;
@@ -24,7 +26,7 @@ async function fetchPdfAsBase64(pdfUrl: string): Promise<string> {
   return buffer.toString("base64");
 }
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: NextRequest): Promise<Response> {
   const { to, subject, content, pdf, pdfName }: EmailRequest = await req.json();
 
   try {

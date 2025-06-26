@@ -5,9 +5,10 @@ import User from "@/models/User";
 import { signedSubscriptionSendToClientEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { loggedIn, parseForm, sendNotification } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

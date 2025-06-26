@@ -9,7 +9,7 @@ import { loggedIn } from "@/utils/server";
 import { NextRequest } from "next/server";
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

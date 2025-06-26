@@ -15,6 +15,7 @@ import {
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { newInvestmentEmail } from "@/templates/emails";
 import User from "@/models/User";
+import { NextRequest } from "next/server";
 
 export const config = {
   api: {
@@ -47,7 +48,7 @@ export async function GET() {
     return sendErrorResponse(500, "Internal server error", error);
   }
 }
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const decoded: any = await loggedIn();

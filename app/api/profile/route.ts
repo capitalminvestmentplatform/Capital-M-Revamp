@@ -3,6 +3,7 @@ import User from "@/models/User";
 import { loggedIn } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { uploadFileToCloudinary } from "@/lib/upload";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -21,7 +22,7 @@ export async function GET() {
   }
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
   try {
     await connectToDatabase();
 

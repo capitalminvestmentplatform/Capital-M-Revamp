@@ -1,6 +1,7 @@
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request, res: Response): Promise<Response> {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
     const { id } = await req.json();
     const response = await fetch(`${process.env.PANDA_API_URI}HoldingsMv2`, {

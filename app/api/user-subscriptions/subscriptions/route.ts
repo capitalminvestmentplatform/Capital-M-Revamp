@@ -6,6 +6,7 @@ import { connectToDatabase } from "@/lib/db";
 import Commitment from "@/models/Commitment";
 import Subscription from "@/models/Subscription";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -54,7 +55,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
 

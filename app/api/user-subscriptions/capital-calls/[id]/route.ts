@@ -2,11 +2,12 @@ import { connectToDatabase } from "@/lib/db";
 import CapitalCall from "@/models/CapitalCall";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { loggedIn } from "@/utils/server";
+import { NextRequest } from "next/server";
 
 // Accepts capitalCallId from the route like: /api/products/[id]
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

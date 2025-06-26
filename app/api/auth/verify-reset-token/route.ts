@@ -4,8 +4,9 @@ import crypto from "crypto";
 import { cookies } from "next/headers";
 import { setCookies } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const { token } = await req.json();

@@ -2,6 +2,7 @@ import { connectToDatabase } from "@/lib/db";
 import CapitalCall from "@/models/CapitalCall";
 import Receipt from "@/models/Receipt";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -50,7 +51,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
 

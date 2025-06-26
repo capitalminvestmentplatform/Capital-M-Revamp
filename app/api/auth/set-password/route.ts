@@ -2,8 +2,9 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import { loggedIn } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
 

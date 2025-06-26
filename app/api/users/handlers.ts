@@ -5,6 +5,7 @@ import { accountVerificationEmail, welcomeEmail } from "@/templates/emails";
 import { loggedIn, sendNotification } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { socket } from "@/app/socket";
+import { NextRequest } from "next/server";
 
 export async function getUsers() {
   try {
@@ -39,7 +40,7 @@ const getPandaConnectPortfolios = async () => {
   }
 };
 
-export async function createUser(req: Request) {
+export async function createUser(req: NextRequest) {
   try {
     await connectToDatabase();
     const {
