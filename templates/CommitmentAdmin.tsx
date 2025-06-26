@@ -87,9 +87,7 @@ const CommitmentAdmin: React.FC<CommitmentAdminEmailProps> = ({
 
           <Button
             style={button}
-            href={
-              "http://localhost:3000/dashboard/user-subscriptions/commitments"
-            }
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/commitments`}
           >
             View Commitment
           </Button>

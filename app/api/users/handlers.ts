@@ -21,7 +21,7 @@ export async function getUsers() {
 const getPandaConnectPortfolios = async () => {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/panda-connect/portfolio`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}api/panda-connect/portfolio`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

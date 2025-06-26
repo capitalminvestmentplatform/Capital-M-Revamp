@@ -162,7 +162,7 @@ export async function receiptSendToClientEmail(
     id,
     attachment,
   } = payload;
-  const receiptUrl = `http://localhost:3000/dashboard/user-subscriptions/receipts/${id}`;
+  const receiptUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/receipts/${id}`;
 
   const emailHtml = await render(
     React.createElement(ReceiptSendToClient, {
@@ -212,7 +212,7 @@ export async function capitalCallSendToClientEmail(
     branch,
     attachment,
   } = payload;
-  const capitalCallUrl = `http://localhost:3000/dashboard/user-subscriptions/capital-calls/${capitalCallId}`;
+  const capitalCallUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/capital-calls/${capitalCallId}`;
 
   const emailHtml = await render(
     React.createElement(CapitalCallSendToClient, {
@@ -243,7 +243,7 @@ export async function subscriptionSendToClientEmail(
   subject: string
 ) {
   const { username, email, title, productId, subscriptionId } = payload;
-  const subscriptionUrl = `http://localhost:3000/dashboard/user-subscriptions/subscriptions/${subscriptionId}`;
+  const subscriptionUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/subscriptions/${subscriptionId}`;
 
   const emailHtml = await render(
     React.createElement(SubscriptionSendToClient, {
@@ -271,7 +271,7 @@ export async function signedSubscriptionSendToClientEmail(
   subject: string
 ) {
   const { username, email, title, attachment, subscriptionId } = payload;
-  const subscriptionUrl = `http://localhost:3000/dashboard/user-subscriptions/subscriptions/${subscriptionId}`;
+  const subscriptionUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/subscriptions/${subscriptionId}`;
 
   const emailHtml = await render(
     React.createElement(SignedSubscriptionSendToClient, {
@@ -394,7 +394,7 @@ export async function accountVerificationEmail(
   subject: string
 ) {
   const { firstName, lastName, email, verificationToken } = payload;
-  const verificationUrl = `http://localhost:3000/auth/verify-user?token=${verificationToken}`;
+  const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}auth/verify-user?token=${verificationToken}`;
   const emailHtml = await render(
     React.createElement(VerifyUser, {
       name: `${firstName} ${lastName}`,
@@ -427,7 +427,7 @@ export async function newInvestmentEmail(
     investmentId,
   } = payload;
 
-  const investmentUrl = `http://localhost:3000/dashboard/investments/${investmentId}`;
+  const investmentUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/investments/${investmentId}`;
   const emailHtml = await render(
     React.createElement(Investment, {
       name: `${firstName} ${lastName}`,
@@ -451,7 +451,7 @@ export async function forgotPasswordEmail(
   subject: string
 ) {
   const { firstName, lastName, email, resetToken } = payload;
-  const resetUrl = `http://localhost:3000/auth/verify-reset-pin?token=${resetToken}`;
+  const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}auth/verify-reset-pin?token=${resetToken}`;
   const emailHtml = await render(
     React.createElement(VerifyUser, {
       name: `${firstName} ${lastName}`,
@@ -471,7 +471,7 @@ export async function welcomeEmail(
   subject: string
 ) {
   const { firstName, lastName, email } = payload;
-  const loginUrl = `http://localhost:3000/auth/login`;
+  const loginUrl = `${process.env.NEXT_PUBLIC_BASE_URL}auth/login`;
   const emailHtml = await render(
     React.createElement(Welcome, { name: `${firstName} ${lastName}`, loginUrl })
   );
@@ -500,11 +500,14 @@ async function sendEmail(
       payload = JSON.stringify({ to, subject, content });
     }
 
-    const response = await fetch(`http://localhost:3000/api/brevo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: payload,
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}api/brevo`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }
+    );
 
     if (!response.ok) {
       console.error("Failed to send email", response);

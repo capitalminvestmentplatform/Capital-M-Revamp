@@ -12,7 +12,7 @@ export async function sendNotification(
   payload: { title: string; message: string; type: string }
 ) {
   try {
-    await fetch(`http://localhost:3000/api/notifications`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}api/notifications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ to, ...payload }),

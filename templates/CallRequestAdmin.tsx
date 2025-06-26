@@ -79,9 +79,7 @@ const CallRequestAdmin: React.FC<CallRequestAdminEmailProps> = ({
 
           <Button
             style={button}
-            href={
-              "http://localhost:3000/dashboard/user-subscriptions/call-requests"
-            }
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}dashboard/user-subscriptions/call-requests`}
           >
             View Call Request
           </Button>
