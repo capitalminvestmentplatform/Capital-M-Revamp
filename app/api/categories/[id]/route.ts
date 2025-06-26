@@ -10,7 +10,7 @@ export async function PUT(
   try {
     await connectToDatabase();
 
-    const { id } = context.params;
+    const { id } = await context.params;
     const body = await req.json();
     const { name } = body;
 
