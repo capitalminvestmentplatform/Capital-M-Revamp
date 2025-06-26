@@ -5,12 +5,12 @@ import { NextRequest } from "next/server";
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectToDatabase();
 
-    const { id } = await context.params;
+    const { id } = await params;
     const body = await req.json();
     const { name } = body;
 
