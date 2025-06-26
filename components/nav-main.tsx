@@ -40,12 +40,11 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const isParentActive =
-            pathname === item.url ||
-            pathname.startsWith(item.url + "/") ||
-            item.items?.some(
+            !item.items?.some(
               (sub) =>
                 pathname === sub.url || pathname.startsWith(sub.url + "/")
-            );
+            ) &&
+            (pathname === item.url || pathname.startsWith(item.url + "/"));
 
           return item.items && item.items.length > 0 ? ( // ✅ Check if sub-items exist
             <Collapsible
@@ -76,9 +75,11 @@ export function NavMain({
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton
                             asChild
-                            className={
-                              isSubActive ? "bg-primaryBG text-white" : ""
-                            }
+                            className={`${
+                              isSubActive
+                                ? "bg-primaryBG text-white hover:bg-primaryBG hover:text-white"
+                                : ""
+                            }`}
                           >
                             <Link href={subItem.url}>
                               {subItem.icon && <subItem.icon />}

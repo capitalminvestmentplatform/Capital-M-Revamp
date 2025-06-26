@@ -160,8 +160,8 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center justify-between w-full me-8 lg:me-32">
-            <div className="flex items-center gap-2 px-4">
+          <div className="flex items-center justify-between w-full me-8">
+            <div className="flex items-center gap-2 px-4 ms-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb className="hidden sm:flex">
@@ -179,12 +179,21 @@ export default function DashboardLayout({
                     return (
                       <BreadcrumbItem key={href}>
                         {!isLast ? (
-                          <>
-                            <BreadcrumbLink asChild>
-                              <Link href={href}>{formattedSegment}</Link>
-                            </BreadcrumbLink>
-                            <BreadcrumbSeparator />
-                          </>
+                          ["user-subscriptions", "user"].includes(segment) ? (
+                            <>
+                              <span className="text-muted-foreground">
+                                {formattedSegment}
+                              </span>
+                              <BreadcrumbSeparator />
+                            </>
+                          ) : (
+                            <>
+                              <BreadcrumbLink asChild>
+                                <Link href={href}>{formattedSegment}</Link>
+                              </BreadcrumbLink>
+                              <BreadcrumbSeparator />
+                            </>
+                          )
                         ) : (
                           <BreadcrumbPage>{formattedSegment}</BreadcrumbPage>
                         )}
@@ -204,7 +213,9 @@ export default function DashboardLayout({
             </div>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+        <div className="container mx-auto max-w-[1440px] px-4">
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -46,28 +46,44 @@ const ProfileDropdown = () => {
       <DropdownMenuTrigger asChild>
         <UserRound className="cursor-pointer" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-56 me-10">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User />
-            <Link href={"/user/profile"}>Profile</Link>
+          <DropdownMenuItem asChild>
+            <Link href={"/user/profile"} className="cursor-pointer">
+              <div className="flex items-center gap-2">
+                <User size={18} />
+                Profile
+              </div>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings />
-            <Link href={"/user/profile"}>Settings</Link>
+          <DropdownMenuItem asChild>
+            <Link href={"/user/settings"} className="cursor-pointer">
+              <div className="flex items-center gap-2">
+                <Settings size={18} />
+                Settings
+              </div>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <File />
-            <Link href={"/dashboard/documents"}>Documents</Link>
+          <DropdownMenuItem asChild>
+            <Link href={"/dashboard/documents"} className="cursor-pointer">
+              <div className="flex items-center gap-2">
+                <File size={18} />
+                Documents
+              </div>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ChartBar />
-            <Link href={"/dashboard/panda-connect"}>Stats</Link>
+          <DropdownMenuItem asChild>
+            <Link href={"/dashboard/panda-connect"} className="cursor-pointer">
+              <div className="flex items-center gap-2">
+                <ChartBar size={18} />
+                Stats
+              </div>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

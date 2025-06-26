@@ -126,7 +126,7 @@ const InvestmentsPage = () => {
         ];
 
   return (
-    <div className="container mx-auto max-w-[1440px] px-4">
+    <div className="">
       <div className="flex flex-wrap gap-4 mb-5 mt-10">
         <div
           className="bg-gray-200 text-gray-700 text-sm px-3 py-1 rounded-md cursor-pointer"
@@ -163,7 +163,7 @@ const InvestmentsPage = () => {
         {role === "Admin" && (
           <Link
             href={`${pathname}/add`}
-            className="bg-primaryBG hover:bg-primaryBG text-white text-sm px-5 py-2 rounded-md lg:me-20"
+            className={`bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md text-sm font-semibold`}
           >
             Add new investment
           </Link>

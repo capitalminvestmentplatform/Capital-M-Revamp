@@ -2,12 +2,30 @@
 
 import { useNotifications } from "@/hooks/useNotifications";
 import { Bell, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function NotificationBell({ email }: { email: string }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const { notifications, unreadCount, markAllRead, markOneRead } =
     useNotifications(email);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function getRelativeTime(date: string | Date): string {
     const now = new Date();
@@ -24,7 +42,7 @@ export default function NotificationBell({ email }: { email: string }) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <Bell
         className="cursor-pointer"
         size={22}

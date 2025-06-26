@@ -58,11 +58,16 @@ const DataTable: React.FC<DataTableProps> = ({
                     description="Are you sure you want to delete this user? This action cannot be undone."
                     onConfirm={() => handleDelete(row._id)}
                   >
-                    <Trash size={16} className="text-red-600 cursor-pointer" />
+                    <button className="bg-white/80 p-1 rounded hover:bg-red-200">
+                      <Trash size={16} className="text-red-600" />
+                    </button>
                   </ConfirmModal>
 
-                  <Link href={`/dashboard/users/${row._id}`}>
-                    <Pencil className="cursor-pointer" size={16} />
+                  <Link
+                    href={`/dashboard/users/${row._id}`}
+                    className="bg-white/80 p-1 rounded hover:bg-green-200"
+                  >
+                    <Pencil size={16} className="text-primaryBG" />
                   </Link>
                 </>
               )}

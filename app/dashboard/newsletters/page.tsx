@@ -82,7 +82,7 @@ const NewsLetterPage = () => {
         {role === "Admin" && (
           <Link
             href={`${pathname}/add`}
-            className="bg-primaryBG hover:bg-primaryBG text-white text-sm px-5 py-2 rounded-md lg:me-20"
+            className={`bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md text-sm font-semibold`}
           >
             Add newsletter
           </Link>

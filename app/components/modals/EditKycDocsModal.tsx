@@ -102,8 +102,8 @@ export const EditKycDocsModal = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="bg-white/80 p-1 rounded hover:bg-primaryBG hover:text-white">
-          <Pencil size={16} />
+        <button className="bg-white/80 p-1 rounded hover:bg-green-200">
+          <Pencil size={16} className="text-primaryBG" />
         </button>
       </DialogTrigger>
 
