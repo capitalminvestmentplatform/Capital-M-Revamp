@@ -12,13 +12,13 @@ import Category from "@/models/Category";
 
 // Accepts productId from the route like: /api/products/[id]
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
   try {
     await connectToDatabase();
 
-    const productId = params.id;
+    const productId = context.params.id;
 
     const product = await Product.findById(productId)
       .populate("category", "name")
