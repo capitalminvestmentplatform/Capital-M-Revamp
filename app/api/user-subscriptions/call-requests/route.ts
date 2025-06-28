@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import CallRequest from "@/models/CallRequest";
 import Product from "@/models/Product";
 import User from "@/models/User";
@@ -87,12 +88,10 @@ export async function POST(req: NextRequest) {
     for (const user of users) {
       await sendNotification(user.email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
 
       const username = `${firstName} ${lastName}`;
       const userEmail = email;

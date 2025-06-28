@@ -16,6 +16,7 @@ import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { newInvestmentEmail } from "@/templates/emails";
 import User from "@/models/User";
 import { NextRequest } from "next/server";
+import { pusherServer } from "@/lib/pusher-server";
 
 export const config = {
   api: {
@@ -172,12 +173,10 @@ export async function POST(req: NextRequest) {
 
         await sendNotification(user.email, notify);
 
-        setTimeout(() => {
-          (globalThis as any).io?.emit("new-notification", {
-            ...notify,
-            timestamp: new Date(),
-          });
-        }, 1000);
+        await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+          ...notify,
+          timestamp: new Date(),
+        });
 
         const { firstName, lastName, email } = user;
         const investmentId = productObject._id;

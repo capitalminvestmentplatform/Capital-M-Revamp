@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 import { accountVerificationEmail, welcomeEmail } from "@/templates/emails";
 import { loggedIn, sendNotification } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
-import { socket } from "@/app/socket";
 import { NextRequest } from "next/server";
+import { pusherServer } from "@/lib/pusher-server";
 
 export async function getUsers() {
   try {
@@ -147,12 +147,10 @@ export async function createUser(req: NextRequest) {
       };
       await sendNotification(admin.email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${admin.email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
     }
 
     return sendSuccessResponse(201, "User created successfully!", newUser);

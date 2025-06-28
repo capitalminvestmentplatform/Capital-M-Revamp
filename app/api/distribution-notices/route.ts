@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import DistributionNotice from "@/models/DistributionNotice";
 import User from "@/models/User";
 import { distributionNoticeEmail } from "@/templates/emails";
@@ -77,12 +78,10 @@ export async function POST(req: NextRequest) {
 
     await sendNotification(email, notify);
 
-    setTimeout(() => {
-      (globalThis as any).io?.emit("new-notification", {
-        ...notify,
-        timestamp: new Date(),
-      });
-    }, 1000);
+    await pusherServer.trigger(`user-${email}`, "new-notification", {
+      ...notify,
+      timestamp: new Date(),
+    });
 
     const date = new Date(distributionDate);
     const formattedDate = date.toISOString().split("T")[0]; // "2025-03-20"

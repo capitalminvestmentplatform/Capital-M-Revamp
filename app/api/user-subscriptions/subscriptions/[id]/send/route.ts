@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import Subscription from "@/models/Subscription";
 import { subscriptionSendToClientEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
@@ -39,12 +40,10 @@ export async function PUT(
 
     await sendNotification(email, notify);
 
-    setTimeout(() => {
-      (globalThis as any).io?.emit("new-notification", {
-        ...notify,
-        timestamp: new Date(),
-      });
-    }, 1000);
+    await pusherServer.trigger(`user-${email}`, "new-notification", {
+      ...notify,
+      timestamp: new Date(),
+    });
     const subscriptionId = id;
     await subscriptionSendToClientEmail(
       {

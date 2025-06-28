@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import { uploadFileToCloudinary } from "@/lib/upload";
 import Subscription from "@/models/Subscription";
 import User from "@/models/User";
@@ -42,12 +43,10 @@ export async function PUT(
     for (const user of users) {
       await sendNotification(user.email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
     }
 
     const date = new Date();

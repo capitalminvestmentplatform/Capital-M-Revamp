@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import Category from "@/models/Category";
 import NewsLetter from "@/models/NewsLetter";
 import Product from "@/models/Product";
@@ -90,12 +91,10 @@ export async function POST(req: NextRequest) {
     for (const user of matchedUsers) {
       await sendNotification(user.email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
 
       await newsletterEmail(
         {

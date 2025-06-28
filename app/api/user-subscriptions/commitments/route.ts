@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import Commitment from "@/models/Commitment";
 import Product from "@/models/Product";
 import User from "@/models/User";
@@ -93,19 +94,17 @@ export async function POST(req: NextRequest) {
 
     const notify = {
       title: "You've Got a New Commitment",
-      message: `New commitment is added for the product: ${title}${decoded.role === "Admin" ? "." : ` by ${firstName} ${lastName}.`}`,
+      message: `from pusher New commitment is added for the product: ${title}${decoded.role === "Admin" ? "." : ` by ${firstName} ${lastName}.`}`,
       type: "info",
     };
 
     if (decoded.role === "Admin") {
       await sendNotification(email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
 
       await commitmentUserEmail(
         {
@@ -127,12 +126,10 @@ export async function POST(req: NextRequest) {
       for (const user of users) {
         await sendNotification(user.email, notify);
 
-        setTimeout(() => {
-          (globalThis as any).io?.emit("new-notification", {
-            ...notify,
-            timestamp: new Date(),
-          });
-        }, 1000);
+        await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+          ...notify,
+          timestamp: new Date(),
+        });
 
         const username = `${firstName} ${lastName}`;
         const userEmail = email;

@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import KYC from "@/models/KYC";
 import User from "@/models/User";
 import { kycEmail } from "@/templates/emails";
@@ -72,12 +73,10 @@ export async function POST(req: NextRequest) {
     if (decoded.role === "Admin") {
       await sendNotification(email, notify);
 
-      setTimeout(() => {
-        (globalThis as any).io?.emit("new-notification", {
-          ...notify,
-          timestamp: new Date(),
-        });
-      }, 1000);
+      await pusherServer.trigger(`user-${email}`, "new-notification", {
+        ...notify,
+        timestamp: new Date(),
+      });
       await kycEmail(
         {
           name,
@@ -94,12 +93,10 @@ export async function POST(req: NextRequest) {
       for (const user of users) {
         await sendNotification(user.email, notify);
 
-        setTimeout(() => {
-          (globalThis as any).io?.emit("new-notification", {
-            ...notify,
-            timestamp: new Date(),
-          });
-        }, 1000);
+        await pusherServer.trigger(`user-${user.email}`, "new-notification", {
+          ...notify,
+          timestamp: new Date(),
+        });
 
         await kycEmail(
           {

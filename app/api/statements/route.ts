@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import Statement from "@/models/Statement";
 import User from "@/models/User";
 import { statementEmail } from "@/templates/emails";
@@ -68,12 +69,10 @@ export async function POST(req: NextRequest) {
 
     await sendNotification(email, notify);
 
-    setTimeout(() => {
-      (globalThis as any).io?.emit("new-notification", {
-        ...notify,
-        timestamp: new Date(),
-      });
-    }, 1000);
+    await pusherServer.trigger(`user-${email}`, "new-notification", {
+      ...notify,
+      timestamp: new Date(),
+    });
 
     const date = new Date();
     const formattedDate = date.toLocaleString("en-US", {

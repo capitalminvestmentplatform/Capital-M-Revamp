@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher-server";
 import Commitment from "@/models/Commitment";
 import Receipt from "@/models/Receipt";
 import { receiptSendToClientEmail } from "@/templates/emails";
@@ -56,12 +57,10 @@ export async function PUT(
 
     await sendNotification(email, notify);
 
-    setTimeout(() => {
-      (globalThis as any).io?.emit("new-notification", {
-        ...notify,
-        timestamp: new Date(),
-      });
-    }, 1000);
+    await pusherServer.trigger(`user-${email}`, "new-notification", {
+      ...notify,
+      timestamp: new Date(),
+    });
 
     const date = new Date();
     const monthYear = date.toLocaleString("en-US", {
