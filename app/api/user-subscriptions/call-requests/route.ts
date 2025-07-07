@@ -14,6 +14,7 @@ export async function GET() {
 
     // Fetch all products and populate the category field (only 'name')
     const callRequests = await CallRequest.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "userId",
         select: "firstName lastName clientCode email", // grab raw fields

@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import CustomButton from "@/app/components/Button";
 import RichTextEditor from "@/app/components/textEditor/RichTextEditor";
-import { uploadFileToCloudinary } from "@/utils/client";
+import { processTiptapImages, uploadFileToCloudinary } from "@/utils/client";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -99,53 +99,6 @@ const AddNewsletterPage = () => {
     } catch (error) {
       setError((error as Error).message);
     }
-  };
-  const base64ToFile = (base64: string, filename: string): File => {
-    const arr = base64.split(",");
-    const mime = arr[0].match(/:(.*?);/)?.[1] || "image/png";
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-  };
-
-  const processTiptapImages = async (
-    html: string,
-    folder: string
-  ): Promise<string> => {
-    const imgTagRegex = /<img[^>]+src="([^">]+)"/g;
-    let match: RegExpExecArray | null;
-    const uploads: { original: string; uploaded: string }[] = [];
-
-    while ((match = imgTagRegex.exec(html)) !== null) {
-      const src = match[1];
-
-      if (!src.startsWith("data:image") || src.includes("res.cloudinary.com"))
-        continue;
-
-      try {
-        const file = base64ToFile(src, "editor-image.png"); // name can be dynamic
-        const uploadedUrl = await uploadFileToCloudinary(file, folder);
-
-        if (uploadedUrl) {
-          uploads.push({ original: src, uploaded: uploadedUrl });
-        }
-      } catch (error) {
-        console.error("Error processing image:", error);
-      }
-    }
-
-    let updatedHtml = html;
-    for (const { original, uploaded } of uploads) {
-      updatedHtml = updatedHtml.replace(original, uploaded);
-    }
-
-    return updatedHtml;
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {

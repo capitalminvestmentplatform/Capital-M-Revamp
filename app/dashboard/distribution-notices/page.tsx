@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DataTable from "./DataTable";
 import { AddDistributionNoticeModal } from "@/app/components/modals/AddDistributionNoticeModal";
+import { Input } from "@/components/ui/input";
 
 const DistributionNoticesPage = () => {
   const loggedInUser = getLoggedInUser();
@@ -16,6 +17,7 @@ const DistributionNoticesPage = () => {
   const [distributionNotices, setDistributionNotices] = useState([]);
   const [users, setUsers] = useState([]);
   const [commitments, setCommitments] = useState([]);
+  const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
     fetchDistributionNotices();
@@ -212,13 +214,21 @@ const DistributionNoticesPage = () => {
   return (
     <div>
       <div className="my-10 flex justify-end">
-        {isAdmin && (
-          <AddDistributionNoticeModal
-            users={users}
-            commitments={commitments}
-            onSubmit={handleAddDistributionNotice}
+        {" "}
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
           />
-        )}
+          {isAdmin && (
+            <AddDistributionNoticeModal
+              users={users}
+              commitments={commitments}
+              onSubmit={handleAddDistributionNotice}
+            />
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -234,6 +244,7 @@ const DistributionNoticesPage = () => {
           tableRows={filteredDistributionNotices || []}
           handleDelete={handleDeleteDistributionNotice}
           handleEdit={handleEditDistributionNotice}
+          searchValue={searchField}
         />
       )}
     </div>

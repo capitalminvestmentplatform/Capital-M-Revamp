@@ -15,13 +15,29 @@ import MessageModal from "../../../components/modals/MessageModal";
 interface DataTableProps {
   tableCols: string[]; // Array of column headers
   tableRows: Record<string, any>[]; // Array of objects with dynamic keys
+  searchValue: string;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ tableCols, tableRows }) => {
+const DataTable: React.FC<DataTableProps> = ({
+  tableCols,
+  tableRows,
+  searchValue,
+}) => {
   const loggedInUser = getLoggedInUser();
   const role = loggedInUser ? loggedInUser.role : null;
-  if (tableRows.length === 0) {
-    return <p className="text-center text-gray-500">No data available</p>;
+
+  const normalizedSearch = searchValue.toLowerCase().trim();
+
+  const filteredRows = tableRows?.filter((row) => {
+    const titleMatch = row.title?.toLowerCase().includes(normalizedSearch);
+    const clientCodeMatch = row.clientCode
+      ?.toLowerCase()
+      .includes(normalizedSearch);
+    return titleMatch || clientCodeMatch;
+  });
+
+  if (filteredRows.length === 0) {
+    return <p className="text-center text-gray-500">No matching results</p>;
   }
 
   return (
@@ -34,7 +50,7 @@ const DataTable: React.FC<DataTableProps> = ({ tableCols, tableRows }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tableRows.map((row, index) => (
+        {filteredRows.map((row, index) => (
           <TableRow key={index}>
             <TableCell>{row.productId ? row.productId : "-"}</TableCell>
             <TableCell>{row.title ? row.title : "-"}</TableCell>

@@ -1,4 +1,5 @@
 "use client";
+import { Input } from "@/components/ui/input";
 import DataTable from "./DataTable";
 import { AddCallRequestModal } from "@/app/components/modals/AddCallRequestModal";
 import { getLoggedInUser } from "@/utils/client";
@@ -17,6 +18,7 @@ const CallRequestsPage = () => {
   const [investments, setInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
     fetchInvestments();
@@ -123,13 +125,20 @@ const CallRequestsPage = () => {
   return (
     <div>
       <div className="my-10 flex justify-end">
-        {!isAdmin && (
-          <AddCallRequestModal
-            investments={investments}
-            onSubmit={handleAddCallRequest}
-            context="call-requests"
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
           />
-        )}
+          {!isAdmin && (
+            <AddCallRequestModal
+              investments={investments}
+              onSubmit={handleAddCallRequest}
+              context="call-requests"
+            />
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -141,6 +150,7 @@ const CallRequestsPage = () => {
         <DataTable
           tableCols={tableCols}
           tableRows={filteredCallRequests || []}
+          searchValue={searchField}
         />
       )}
     </div>

@@ -1,4 +1,5 @@
 "use client";
+import { Input } from "@/components/ui/input";
 import DataTable from "./DataTable";
 import { AddCommitmentModal } from "@/app/components/modals/AddCommitmentModal";
 import { getLoggedInUser } from "@/utils/client";
@@ -19,6 +20,7 @@ const CommitmentsPage = () => {
   const [loading, setLoading] = useState(true);
   const [initiateLoadingIndex, setInitiateLoadingIndex] = useState<number>(-1);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
     fetchInvestments();
@@ -253,14 +255,21 @@ const CommitmentsPage = () => {
   return (
     <div>
       <div className="my-10 flex justify-end">
-        {isAdmin && (
-          <AddCommitmentModal
-            users={users}
-            investments={investments}
-            onSubmit={handleAddCommitment}
-            context="commitments"
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
           />
-        )}
+          {isAdmin && (
+            <AddCommitmentModal
+              users={users}
+              investments={investments}
+              onSubmit={handleAddCommitment}
+              context="commitments"
+            />
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -276,6 +285,7 @@ const CommitmentsPage = () => {
           handleEdit={handleEdit}
           createSubscription={createSubscription}
           initiateLoadingIndex={initiateLoadingIndex}
+          searchValue={searchField}
         />
       )}
     </div>

@@ -99,7 +99,6 @@ const EditNewsletterPage = () => {
                 : null;
             })
             .filter(Boolean) || [];
-        console.log(data, "data");
         reset({
           subject: data.subject,
           description: data.description,

@@ -19,7 +19,6 @@ export const connectToDatabase = async () => {
 
   try {
     global.mongooseConnection = mongoose.connect(MONGO_URI);
-    console.log("Connected to MongoDB!");
     return global.mongooseConnection;
   } catch (error) {
     console.error("MongoDB connection error:", error);

@@ -1,17 +1,7 @@
 import { connectToDatabase } from "@/lib/db";
 import Product from "@/models/Product";
 import Category from "@/models/Category";
-
-import {
-  uploadFileToCloudinary,
-  uploadMultipleFilesToCloudinary,
-} from "@/lib/upload";
-import {
-  loggedIn,
-  parseForm,
-  processTiptapImages,
-  sendNotification,
-} from "@/utils/server";
+import { loggedIn, sendNotification } from "@/utils/server";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { newInvestmentEmail } from "@/templates/emails";
 import User from "@/models/User";
@@ -24,15 +14,50 @@ export const config = {
   },
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    // Fetch all products and populate the category field (only 'name')
-    const products = await Product.find()
-      .populate("category", "name")
-      .sort({ createdAt: -1 })
-      .lean();
+    const { searchParams } = new URL(req.url);
+
+    const mode = searchParams.get("mode") || "advanced"; // default to advanced
+    if (mode === "simple") {
+      const products = await Product.find()
+        .populate("category", "name")
+        .sort({ createdAt: -1 })
+        .lean();
+
+      const formattedProducts = products.map((product) => ({
+        ...product,
+        category: product.category?.name || null,
+      }));
+
+      return sendSuccessResponse(
+        200,
+        "Products fetched successfully!",
+        formattedProducts
+      );
+    }
+
+    const search = searchParams.get("search") || "";
+    const sortBy = searchParams.get("sortBy") || "createdAt";
+    const sortOrder = searchParams.get("sortOrder") === "asc" ? 1 : -1;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+
+    const filter = search ? { title: { $regex: search, $options: "i" } } : {};
+
+    const skip = (page - 1) * limit;
+
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .populate("category", "name")
+        .sort({ [sortBy]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Product.countDocuments(filter),
+    ]);
 
     // Replace category object with just the name
     const formattedProducts = products.map((product) => ({
@@ -92,15 +117,6 @@ export async function POST(req: NextRequest) {
       return sendErrorResponse(404, "Category not found");
     }
 
-    // 2. Process description if needed
-    let cleanedDescription = description;
-    if (typeof cleanedDescription === "string") {
-      cleanedDescription = await processTiptapImages(
-        cleanedDescription,
-        "investments/description"
-      );
-    }
-
     // 3. Clean FAQs
     const cleanedFaqs = Array.isArray(faqs)
       ? faqs.filter((faq) => faq.question?.trim() || faq.answer?.trim())
@@ -130,7 +146,7 @@ export async function POST(req: NextRequest) {
       productId,
       title,
       tagline,
-      description: cleanedDescription,
+      description,
       category: category._id,
       isDraft,
       isPublished: !isDraft,

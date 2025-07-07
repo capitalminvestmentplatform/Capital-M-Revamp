@@ -43,7 +43,6 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 
       const response = await res.json();
 
-      console.log("response", response);
       if (response.statusCode !== 200) {
         toast.error(response.message);
         throw new Error(response.message);

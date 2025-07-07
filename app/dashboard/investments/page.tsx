@@ -8,6 +8,16 @@ import { usePathname } from "next/navigation";
 import { Grid, List } from "lucide-react";
 import { getLoggedInUser } from "@/utils/client";
 import DataTable from "../../components/investments/DataTable";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const InvestmentsPage = () => {
   const role = getLoggedInUser()?.role;
@@ -20,10 +30,29 @@ const InvestmentsPage = () => {
   const [category, setCategory] = useState("all");
   const [view, setView] = useState("grid");
 
+  // // Controlled input (user types/selects)
+  // const [searchInput, setSearchInput] = useState("");
+  // const [sortByInput, setSortByInput] = useState<string[]>(["createdAt"]);
+  // const [sortOrderInput, setSortOrderInput] = useState<("asc" | "desc")[]>([
+  //   "desc",
+  // ]);
+
+  // // Applied filters (used in API call)
+  // const [search, setSearch] = useState("");
+  // const [sortBy, setSortBy] = useState<string[]>(["createdAt"]);
+  // const [sortOrder, setSortOrder] = useState<("asc" | "desc")[]>(["desc"]);
+
+  // const [page, setPage] = useState(1);
+  // const [limit, setLimit] = useState(10);
+
   useEffect(() => {
-    fetchInvestments();
     fetchCategories();
+    fetchInvestments();
   }, []);
+
+  // useEffect(() => {
+  //   fetchInvestments();
+  // }, [search, page, limit, sortBy, sortOrder]);
 
   const fetchCategories = async () => {
     try {
@@ -46,16 +75,27 @@ const InvestmentsPage = () => {
 
   const fetchInvestments = async () => {
     try {
-      const res = await fetch("/api/products");
+      // const params = new URLSearchParams({
+      //   search,
+      //   page: page.toString(),
+      //   limit: limit.toString(),
+      //   sortBy: sortBy.join(","), // e.g. "title,createdAt"
+      //   sortOrder: sortOrder.join(","), // e.g. "asc,desc"
+      // });
 
+      const res = await fetch(
+        `/api/products?mode=simple`
+        // &${params.toString()}
+      );
       const response = await res.json();
+
       if (response.statusCode !== 200) {
         toast.error(response.message);
         throw new Error(response.message);
       }
 
-      const investments = response.data;
-      setInvestments(investments);
+      setInvestments(response.data);
+      // Optionally set totalPages, currentPage etc.
     } catch (error) {
       setError((error as Error).message);
     } finally {
@@ -85,7 +125,7 @@ const InvestmentsPage = () => {
   };
 
   const filteredInvestments =
-    investments.length > 0 &&
+    investments?.length > 0 &&
     investments.filter((investment: InvestmentProps) => {
       const isCategoryMatch =
         category === "all" || investment.category === category;
@@ -110,6 +150,7 @@ const InvestmentsPage = () => {
       ? [
           "Investment ID",
           "Title",
+          "Thumbnail",
           "Category",
           "Expected Profit",
           "Investment Duration",
@@ -119,6 +160,7 @@ const InvestmentsPage = () => {
       : [
           "Investment ID",
           "Title",
+          "Thumbnail",
           "Category",
           "Expected Profit",
           "Investment Duration",
@@ -146,6 +188,77 @@ const InvestmentsPage = () => {
       </div>
 
       <div className="my-10 flex justify-between items-center">
+        {/* <div className="flex items-center gap-5">
+          <Label className="text-sm w-full">Search by: </Label>
+
+          <Input
+            type="text"
+            placeholder="Search by title or category"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-fit text-sm"
+          />
+
+          <Label className="text-sm">Sort by: </Label>
+
+          <Select
+            value={sortByInput[0]}
+            onValueChange={(value) => {
+              setSortByInput([value]);
+              setSortOrderInput(["asc"]); // or preserve old order
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="title">Title</SelectItem>
+              <SelectItem value="createdAt">Created At</SelectItem>
+              <SelectItem value="minInvestment">Min Investment</SelectItem>
+              <SelectItem value="currentValue">Current Value</SelectItem>
+              <SelectItem value="expectedValue">Expected Value</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Label className="text-sm">Order by: </Label>
+
+          <Button
+            variant="outline"
+            onClick={() =>
+              setSortOrderInput([sortOrderInput[0] === "asc" ? "desc" : "asc"])
+            }
+          >
+            {sortOrderInput[0] === "asc" ? "↑ Ascending" : "↓ Descending"}
+          </Button>
+          <Button
+            onClick={() => {
+              setSearch(searchInput);
+              setSortBy([...sortByInput]);
+              setSortOrder([...sortOrderInput]);
+              setPage(1); // reset to first page on filter
+            }}
+          >
+            Apply
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSearchInput("");
+              setSortByInput(["createdAt"]);
+              setSortOrderInput(["desc"]);
+
+              // Also reset applied filters
+              setSearch("");
+              setSortBy(["createdAt"]);
+              setSortOrder(["desc"]);
+              setPage(1);
+            }}
+          >
+            Reset
+          </Button>
+        </div> */}
+
         <div className="flex gap-4">
           <div
             className={`bg-gray-200 rounded-md p-2 cursor-pointer ${view === "grid" ? "bg-primaryBG text-white" : "initial"}`}
@@ -160,6 +273,7 @@ const InvestmentsPage = () => {
             <List size={20} />
           </div>
         </div>
+
         {role === "Admin" && (
           <Link
             href={`${pathname}/add`}
@@ -174,12 +288,12 @@ const InvestmentsPage = () => {
         <p className="text-center text-gray-500">Loading...</p>
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
-      ) : investments.length === 0 ? (
+      ) : investments?.length === 0 ? (
         <p className="text-center text-gray-500">No investments available</p>
       ) : (
         <>
           {view === "grid" ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {Array.isArray(filteredInvestments) &&
                 filteredInvestments.map(
                   (investment: InvestmentProps, index: number) => (

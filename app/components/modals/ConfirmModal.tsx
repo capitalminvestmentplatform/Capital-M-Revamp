@@ -32,7 +32,6 @@ export function ConfirmModal({
     setLoading(true);
     const success = await onConfirm(); // ✅ wait for result
     setLoading(false);
-    console.log(success);
     if (success) {
       setOpen(false); // ✅ only close if success
     }

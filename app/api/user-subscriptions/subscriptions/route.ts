@@ -14,6 +14,7 @@ export async function GET() {
 
     // Fetch all products and populate the category field (only 'name')
     const subscriptions = await Subscription.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "commitmentId",
         select: "commitmentAmount status", // grab raw fields

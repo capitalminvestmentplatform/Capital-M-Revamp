@@ -64,8 +64,8 @@ const DistributionNotice: React.FC<DistributionNoticeEmailProps> = ({
           </Text>
 
           <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
+            Please check the attached file below. If you have any questions,
+            feel free to reach out. We're here to help!
           </Text>
 
           <Footer />

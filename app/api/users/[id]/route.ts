@@ -24,7 +24,6 @@ export async function GET(
 
     return sendSuccessResponse(200, "User fetched successfully", user);
   } catch (error) {
-    console.log("error", error);
     return sendErrorResponse(500, "Internal server error", error);
   }
 }

@@ -30,7 +30,6 @@ const ProfileDropdown = () => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data.message);
         // Redirect user or update UI after logout
         window.location.href = "/auth/login"; // Redirect to login page
       } else {

@@ -54,7 +54,6 @@ export default function DashboardLayout({
         if (i > 0 && /^[a-f\d]{24}$/i.test(current)) {
           try {
             let url = "";
-            console.log(prev, "prev", current);
             if (prev === "investments") url = `/api/products/${current}`;
             else if (
               ["subscriptions", "capital-calls", "receipts"].includes(prev)

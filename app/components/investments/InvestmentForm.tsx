@@ -60,9 +60,7 @@ export const InvestmentForm = ({
   });
 
   const handleDraft = () => {
-    console.log("🔥 Draft button clicked");
     handleSubmit((data) => {
-      console.log("✅ Submitting as draft", data);
       onSubmit(data, true);
     }, onError)();
   };

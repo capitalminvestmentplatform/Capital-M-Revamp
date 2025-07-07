@@ -16,6 +16,7 @@ export async function GET() {
 
     // Fetch all products and populate the category field (only 'name')
     const newsletters = await NewsLetter.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "pId",
         select: "title", // grab raw fields

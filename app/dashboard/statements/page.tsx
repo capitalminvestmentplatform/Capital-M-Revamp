@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DataTable from "./DataTable";
 import { AddStatementModal } from "@/app/components/modals/AddStatementModal";
+import { Input } from "@/components/ui/input";
 
 const StatementsPage = () => {
   const loggedInUser = getLoggedInUser();
@@ -12,6 +13,7 @@ const StatementsPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   const [statements, setStatements] = useState([]);
   const [users, setUsers] = useState([]);
@@ -136,9 +138,16 @@ const StatementsPage = () => {
   return (
     <div>
       <div className="my-10 flex justify-end">
-        {isAdmin && (
-          <AddStatementModal users={users} onSubmit={handleAddStatement} />
-        )}
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
+          />
+          {isAdmin && (
+            <AddStatementModal users={users} onSubmit={handleAddStatement} />
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -151,6 +160,7 @@ const StatementsPage = () => {
           tableCols={tableCols}
           tableRows={filteredStatements || []}
           handleDelete={handleDeleteStatement}
+          searchValue={searchField}
         />
       )}
     </div>

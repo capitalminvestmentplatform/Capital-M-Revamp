@@ -40,11 +40,6 @@ export function GalleryImagesUpload({
     }
   }, []); // empty dependency array ensures this runs only once
 
-  console.log("GalleryImagesUpload", {
-    defaultPreviews,
-    currentValue,
-    hydrated: hydrated.current,
-  });
   return (
     <Controller
       name="galleryImages"

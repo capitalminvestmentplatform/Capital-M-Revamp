@@ -87,25 +87,9 @@ const ReceiptSendToClient: React.FC<ReceiptSendToClientEmailProps> = ({
             </span>
           </Text>
           <Text style={text}>
-            We appreciate your trust in our platform and the confidence you have
-            placed in us. Rest assured that your investment will be handled with
-            utmost care and diligence.
+            Please check the attached file below. If you have any questions,
+            feel free to reach out. We're here to help!
           </Text>
-          <Text style={text}>
-            As the project progresses, we will keep you informed about any
-            updates or important milestones. You can expect regular reports and
-            communications to ensure transparency and maintain your peace of
-            mind.
-          </Text>
-          <Text style={text}>
-            Thank you for choosing Capital M. We are excited to be a part of
-            your investment journey and look forward to assisting you in
-            achieving your financial objectives.
-          </Text>
-
-          <Button style={button} href={receiptUrl}>
-            View Receipt
-          </Button>
 
           <Footer />
         </Container>

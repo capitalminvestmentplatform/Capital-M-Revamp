@@ -97,7 +97,6 @@ export const AddDistributionNoticeModal = ({
 
     setLoading(false);
   };
-  console.log(commitments, "commitments");
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

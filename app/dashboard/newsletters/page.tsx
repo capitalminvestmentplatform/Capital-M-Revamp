@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import DataTable from "./DataTable";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 const NewsLetterPage = () => {
   const pathname = usePathname(); // Get the current path
@@ -15,6 +16,7 @@ const NewsLetterPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   const [newsletters, setNewsletters] = useState([]);
 
@@ -62,12 +64,12 @@ const NewsLetterPage = () => {
       return false;
     }
   };
-
+  console.log(loggedInUser, "loggedInUser");
   const filteredNewsletters =
     newsletters.length > 0
-      ? newsletters.filter((receipt: any) => {
+      ? newsletters.filter((newsletter: any) => {
           if (isAdmin) return true; // Admin sees all
-          return receipt.email === loggedInUser?.email; // Others see their own
+          return newsletter.userId.includes(loggedInUser?.id); // Others see their own
         })
       : [];
 
@@ -79,14 +81,21 @@ const NewsLetterPage = () => {
   return (
     <div>
       <div className="my-10 flex justify-end">
-        {role === "Admin" && (
-          <Link
-            href={`${pathname}/add`}
-            className={`bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md text-sm font-semibold`}
-          >
-            Add newsletter
-          </Link>
-        )}
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
+          />
+          {role === "Admin" && (
+            <Link
+              href={`${pathname}/add`}
+              className={`bg-primaryBG hover:bg-primaryBG text-white px-5 py-2 rounded-md text-sm font-semibold w-full text-center`}
+            >
+              Add newsletter
+            </Link>
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -99,6 +108,7 @@ const NewsLetterPage = () => {
           tableCols={tableCols}
           tableRows={filteredNewsletters || []}
           handleDelete={handleDeleteNewsletter}
+          searchValue={searchField}
         />
       )}
     </div>

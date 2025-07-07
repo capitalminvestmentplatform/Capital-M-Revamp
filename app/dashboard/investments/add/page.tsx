@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { fetchCategories } from "../../../../utils/client";
+import { fetchCategories, processTiptapImages } from "../../../../utils/client";
 import { investmentSchema } from "../../../components/investments/InvestmentSchema";
 import { InvestmentForm } from "../../../components/investments/InvestmentForm";
 import { uploadFileToCloudinary } from "@/utils/client";
@@ -45,6 +45,15 @@ const AddInvestmentPage = () => {
   };
 
   const onSubmit = async (data: any, isDraft: boolean = false) => {
+    let description = data.description || "";
+    if (data.description) {
+      // Process images in the description
+      description = await processTiptapImages(
+        description,
+        "investments/description"
+      );
+    }
+
     let formattedData = {
       ...data,
       expectedValue: +data.expectedValue,
@@ -56,8 +65,10 @@ const AddInvestmentPage = () => {
       managementFee: +data.managementFee,
       performanceFee: +data.performanceFee,
       isDraft,
+      description,
       status: isDraft ? false : data.status, // ✅ Auto-set status = false if saving as draft
     };
+
     try {
       if (isDraft) {
         setLoadingAction("draft");

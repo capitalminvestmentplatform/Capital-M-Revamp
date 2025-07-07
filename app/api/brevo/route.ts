@@ -34,7 +34,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     let payload = "";
     if (pdf) {
       base64 = await fetchPdfAsBase64(pdf);
-      console.log("Base64 length:", base64.length);
       payload = JSON.stringify({
         sender: {
           email: "no-reply@capitalm.ae",

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DataTable from "./DataTable";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 const SubscriptionsPage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const SubscriptionsPage = () => {
   const [acceptLoadingIndex, setAcceptLoadingIndex] = useState<number>(-1);
   const [capitalLoadingIndex, setCapitalLoadingIndex] = useState<number>(-1);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
     fetchSubscriptions();
@@ -155,7 +157,15 @@ const SubscriptionsPage = () => {
 
   return (
     <div>
-      {" "}
+      <div className="my-10 flex justify-end">
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
+          />
+        </div>
+      </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
       ) : error ? (
@@ -171,6 +181,7 @@ const SubscriptionsPage = () => {
           createCapitalCall={createCapitalCall}
           acceptLoadingIndex={acceptLoadingIndex}
           capitalLoadingIndex={capitalLoadingIndex}
+          searchValue={searchField}
         />
       )}
     </div>

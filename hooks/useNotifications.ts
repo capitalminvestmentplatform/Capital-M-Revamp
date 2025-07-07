@@ -6,8 +6,6 @@ import Pusher from "pusher-js";
 export function useNotifications(email: string | null) {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
 
   const fetchNotifications = async () => {
     if (!email) return;
@@ -50,39 +48,6 @@ export function useNotifications(email: string | null) {
       pusher.disconnect();
     };
   }, [email]);
-
-  // useEffect(() => {
-  //   if (socket.connected) onConnect();
-
-  //   function onConnect() {
-  //     setIsConnected(true);
-  //     //@ts-ignore
-  //     setTransport(socket.io.engine?.transport?.name || "N/A");
-
-  //     socket.io.on("upgrade", (t: any) => setTransport(t));
-  //   }
-
-  //   function onDisconnect() {
-  //     setIsConnected(false);
-  //     setTransport("N/A");
-  //   }
-
-  //   function onNewNotification(data: any) {
-  //     fetchNotifications();
-  //     const audio = new Audio("/sounds/notification.mp3");
-  //     audio.play().catch(() => {});
-  //   }
-
-  //   socket.on("connect", onConnect);
-  //   socket.on("disconnect", onDisconnect);
-  //   socket.on("new-notification", onNewNotification);
-
-  //   return () => {
-  //     socket.off("connect", onConnect);
-  //     socket.off("disconnect", onDisconnect);
-  //     socket.off("new-notification", onNewNotification);
-  //   };
-  // }, []);
 
   const markAllRead = async () => {
     await fetch("/api/notifications", { method: "PATCH" });

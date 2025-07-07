@@ -162,7 +162,6 @@ const DashboardPage: React.FC = () => {
 
       return malcoAssets;
     } catch (error) {
-      console.log((error as Error).message);
     } finally {
     }
   };
@@ -208,9 +207,7 @@ const DashboardPage: React.FC = () => {
       maData = maData.filter((item: any) => item.category !== undefined);
       portfolioData = maData;
       setUserTotalPortfolio(maData);
-    } catch (error) {
-      console.log((error as Error).message);
-    }
+    } catch (error) {}
 
     const userCB = calculatePortfolioSums(portfolioData || []);
 
@@ -254,9 +251,9 @@ const DashboardPage: React.FC = () => {
         <div className="">
           <div className="mt-5">
             <h2 className="mb-5 text-lg font-semibold">Charts</h2>
-            <div className="flex flex-col lg:flex-row gap-8 mb-5">
+            <div className="flex flex-col xl:flex-row gap-8 mb-5">
               {/* Left side: Bar chart */}
-              <div className="w-full lg:w-2/3">
+              <div className="w-full xl:w-2/3">
                 <h4 className="font-medium mb-2">Total Portfolio</h4>
                 <div id="chart" className="bg-white p-4">
                   <Charts
@@ -269,7 +266,7 @@ const DashboardPage: React.FC = () => {
               </div>
 
               {/* Right side: Pie chart */}
-              <div className="w-full lg:w-1/3" style={{ height: "330px" }}>
+              <div className="w-full xl:w-1/3" style={{ height: "530px" }}>
                 <h4 className="font-medium mb-2">Portfolio Value</h4>
                 <div className="bg-white p-4 h-full">
                   <Charts
@@ -430,7 +427,7 @@ const DashboardPage: React.FC = () => {
       ) : investments.length === 0 ? (
         <p className="text-center text-gray-500">No investments available</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {Array.isArray(filteredInvestments) &&
             filteredInvestments.map(
               (investment: InvestmentProps, index: number) => (

@@ -64,8 +64,6 @@ export default function RichTextEditor({ onChange, content = "" }: Props) {
     ],
     content,
     onUpdate: ({ editor }) => {
-      console.log("HTML Output:", editor.getHTML());
-
       onChange(editor.getHTML());
     },
     onCreate: ({ editor }) => {

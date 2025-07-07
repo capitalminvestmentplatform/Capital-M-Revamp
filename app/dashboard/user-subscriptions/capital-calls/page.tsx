@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DataTable from "./DataTable";
+import { Input } from "@/components/ui/input";
 
 const CapitalCallsPage = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const CapitalCallsPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchField, setSearchField] = useState("");
 
   const [capitalCalls, setCapitalCalls] = useState([]);
   const [receiptLoadingIndex, setReceiptLoadingIndex] = useState<number>(-1);
@@ -124,7 +126,15 @@ const CapitalCallsPage = () => {
 
   return (
     <div>
-      {" "}
+      <div className="my-10 flex justify-end">
+        <div className="flex gap-3">
+          <Input
+            type="text"
+            placeholder="Search here"
+            onChange={(e) => setSearchField(e.target.value)}
+          />
+        </div>
+      </div>
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
       ) : error ? (
@@ -138,6 +148,7 @@ const CapitalCallsPage = () => {
           handleDelete={handleDelete}
           receiptLoadingIndex={receiptLoadingIndex}
           createReceipt={createReceipt}
+          searchValue={searchField}
         />
       )}
     </div>

@@ -14,6 +14,7 @@ export async function GET() {
 
     // Fetch all products and populate the category field (only 'name')
     const commitments = await Commitment.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "userId",
         select: "_id firstName lastName clientCode email", // grab raw fields
@@ -94,7 +95,7 @@ export async function POST(req: NextRequest) {
 
     const notify = {
       title: "You've Got a New Commitment",
-      message: `from pusher New commitment is added for the product: ${title}${decoded.role === "Admin" ? "." : ` by ${firstName} ${lastName}.`}`,
+      message: `New commitment is added for the product: ${title}${decoded.role === "Admin" ? "." : ` by ${firstName} ${lastName}.`}`,
       type: "info",
     };
 

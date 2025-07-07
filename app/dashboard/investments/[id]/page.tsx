@@ -175,9 +175,9 @@ const InvestmentPage = () => {
         </div>
       </div>
       {/* Grid Section */}
-      <div className="grid lg:grid-cols-3 gap-6 mt-8">
+      <div className="grid xl:grid-cols-3 gap-6 mt-8">
         {/* Left Column (70%) */}
-        <div className="lg:col-span-2">
+        <div className="xl:col-span-2">
           <div className="bg-white p-3 lg:p-6 rounded-lg shadow-md">
             <Tabs defaultValue="gallery" className="mx-auto">
               <TabsList className="grid w-full grid-cols-3">
@@ -260,7 +260,7 @@ const InvestmentPage = () => {
         </div>
 
         {/* Right Column (30%) */}
-        <div className="lg:col-span-1">
+        <div className="xl:col-span-1">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="!mb-3 bg-gray-200 flex gap-2 justify-between items-center text-sm text-muted-foreground border p-2">
               <p className="text-gray-600">Investment ID:</p>

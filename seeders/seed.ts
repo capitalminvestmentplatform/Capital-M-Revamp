@@ -15,7 +15,6 @@ async function seed() {
 
     // Insert categories
     const createdCategories = await Category.insertMany(categories);
-    console.log("Categories seeded");
 
     // // Insert subcategories with category name as reference
     // const createdSubcategories = await Subcategory.insertMany(
@@ -29,7 +28,6 @@ async function seed() {
     //     };
     //   })
     // );
-    // console.log("Subcategories seeded");
 
     // // Insert malcoAssets with category and subCategory names as references
     // const assetsToInsert = malcoAssets.map((asset) => {
@@ -47,9 +45,7 @@ async function seed() {
     //   };
     // });
 
-    // console.log("assetsToInsert", assetsToInsert);
     // await MalcoAsset.insertMany(assetsToInsert);
-    // console.log("MalcoAssets seeded");
 
     process.exit(0);
   } catch (error) {

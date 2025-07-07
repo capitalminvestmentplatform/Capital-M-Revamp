@@ -39,6 +39,7 @@ const Charts = ({ type, dataset1, dataset2, labels }: ChartsProps) => {
     return (
       <Bar
         options={totalPortfolio}
+        style={{ height: "400px" }}
         data={{
           labels: labels,
           datasets: [
@@ -63,6 +64,7 @@ const Charts = ({ type, dataset1, dataset2, labels }: ChartsProps) => {
     return (
       <Pie
         options={portfolioValue}
+        style={{ height: "350px" }}
         data={{
           labels: labels,
           datasets: [

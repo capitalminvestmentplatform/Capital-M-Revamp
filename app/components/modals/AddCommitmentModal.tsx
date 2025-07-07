@@ -110,7 +110,6 @@ export const AddCommitmentModal = ({
     }
     setLoading(false);
   };
-  console.log(users, "from add commitment");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

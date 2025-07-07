@@ -13,6 +13,7 @@ import Link from "next/link";
 import React from "react";
 import { getLoggedInUser } from "@/utils/client";
 import { ConfirmModal } from "../modals/ConfirmModal";
+import Image from "next/image";
 
 interface DataTableProps {
   tableCols: string[]; // Array of column headers
@@ -51,6 +52,23 @@ const DataTable: React.FC<DataTableProps> = ({
               >
                 {row.title ? row.title : "-"}
               </Link>
+            </TableCell>
+            <TableCell className="relative">
+              {row.featuredImage ? (
+                <div className="relative w-16 h-16 rounded-full overflow-hidden">
+                  <Image
+                    src={row.featuredImage}
+                    alt="thumbnail"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div
+                  style={{ width: "50px", height: "50px" }}
+                  className="rounded-full border-2"
+                />
+              )}
             </TableCell>
             <TableCell>{row.category ? row.category : "-"}</TableCell>
             <TableCell>

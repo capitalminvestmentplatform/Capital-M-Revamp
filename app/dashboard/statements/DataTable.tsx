@@ -17,17 +17,31 @@ interface DataTableProps {
   tableCols: string[]; // Array of column headers
   tableRows: Record<string, any>[]; // Array of objects with dynamic keys
   handleDelete: (id: string) => Promise<boolean> | boolean;
+  searchValue: string;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
   tableCols,
   tableRows,
   handleDelete,
+  searchValue,
 }) => {
   const loggedInUser = getLoggedInUser();
   const role = loggedInUser ? loggedInUser.role : null;
-  if (tableRows.length === 0) {
-    return <p className="text-center text-gray-500">No data available</p>;
+
+  const normalizedSearch = searchValue.toLowerCase().trim();
+
+  const filteredRows = tableRows?.filter((row) => {
+    const monthMatch = row.month?.toLowerCase().includes(normalizedSearch);
+    const yearMatch = row.year?.toString().includes(normalizedSearch); // ✅ convert number to string
+    const clientCodeMatch = row.clientCode
+      ?.toLowerCase()
+      .includes(normalizedSearch);
+    return monthMatch || yearMatch || clientCodeMatch;
+  });
+
+  if (filteredRows.length === 0) {
+    return <p className="text-center text-gray-500">No matching results</p>;
   }
 
   return (
@@ -47,7 +61,7 @@ const DataTable: React.FC<DataTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tableRows.map((row, index) => (
+        {filteredRows.map((row, index) => (
           <TableRow key={index}>
             {role === "Admin" && (
               <TableCell>

@@ -51,7 +51,6 @@ export async function PATCH() {
     const decoded: any = await loggedIn();
 
     const user = await User.findById(decoded.id).lean();
-    console.log(user, "user");
     if (!user || !decoded.email) {
       return sendErrorResponse(404, "User not found");
     }
@@ -73,7 +72,6 @@ export async function DELETE() {
     const decoded: any = await loggedIn();
 
     const user = await User.findById(decoded.id).lean();
-    console.log(user, "user");
     if (!user || !decoded.email) {
       return sendErrorResponse(404, "User not found");
     }

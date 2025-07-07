@@ -13,6 +13,7 @@ export async function GET() {
 
     // Fetch all products and populate the category field (only 'name')
     const statements = await Statement.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "userId",
         select: "firstName lastName clientCode email", // grab raw fields
