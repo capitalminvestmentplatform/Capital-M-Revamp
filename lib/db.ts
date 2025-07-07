@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 
-const MONGO_URI =
-  "mongodb+srv://inaam:USpCXWxtplDzbYek@cluster0.qpn51.mongodb.net/capital-m?retryWrites=true&w=majority&appName=Cluster0";
-
-if (!MONGO_URI) {
-  throw new Error("MONGO_URI is missing in .env.local");
+if (!process.env.MONGO_URI) {
+  throw new Error("process.env.MONGO_URI is missing in .env.local");
 }
 
 // Use global object to track connection across hot reloads (useful for Next.js)
@@ -18,7 +15,7 @@ export const connectToDatabase = async () => {
   }
 
   try {
-    global.mongooseConnection = mongoose.connect(MONGO_URI);
+    global.mongooseConnection = mongoose.connect(process.env.MONGO_URI!);
     return global.mongooseConnection;
   } catch (error) {
     console.error("MongoDB connection error:", error);
