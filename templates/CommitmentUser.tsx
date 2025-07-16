@@ -53,19 +53,14 @@ const CommitmentUser: React.FC<CommitmentUserEmailProps> = ({
           </Text>
 
           <Text style={text}>
-            Requested Amount:{" "}
-            <span style={{ fontWeight: "bold" }}>
-              AED {commitmentAmount.toLocaleString()}
-            </span>
-          </Text>
-
-          <Text style={text}>
             Investment Title:{" "}
             <span style={{ fontWeight: "bold" }}>{title}</span>
           </Text>
           <Text style={text}>
-            Investment ID:{" "}
-            <span style={{ fontWeight: "bold" }}>{productId}</span>
+            Requested Amount:{" "}
+            <span style={{ fontWeight: "bold" }}>
+              AED {commitmentAmount.toLocaleString()}
+            </span>
           </Text>
 
           <Button
@@ -76,11 +71,8 @@ const CommitmentUser: React.FC<CommitmentUserEmailProps> = ({
           </Button>
 
           <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
+            If you have any questions, please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

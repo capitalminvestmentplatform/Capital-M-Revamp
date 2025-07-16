@@ -96,8 +96,6 @@ const CommitmentAdmin: React.FC<CommitmentAdminEmailProps> = ({
             If you have any questions, feel free to reach out. We're here to
             help!
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

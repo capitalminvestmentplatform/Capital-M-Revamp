@@ -185,6 +185,7 @@ export async function POST(req: NextRequest) {
           title: "Ready for Your Next Investment?",
           message: `New investment ${productObject.title} has launched in the system. Check it out.`,
           type: "info",
+          url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/investments/${productObject._id}`,
         };
 
         await sendNotification(user.email, notify);
@@ -197,18 +198,18 @@ export async function POST(req: NextRequest) {
         const { firstName, lastName, email } = user;
         const investmentId = productObject._id;
 
-        await newInvestmentEmail(
-          {
-            firstName,
-            lastName,
-            email,
-            title: productObject.title,
-            projectedReturn: productObject.projectedReturn,
-            investmentDuration: productObject.investmentDuration,
-            investmentId,
-          },
-          "New Investment Opportunity - Capital M"
-        );
+        // await newInvestmentEmail(
+        //   {
+        //     firstName,
+        //     lastName,
+        //     email,
+        //     title: productObject.title,
+        //     projectedReturn: productObject.projectedReturn,
+        //     investmentDuration: productObject.investmentDuration,
+        //     investmentId,
+        //   },
+        //   "New Investment Opportunity - Capital M"
+        // );
       }
     }
 

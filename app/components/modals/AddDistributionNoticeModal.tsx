@@ -142,7 +142,7 @@ export const AddDistributionNoticeModal = ({
           </div>
 
           <div>
-            <Label>Completed Commitments</Label>
+            <Label>Investment Name</Label>
             <Select onValueChange={(val) => setValue("commitmentName", val)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Commitment" />

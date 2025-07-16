@@ -18,12 +18,14 @@ interface DataTableProps {
   tableCols: string[]; // Array of column headers
   tableRows: Record<string, any>[]; // Array of objects with dynamic keys
   handleDelete: (userId: string) => Promise<boolean>;
+  sendEmail: (userId: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
   tableCols,
   tableRows,
   handleDelete,
+  sendEmail,
 }) => {
   const loggedInUser = getLoggedInUser();
   const id = loggedInUser ? loggedInUser.id : null;
@@ -50,6 +52,18 @@ const DataTable: React.FC<DataTableProps> = ({
             <TableCell>{row.email}</TableCell>
             <TableCell>{row.phone}</TableCell>
             <TableCell className="capitalize">{row.role}</TableCell>
+            <TableCell>
+              {row.role === "User" ? (
+                <button
+                  onClick={() => sendEmail(row._id)}
+                  className="bg-primaryBG hover:bg-primaryBG text-white py-1 px-3 rounded-md text-xs font-semibold"
+                >
+                  Send
+                </button>
+              ) : (
+                <>-</>
+              )}
+            </TableCell>
             <TableCell className="flex gap-2">
               {row._id !== id && (
                 <>

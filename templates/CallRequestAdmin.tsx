@@ -85,11 +85,8 @@ const CallRequestAdmin: React.FC<CallRequestAdminEmailProps> = ({
           </Button>
 
           <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
+            If you have any questions, please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

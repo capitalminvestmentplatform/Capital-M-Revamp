@@ -60,7 +60,7 @@ const ReceiptSendToClient: React.FC<ReceiptSendToClientEmailProps> = ({
             <span style={{ fontWeight: "bold" }}>{title}</span>
           </Text>
           <Text style={text}>
-            Investment Amount:{" "}
+            Amount Received:{" "}
             <span style={{ fontWeight: "bold" }}>
               AED {commitmentAmount && commitmentAmount.toLocaleString()}
             </span>
@@ -88,10 +88,8 @@ const ReceiptSendToClient: React.FC<ReceiptSendToClientEmailProps> = ({
           </Text>
           <Text style={text}>
             Please check the attached file below. If you have any questions,
-            feel free to reach out. We're here to help!
+            please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

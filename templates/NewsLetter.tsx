@@ -30,7 +30,7 @@ const NewsLetter: React.FC<NewsLetterEmailProps> = ({
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Newsletter - Capital M</Preview>
+        <Preview>{newsletterTitle} - Capital M</Preview>
         <Container style={container}>
           <Section style={logoContainer}>
             <Img
@@ -44,31 +44,8 @@ const NewsLetter: React.FC<NewsLetterEmailProps> = ({
           <Text style={nameText}>Dear {name} </Text>
 
           <Text style={text}>
-            <span>{"Newsletter Details:"}</span>
-          </Text>
-          <Text style={text}>
-            Title: <span style={{ fontWeight: "bold" }}>{newsletterTitle}</span>
-          </Text>
-          {category && (
-            <Text style={text}>
-              Category: <span style={{ fontWeight: "bold" }}>{category}</span>
-            </Text>
-          )}
-          {investmentTitle && (
-            <Text style={text}>
-              Investment Title:{" "}
-              <span style={{ fontWeight: "bold" }}>{investmentTitle}</span>
-            </Text>
-          )}
-          <Text style={text}>
             <p dangerouslySetInnerHTML={{ __html: description }} />
           </Text>
-          <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
-          </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

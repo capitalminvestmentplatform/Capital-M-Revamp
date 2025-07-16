@@ -87,21 +87,22 @@ export async function POST(req: NextRequest) {
     const date = new Date(distributionDate);
     const formattedDate = date.toISOString().split("T")[0]; // "2025-03-20"
 
-    await distributionNoticeEmail(
-      {
-        firstName,
-        lastName,
-        email,
-        clientCode,
-        commitmentName,
-        distributionAmount,
-        attachment: {
-          file: pdf,
-          name: `Distribution Notice - ${formattedDate}.pdf`,
-        },
-      },
-      `Distribution Notice - ${formattedDate} - Capital M`
-    );
+    // await distributionNoticeEmail(
+    //   {
+    //     firstName,
+    //     lastName,
+    //     email,
+    //     clientCode,
+    //     commitmentName,
+    //     distributionAmount,
+    //     description,
+    //     attachment: {
+    //       file: pdf,
+    //       name: `Distribution Notice - ${formattedDate}.pdf`,
+    //     },
+    //   },
+    //   `Distribution Notice - ${formattedDate} - Capital M`
+    // );
 
     return sendSuccessResponse(
       201,

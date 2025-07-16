@@ -54,9 +54,8 @@ const CapitalCallSendToClient: React.FC<CapitalCallSendToClientEmailProps> = ({
           <Text style={nameText}>Dear {username}</Text>
 
           <Text style={heroText}>
-            This Capital Call is generated for a payment to be made in response
-            to your subscription request for the investment in <b>{title}</b> in
-            Capital M.
+            This Capital Call is generated for your subscription in{" "}
+            <b>{title}</b> with Capital M.
           </Text>
 
           <Text style={text}>
@@ -99,11 +98,8 @@ const CapitalCallSendToClient: React.FC<CapitalCallSendToClientEmailProps> = ({
             View Capital Call
           </Button>
           <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
+            If you have any questions, please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

@@ -100,14 +100,14 @@ export async function createUser(req: NextRequest) {
     //   );
     // }
 
-    const jwtSecret = process.env.JWT_SECRET as string;
-    const verificationToken = jwt.sign(
-      { email, id: "userId", role: "User" },
-      jwtSecret,
-      {
-        expiresIn: "24h",
-      }
-    );
+    // const jwtSecret = process.env.JWT_SECRET as string;
+    // const verificationToken = jwt.sign(
+    //   { email, id: "userId", role: "User" },
+    //   jwtSecret,
+    //   {
+    //     expiresIn: "24h",
+    //   }
+    // );
 
     const newUser = new User({
       firstName,
@@ -118,40 +118,36 @@ export async function createUser(req: NextRequest) {
       email,
       password, // Store PIN as plain text (ensure database security measures)
       role,
-      verificationToken,
+      // verificationToken,
+      isVerified: true,
       portfolioId: portfolio.portfolio_id ? portfolio.portfolio_id : undefined,
     });
 
     await newUser.save();
 
-    await accountVerificationEmail(
-      { firstName, lastName, email, verificationToken },
-      "Verify Your Email - Capital M Investment Platform"
-    );
+    // await welcomeEmail(
+    //   { firstName, lastName, email, verificationToken, password },
+    //   "Welcome to Capital M Investment Platform"
+    // );
 
-    await welcomeEmail(
-      { firstName, lastName, email },
-      "Welcome to Capital M Investment Platform"
-    );
+    // const admins = await User.find({
+    //   role: "Admin",
+    //   email: { $ne: decoded.email },
+    // });
 
-    const admins = await User.find({
-      role: "Admin",
-      email: { $ne: decoded.email },
-    });
+    // for (const admin of admins) {
+    //   const notify = {
+    //     title: "Say Hello to a New Member",
+    //     message: `A new user ${firstName} ${lastName} has been registered.`,
+    //     type: "info",
+    //   };
+    //   await sendNotification(admin.email, notify);
 
-    for (const admin of admins) {
-      const notify = {
-        title: "Say Hello to a New Member",
-        message: `A new user ${firstName} ${lastName} has been registered.`,
-        type: "info",
-      };
-      await sendNotification(admin.email, notify);
-
-      await pusherServer.trigger(`user-${admin.email}`, "new-notification", {
-        ...notify,
-        timestamp: new Date(),
-      });
-    }
+    //   await pusherServer.trigger(`user-${admin.email}`, "new-notification", {
+    //     ...notify,
+    //     timestamp: new Date(),
+    //   });
+    // }
 
     return sendSuccessResponse(201, "User created successfully!", newUser);
   } catch (error) {

@@ -15,6 +15,7 @@ import DistributionNotice from "./DistributionNotice";
 import Statement from "./Statement";
 import KYC from "./KYC";
 import NewsLetter from "./NewsLetter";
+import WelcomeTemp from "./WelcomeTemp";
 
 export async function newsletterEmail(
   payload: {
@@ -75,6 +76,7 @@ export async function statementEmail(
     clientCode: string;
     month: string;
     year: number;
+    id: string;
     attachment: {
       file: string;
       name: string;
@@ -82,16 +84,28 @@ export async function statementEmail(
   },
   subject: string
 ) {
-  const { firstName, lastName, email, clientCode, month, year, attachment } =
-    payload;
+  const {
+    firstName,
+    lastName,
+    email,
+    clientCode,
+    month,
+    year,
+    attachment,
+    id,
+  } = payload;
 
   const name = `${firstName} ${lastName}`;
+
+  const statementUrl = `${process.env.NEXT_PUBLIC_BASE_URL}dashboard/statements`;
+
   const emailHtml = await render(
     React.createElement(Statement, {
       name,
       clientCode,
       month,
       year,
+      statementUrl,
     })
   );
 
@@ -105,6 +119,7 @@ export async function distributionNoticeEmail(
     email: string;
     clientCode: string;
     commitmentName: string;
+    description: string;
     distributionAmount: number;
     attachment: {
       file: string;
@@ -119,6 +134,7 @@ export async function distributionNoticeEmail(
     email,
     clientCode,
     commitmentName,
+    description,
     distributionAmount,
     attachment,
   } = payload;
@@ -130,6 +146,7 @@ export async function distributionNoticeEmail(
       clientCode,
       commitmentName,
       distributionAmount,
+      description,
     })
   );
 
@@ -462,18 +479,45 @@ export async function forgotPasswordEmail(
   return sendEmail(email, subject, emailHtml);
 }
 
+export async function welcomeEmailTemp(
+  payload: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  },
+  subject: string
+) {
+  const { firstName, lastName, email, password } = payload;
+
+  const emailHtml = await render(
+    React.createElement(WelcomeTemp, {
+      name: `${firstName} ${lastName}`,
+      password,
+    })
+  );
+
+  return sendEmail(email, subject, emailHtml);
+}
 export async function welcomeEmail(
   payload: {
     firstName: string;
     lastName: string;
     email: string;
+    verificationToken: string;
+    password: string;
   },
   subject: string
 ) {
-  const { firstName, lastName, email } = payload;
-  const loginUrl = `${process.env.NEXT_PUBLIC_BASE_URL}auth/login`;
+  const { firstName, lastName, email, verificationToken, password } = payload;
+  const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}auth/verify-user?token=${verificationToken}`;
+
   const emailHtml = await render(
-    React.createElement(Welcome, { name: `${firstName} ${lastName}`, loginUrl })
+    React.createElement(Welcome, {
+      name: `${firstName} ${lastName}`,
+      verificationUrl,
+      password,
+    })
   );
 
   return sendEmail(email, subject, emailHtml);

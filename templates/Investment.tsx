@@ -49,17 +49,20 @@ const Investment: React.FC<InvestmentEmailProps> = ({
           </Text>
 
           <Text style={text}>
-            Investment Title: <span className="font-bold">{title}</span>
+            Investment Title:{" "}
+            <span style={{ fontWeight: "bold" }}>{title}</span>
           </Text>
 
           <Text style={text}>
             Investment Duration:{" "}
-            <span className="font-bold">{investmentDuration} years</span>
+            <span style={{ fontWeight: "bold" }}>
+              {investmentDuration} years
+            </span>
           </Text>
 
           <Text style={text}>
             Expected Profit:{" "}
-            <span className="font-bold">
+            <span style={{ fontWeight: "bold" }}>
               AED {projectedReturn.toLocaleString()}
             </span>
           </Text>
@@ -69,11 +72,8 @@ const Investment: React.FC<InvestmentEmailProps> = ({
           </Button>
 
           <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
+            If you have any questions, please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

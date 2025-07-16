@@ -41,7 +41,7 @@ export default function VerifyUser({
 
           <Text style={heroText}>
             Your account verification link is below - please click below to
-            verify your acount.
+            verify your account.
           </Text>
 
           <Button style={button} href={verifyUrl}>
@@ -52,8 +52,6 @@ export default function VerifyUser({
             If you didn't request this email, there's nothing to worry about,
             you can safely ignore it.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

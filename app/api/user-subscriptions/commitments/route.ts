@@ -107,18 +107,18 @@ export async function POST(req: NextRequest) {
         timestamp: new Date(),
       });
 
-      await commitmentUserEmail(
-        {
-          firstName,
-          lastName,
-          email,
-          title,
-          phone,
-          commitmentAmount,
-          productId,
-        },
-        `Commitment received for ${title} - Capital M`
-      );
+      // await commitmentUserEmail(
+      //   {
+      //     firstName,
+      //     lastName,
+      //     email,
+      //     title,
+      //     phone,
+      //     commitmentAmount,
+      //     productId,
+      //   },
+      //   `Commitment received for ${title} - Capital M`
+      // );
     } else {
       const users = await User.find({
         role: "Admin",
@@ -136,19 +136,19 @@ export async function POST(req: NextRequest) {
         const userEmail = email;
         const { email: adminEmail } = user;
 
-        await commitmentAdminEmail(
-          {
-            username,
-            userEmail,
-            adminEmail,
-            clientCode,
-            title,
-            phone,
-            commitmentAmount,
-            message,
-          },
-          `Commitment received for ${title} - Capital M`
-        );
+        // await commitmentAdminEmail(
+        //   {
+        //     username,
+        //     userEmail,
+        //     adminEmail,
+        //     clientCode,
+        //     title,
+        //     phone,
+        //     commitmentAmount,
+        //     message,
+        //   },
+        //   `Commitment received for ${title} - Capital M`
+        // );
       }
     }
 

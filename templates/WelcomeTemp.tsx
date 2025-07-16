@@ -9,19 +9,21 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import * as React from "react";
 import Footer from "./Footer";
 
-interface KYCEmailProps {
+export default function WelcomeTemp({
+  name,
+  password,
+}: {
   name: string;
-  isAdmin?: boolean;
-}
-
-const KYC: React.FC<KYCEmailProps> = ({ name, isAdmin }) => {
+  password: string;
+}) {
   return (
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>KYC Documents - Capital M</Preview>
+        <Preview>Welcome to Capital M!</Preview>
         <Container style={container}>
           <Section style={logoContainer}>
             <Img
@@ -32,12 +34,15 @@ const KYC: React.FC<KYCEmailProps> = ({ name, isAdmin }) => {
             />
           </Section>
 
-          <Text style={nameText}>Dear {isAdmin ? name : "Admin"} </Text>
+          <Text style={nameText}>Dear {name}</Text>
+
+          <Text style={heroText}>Welcome to Capital M!</Text>
+
           <Text style={heroText}>
-            {isAdmin
-              ? "Your KYC documents have been successfully submitted by admin."
-              : `New KYC documents have been submitted by ${name}.`}
+            Please change your PIN. The default PIN is{" "}
+            <span style={bold}>{password}</span>
           </Text>
+
           <Text style={text}>
             If you have any questions, please feel free to reach out.
           </Text>
@@ -45,9 +50,7 @@ const KYC: React.FC<KYCEmailProps> = ({ name, isAdmin }) => {
       </Body>
     </Html>
   );
-};
-
-export default KYC;
+}
 
 const button = {
   backgroundColor: "#386264",
@@ -85,13 +88,13 @@ const text = {
   lineHeight: "24px",
 };
 
-const span = {
-  fontWeight: "bold",
-};
-
 const nameText = {
   fontSize: "15px",
   lineHeight: "28px",
   marginBottom: "30px",
+  fontWeight: "bold",
+};
+
+const bold = {
   fontWeight: "bold",
 };

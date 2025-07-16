@@ -25,7 +25,9 @@ const SubscriptionSendToClient: React.FC<
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Subscription received for {title} - Capital M</Preview>
+        <Preview>
+          New Subscription form has been added for your signatures - Capital M
+        </Preview>
         <Container style={container}>
           <Section style={logoContainer}>
             <Img
@@ -38,13 +40,11 @@ const SubscriptionSendToClient: React.FC<
 
           <Text style={nameText}>Dear {username}</Text>
 
-          <Text style={heroText}>
-            The request for your subscription for the investment opportunity is
-            created, this exclusive opportunity has the potential to enhance
-            your investment portfolio and contribute to your financial growth.
-            Don't miss out on this exciting venture!
+          <Text style={text}>
+            The subscription form for your investment commitment has been
+            generated. Kindly log in to the system using link below and sign the
+            subscription document.
           </Text>
-
           <Text style={text}>
             <span>{"Investment Details:"}</span>
           </Text>
@@ -53,65 +53,14 @@ const SubscriptionSendToClient: React.FC<
             Investment Title:{" "}
             <span style={{ fontWeight: "bold" }}>{title}</span>
           </Text>
-          <Text style={text}>
-            Investment Id:{" "}
-            <span style={{ fontWeight: "bold" }}>{productId}</span>
-          </Text>
-
-          {/* <Text style={text}>
-            <span>To access your receipt, just click the button below:</span>
-          </Text>
 
           <Button style={button} href={subscriptionUrl}>
-            SIGN SUBSCRIPTION FORM
-          </Button> */}
-
-          <Text style={nameText}>
-            Follow below instructions for manual subscription:
-          </Text>
+            View Subscription
+          </Button>
 
           <Text style={text}>
-            <span>
-              1. Log in to your Capital M account using your credentials.{" "}
-            </span>
+            If you have any questions, please feel free to reach out.
           </Text>
-          <Text style={text}>
-            <span>
-              2. Navigate to the Subscriptions page from the main menu.{" "}
-            </span>
-          </Text>
-          <Text style={text}>
-            <span>
-              3. Locate the specific subscription form and click on accept.{" "}
-            </span>
-          </Text>
-          <Text style={text}>
-            <span>
-              4. Enter the desired investment amount and review the terms and
-              conditions.{" "}
-            </span>
-          </Text>
-          <Text style={text}>
-            <span>
-              5. Add/upload your signatures, Send to Admin and proceed with the
-              Capital Call for payment process.{" "}
-            </span>
-          </Text>
-
-          <Text style={text}>
-            <span>
-              Remember, this investment opportunity is available for a limited
-              time only. Act swiftly to secure your participation before the
-              subscription deadline.
-            </span>
-          </Text>
-
-          <Text style={text}>
-            If you have any questions, feel free to reach out. We're here to
-            help!
-          </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

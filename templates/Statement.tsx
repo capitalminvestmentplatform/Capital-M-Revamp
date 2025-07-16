@@ -15,6 +15,7 @@ interface StatementEmailProps {
   name: string;
   clientCode: string;
   month: string;
+  statementUrl: string;
   year: number;
 }
 
@@ -23,6 +24,7 @@ const Statement: React.FC<StatementEmailProps> = ({
   clientCode,
   month,
   year,
+  statementUrl,
 }) => {
   return (
     <Html>
@@ -44,13 +46,13 @@ const Statement: React.FC<StatementEmailProps> = ({
           <Text style={nameText}>Dear {name}</Text>
 
           <Text style={text}>
-            <span>{"Statement Details:"}</span>
+            Your monthly portfolio statement with Capital M is ready.
           </Text>
 
           <Text style={text}>
-            Client Code:{" "}
-            <span style={{ fontWeight: "bold" }}>{clientCode}</span>
+            <span>{"Statement Details:"}</span>
           </Text>
+
           <Text style={text}>
             Month: <span style={{ fontWeight: "bold" }}>{month}</span>
           </Text>
@@ -58,13 +60,13 @@ const Statement: React.FC<StatementEmailProps> = ({
           <Text style={text}>
             Year: <span style={{ fontWeight: "bold" }}>{year}</span>
           </Text>
-
+          <Button style={button} href={statementUrl}>
+            View Statements
+          </Button>
           <Text style={text}>
             Please check the attached file below. If you have any questions,
-            feel free to reach out. We're here to help!
+            please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

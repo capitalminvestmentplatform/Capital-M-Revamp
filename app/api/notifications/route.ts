@@ -27,7 +27,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
-    const { to, title, message, type } = await req.json();
+    const { to, title, message, type, url } = await req.json();
 
     const newNotification = new Notification({
       to,
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       message,
       type,
       read: false,
+      url,
     });
     await newNotification.save();
 

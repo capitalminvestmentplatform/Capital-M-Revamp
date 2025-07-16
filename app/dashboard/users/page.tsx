@@ -62,6 +62,26 @@ const UsersPage = () => {
     }
   };
 
+  const sendEmail = async (id: string) => {
+    try {
+      const res = await fetch(`/api/send-email-to-user/${id}`, {
+        method: "POST",
+        credentials: "include", // Ensure cookies are sent if authentication is needed
+      });
+
+      const response = await res.json();
+
+      if (response.statusCode !== 200) {
+        toast.error(response.message);
+        throw new Error(response.message);
+      }
+
+      toast.success(response.message);
+    } catch (error) {
+      setError((error as Error).message);
+      toast.error((error as Error).message);
+    }
+  };
   return (
     <div>
       <div className="my-10 flex justify-end">
@@ -86,10 +106,12 @@ const UsersPage = () => {
             "Email",
             "Phone",
             "Role",
+            "Send Email",
             "Actions",
           ]}
           tableRows={users}
           handleDelete={handleDelete}
+          sendEmail={sendEmail}
         />
       )}
     </div>

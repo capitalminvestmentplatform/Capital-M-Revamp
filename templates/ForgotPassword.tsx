@@ -51,8 +51,6 @@ export default function ForgotPasswordEmail({
           <Text style={text}>
             If you did not request a password reset, please ignore this email.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

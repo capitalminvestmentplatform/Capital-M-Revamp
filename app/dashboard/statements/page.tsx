@@ -124,9 +124,9 @@ const StatementsPage = () => {
 
   const filteredStatements =
     statements.length > 0
-      ? statements.filter((receipt: any) => {
+      ? statements.filter((statement: any) => {
           if (isAdmin) return true; // Admin sees all
-          return receipt.email === loggedInUser?.email; // Others see their own
+          return statement.email === loggedInUser?.email; // Others see their own
         })
       : [];
 

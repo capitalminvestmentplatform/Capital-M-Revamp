@@ -32,6 +32,10 @@ export default function DashboardLayout({
   const pathSegments = pathname.split("/").filter(Boolean);
   const [segmentNames, setSegmentNames] = useState<(string | null)[]>([]);
 
+  // You can expand this list if you add more auth routes later
+  const isAuthPage =
+    pathname === "/auth/login" || pathname.startsWith("/auth/");
+
   const excludedRoutes = [
     "/",
     "/auth/login",
@@ -41,6 +45,10 @@ export default function DashboardLayout({
     "/auth/verify-user",
     "/auth/verify-reset-pin",
   ];
+
+  const isExcluded = excludedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
+  );
 
   useEffect(() => {
     const fetchSegmentNames = async () => {
@@ -151,9 +159,10 @@ export default function DashboardLayout({
   };
 
   // Check if the current route is in the excluded list
-  if (excludedRoutes.includes(pathname)) {
+  if (isExcluded) {
     return <>{children}</>;
   }
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -212,7 +221,7 @@ export default function DashboardLayout({
             </div>
           </div>
         </header>
-        <div className="container mx-auto max-w-[1440px] px-4">
+        <div className="container mx-auto max-w-[1440px] px-4" key={pathname}>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
         </div>
       </SidebarInset>

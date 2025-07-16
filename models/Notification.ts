@@ -7,6 +7,7 @@ interface INotification extends Document {
   type: "info" | "alert" | "warning";
   read: boolean;
   createdAt: Date;
+  url: string;
 }
 
 const NotificationSchema = new Schema<INotification>(
@@ -16,6 +17,7 @@ const NotificationSchema = new Schema<INotification>(
     message: { type: String, required: true },
     type: { type: String, enum: ["info", "alert", "warning"], default: "info" },
     read: { type: Boolean, default: false }, // Read status
+    url: { type: String, default: "" }, // Optional URL for more details
   },
   { timestamps: true }
 );

@@ -33,7 +33,7 @@ export async function PUT(
     const { email, username, productId, title } = await req.json();
 
     const notify = {
-      title: "You've Got a New Subscription",
+      title: "Subscription is Ready for Signature",
       message: `New subscription is added for your signature against product: ${title}`,
       type: "info",
     };
@@ -45,16 +45,16 @@ export async function PUT(
       timestamp: new Date(),
     });
     const subscriptionId = id;
-    await subscriptionSendToClientEmail(
-      {
-        username,
-        email,
-        title,
-        productId,
-        subscriptionId,
-      },
-      `New Subscription form has been added for your signatures - Capital M`
-    );
+    // await subscriptionSendToClientEmail(
+    //   {
+    //     username,
+    //     email,
+    //     title,
+    //     productId,
+    //     subscriptionId,
+    //   },
+    //   `New Subscription form has been added for your signatures - Capital M`
+    // );
 
     return sendSuccessResponse(
       200,

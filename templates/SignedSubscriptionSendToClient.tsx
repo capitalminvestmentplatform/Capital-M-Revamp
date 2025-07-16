@@ -38,7 +38,9 @@ const SignedSubscriptionSendToClient: React.FC<
           <Text style={nameText}>Dear {username}</Text>
 
           <Text style={text}>
-            <span>Investment Details:</span>
+            Thank you for signing the subscription documents. Please find below
+            details of the subscription and the copy of the signed subscription
+            for your records.
           </Text>
 
           <Text style={text}>
@@ -52,10 +54,8 @@ const SignedSubscriptionSendToClient: React.FC<
 
           <Text style={text}>
             Please check the attached file below. If you have any questions,
-            feel free to reach out. We're here to help!
+            please feel free to reach out.
           </Text>
-
-          <Footer />
         </Container>
       </Body>
     </Html>

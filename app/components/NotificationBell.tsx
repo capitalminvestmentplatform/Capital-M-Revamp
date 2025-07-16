@@ -2,6 +2,7 @@
 
 import { useNotifications } from "@/hooks/useNotifications";
 import { Bell, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function NotificationBell({ email }: { email: string }) {
@@ -10,6 +11,8 @@ export default function NotificationBell({ email }: { email: string }) {
     useNotifications(email);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -41,6 +44,13 @@ export default function NotificationBell({ email }: { email: string }) {
     return `${diffInMonths}mo`;
   }
 
+  const handleClick = async (id: string, url: string) => {
+    await markOneRead(id); // Ensure this marks the notification as read
+    setTimeout(() => {
+      router.push(url);
+    }, 2000); // Delay to ensure the state updates before navigation
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       <Bell
@@ -70,14 +80,17 @@ export default function NotificationBell({ email }: { email: string }) {
               {notifications.map((notif) => (
                 <div
                   key={notif._id}
-                  onClick={() => markOneRead(notif._id)}
+                  onClick={() => handleClick(notif._id, notif.url)}
                   className={`relative group text-sm border-b py-2 pr-6 cursor-pointer hover:bg-gray-100 ${
                     notif.read ? "text-gray-500" : "text-gray-800 font-medium"
                   }`}
                 >
                   <div className="flex justify-between">
                     <p>{notif.title}</p>
-                    <p className="text-primaryBG font-semibold">
+                    <p
+                      className="text-primaryBG 
+                    font-semibold"
+                    >
                       {getRelativeTime(notif.createdAt)}
                     </p>
                   </div>

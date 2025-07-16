@@ -15,6 +15,7 @@ interface DistributionNoticeEmailProps {
   name: string;
   clientCode: string;
   commitmentName: string;
+  description: string;
   distributionAmount: number;
 }
 
@@ -23,6 +24,7 @@ const DistributionNotice: React.FC<DistributionNoticeEmailProps> = ({
   clientCode,
   commitmentName,
   distributionAmount,
+  description,
 }) => {
   return (
     <Html>
@@ -44,17 +46,16 @@ const DistributionNotice: React.FC<DistributionNoticeEmailProps> = ({
           <Text style={nameText}>Dear {name}</Text>
 
           <Text style={text}>
-            <span>{"Distribution Notice Details:"}</span>
+            We have made a distribution to your registered bank account with
+            Capital M.
           </Text>
 
-          <Text style={text}>
-            Client Code:{" "}
-            <span style={{ fontWeight: "bold" }}>{clientCode}</span>
-          </Text>
-          <Text style={text}>
-            Commitment Name:{" "}
-            <span style={{ fontWeight: "bold" }}>{commitmentName}</span>
-          </Text>
+          {commitmentName && (
+            <Text style={text}>
+              Investment Name:{" "}
+              <span style={{ fontWeight: "bold" }}>{commitmentName}</span>
+            </Text>
+          )}
 
           <Text style={text}>
             Distribution Amount:{" "}
@@ -62,13 +63,14 @@ const DistributionNotice: React.FC<DistributionNoticeEmailProps> = ({
               AED {distributionAmount.toLocaleString()}
             </span>
           </Text>
-
           <Text style={text}>
-            Please check the attached file below. If you have any questions,
-            feel free to reach out. We're here to help!
+            Details: <span style={{ fontWeight: "bold" }}>{description}</span>
           </Text>
 
-          <Footer />
+          <Text style={text}>
+            A copy of the distribution notice is attached below for your
+            records. If you have any questions, please feel free to reach out.
+          </Text>
         </Container>
       </Body>
     </Html>

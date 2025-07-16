@@ -51,6 +51,15 @@ export async function POST(req: NextRequest) {
 
     user = await User.findById(userId);
 
+    // 🔒 Prevent duplicate statements
+    const existingStatement = await Statement.findOne({ userId, month, year });
+    if (existingStatement) {
+      return sendErrorResponse(
+        400,
+        `Statement for ${month} ${year} already exists.`
+      );
+    }
+
     const { email, clientCode, firstName, lastName } = user;
 
     const statement = new Statement({
@@ -81,21 +90,24 @@ export async function POST(req: NextRequest) {
       year: "numeric", // 2025
     }); // e.g., "Jun 2025"
 
-    await statementEmail(
-      {
-        firstName,
-        lastName,
-        email,
-        clientCode,
-        month,
-        year,
-        attachment: {
-          file: pdf,
-          name: `Statement - ${formattedDate}.pdf`,
-        },
-      },
-      `Statement - ${formattedDate} - Capital M`
-    );
+    const id = statement.id;
+
+    // await statementEmail(
+    //   {
+    //     firstName,
+    //     lastName,
+    //     email,
+    //     clientCode,
+    //     month,
+    //     year,
+    //     id,
+    //     attachment: {
+    //       file: pdf,
+    //       name: `Statement - ${formattedDate}.pdf`,
+    //     },
+    //   },
+    //   `Statement - ${formattedDate} - Capital M`
+    // );
 
     return sendSuccessResponse(201, "Statement added successfully!", statement);
   } catch (error) {
