@@ -72,26 +72,26 @@ export async function PUT(
       year: "numeric",
     }); // e.g., "Dec 2025"
 
-    // await capitalCallSendToClientEmail(
-    //   {
-    //     username,
-    //     email,
-    //     title,
-    //     capitalCallId,
-    //     commitmentAmount,
-    //     bankName,
-    //     accountName,
-    //     IBAN,
-    //     accountNumber,
-    //     swiftCode,
-    //     branch,
-    //     attachment: {
-    //       file: pdf,
-    //       name: `Capital Call - ${monthYear}.pdf`,
-    //     },
-    //   },
-    //   `New Capital Call has been sent to you - Capital M`
-    // );
+    await capitalCallSendToClientEmail(
+      {
+        username,
+        email,
+        title,
+        capitalCallId,
+        commitmentAmount,
+        bankName,
+        accountName,
+        IBAN,
+        accountNumber,
+        swiftCode,
+        branch,
+        attachment: {
+          file: pdf,
+          name: `Capital Call - ${monthYear}.pdf`,
+        },
+      },
+      `New Capital Call has been sent to you - Capital M`
+    );
 
     return sendSuccessResponse(
       200,

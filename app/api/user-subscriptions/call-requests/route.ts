@@ -98,18 +98,18 @@ export async function POST(req: NextRequest) {
       const userEmail = email;
       const { email: adminEmail } = user;
 
-      // await callRequestAdminEmail(
-      //   {
-      //     username,
-      //     userEmail,
-      //     adminEmail,
-      //     clientCode,
-      //     title,
-      //     phone,
-      //     message,
-      //   },
-      //   `Call Request received for ${title} - Capital M`
-      // );
+      await callRequestAdminEmail(
+        {
+          username,
+          userEmail,
+          adminEmail,
+          clientCode,
+          title,
+          phone,
+          message,
+        },
+        `Call Request received for ${title} - Capital M`
+      );
     }
 
     return sendSuccessResponse(

@@ -52,7 +52,7 @@ const DataTable: React.FC<DataTableProps> = ({
             <TableCell>{row.email}</TableCell>
             <TableCell>{row.phone}</TableCell>
             <TableCell className="capitalize">{row.role}</TableCell>
-            <TableCell>
+            {/* <TableCell>
               {row.role === "User" ? (
                 <button
                   onClick={() => sendEmail(row._id)}
@@ -63,7 +63,7 @@ const DataTable: React.FC<DataTableProps> = ({
               ) : (
                 <>-</>
               )}
-            </TableCell>
+            </TableCell> */}
             <TableCell className="flex gap-2">
               {row._id !== id && (
                 <>

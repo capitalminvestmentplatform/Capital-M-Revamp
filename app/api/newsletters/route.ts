@@ -97,17 +97,17 @@ export async function POST(req: NextRequest) {
         timestamp: new Date(),
       });
 
-      // await newsletterEmail(
-      //   {
-      //     name: `${user.firstName} ${user.lastName}`.trim(),
-      //     email: user.email,
-      //     category,
-      //     investmentTitle: product.title,
-      //     subject,
-      //     description,
-      //   },
-      //   `${subject} - Capital M`
-      // );
+      await newsletterEmail(
+        {
+          name: `${user.firstName} ${user.lastName}`.trim(),
+          email: user.email,
+          category,
+          investmentTitle: product.title,
+          subject,
+          description,
+        },
+        `${subject} - Capital M`
+      );
     }
 
     return sendSuccessResponse(

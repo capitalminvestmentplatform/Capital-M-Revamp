@@ -198,18 +198,18 @@ export async function POST(req: NextRequest) {
         const { firstName, lastName, email } = user;
         const investmentId = productObject._id;
 
-        // await newInvestmentEmail(
-        //   {
-        //     firstName,
-        //     lastName,
-        //     email,
-        //     title: productObject.title,
-        //     projectedReturn: productObject.projectedReturn,
-        //     investmentDuration: productObject.investmentDuration,
-        //     investmentId,
-        //   },
-        //   "New Investment Opportunity - Capital M"
-        // );
+        await newInvestmentEmail(
+          {
+            firstName,
+            lastName,
+            email,
+            title: productObject.title,
+            projectedReturn: productObject.projectedReturn,
+            investmentDuration: productObject.investmentDuration,
+            investmentId,
+          },
+          "New Investment Opportunity - Capital M"
+        );
       }
     }
 

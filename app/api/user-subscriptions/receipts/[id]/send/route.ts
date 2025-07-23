@@ -68,22 +68,22 @@ export async function PUT(
       year: "numeric",
     }); // e.g., "Dec 2025"
 
-    // await receiptSendToClientEmail(
-    //   {
-    //     username,
-    //     email,
-    //     title,
-    //     receiptId,
-    //     commitmentAmount,
-    //     createdAt,
-    //     id,
-    //     attachment: {
-    //       file: pdf,
-    //       name: `Receipt - ${monthYear}.pdf`,
-    //     },
-    //   },
-    //   `New Receipt has been sent to you - Capital M`
-    // );
+    await receiptSendToClientEmail(
+      {
+        username,
+        email,
+        title,
+        receiptId,
+        commitmentAmount,
+        createdAt,
+        id,
+        attachment: {
+          file: pdf,
+          name: `Receipt - ${monthYear}.pdf`,
+        },
+      },
+      `New Receipt has been sent to you - Capital M`
+    );
 
     return sendSuccessResponse(
       200,

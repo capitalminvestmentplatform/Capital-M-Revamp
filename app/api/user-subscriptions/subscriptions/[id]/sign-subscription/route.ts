@@ -56,19 +56,19 @@ export async function PUT(
     }); // e.g., "Dec 2025"
     const subscriptionId = id;
 
-    // await signedSubscriptionSendToClientEmail(
-    //   {
-    //     username,
-    //     email: decoded.email,
-    //     title,
-    //     subscriptionId,
-    //     attachment: {
-    //       file: signedSubscription,
-    //       name: `Confirmation of subscription - ${monthYear}.pdf`,
-    //     },
-    //   },
-    //   `Confirmation of subscription - Capital M`
-    // );
+    await signedSubscriptionSendToClientEmail(
+      {
+        username,
+        email: decoded.email,
+        title,
+        subscriptionId,
+        attachment: {
+          file: signedSubscription,
+          name: `Confirmation of subscription - ${monthYear}.pdf`,
+        },
+      },
+      `Confirmation of subscription - Capital M`
+    );
 
     return sendSuccessResponse(
       200,

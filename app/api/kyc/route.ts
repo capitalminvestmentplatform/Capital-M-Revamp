@@ -77,14 +77,14 @@ export async function POST(req: NextRequest) {
         ...notify,
         timestamp: new Date(),
       });
-      // await kycEmail(
-      //   {
-      //     name,
-      //     email,
-      //     isAdmin: decoded.role === "Admin" ? true : false,
-      //   },
-      //   `KYC Documents - Capital M`
-      // );
+      await kycEmail(
+        {
+          name,
+          email,
+          isAdmin: decoded.role === "Admin" ? true : false,
+        },
+        `KYC Documents - Capital M`
+      );
     } else {
       const users = await User.find({
         role: "Admin",
@@ -98,14 +98,14 @@ export async function POST(req: NextRequest) {
           timestamp: new Date(),
         });
 
-        // await kycEmail(
-        //   {
-        //     name,
-        //     email: user.email,
-        //     isAdmin: decoded.role === "Admin" ? true : false,
-        //   },
-        //   `KYC Documents - Capital M`
-        // );
+        await kycEmail(
+          {
+            name,
+            email: user.email,
+            isAdmin: decoded.role === "Admin" ? true : false,
+          },
+          `KYC Documents - Capital M`
+        );
       }
     }
 

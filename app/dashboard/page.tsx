@@ -159,7 +159,7 @@ const DashboardPage: React.FC = () => {
         From here, you can access all your investment information and manage
         your account portfolio.
       </p>
-      {role !== "Admin" && mostRecentStatement && (
+      {/* {role !== "Admin" && mostRecentStatement && (
         <div className="w-full h-[600px] border rounded overflow-hidden">
           <iframe
             src={`${mostRecentStatement}#view=FitH&navpanes=0&scrollbar=0`}
@@ -167,8 +167,8 @@ const DashboardPage: React.FC = () => {
             className="w-full h-full"
           />
         </div>
-      )}
-      {/* {role !== "Admin" && <PandaConnect />} */}
+      )} */}
+      {role !== "Admin" && <PandaConnect />}
 
       <div className="flex flex-wrap gap-4 mb-5 mt-10">
         <div

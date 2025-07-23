@@ -92,22 +92,22 @@ export async function POST(req: NextRequest) {
 
     const id = statement.id;
 
-    // await statementEmail(
-    //   {
-    //     firstName,
-    //     lastName,
-    //     email,
-    //     clientCode,
-    //     month,
-    //     year,
-    //     id,
-    //     attachment: {
-    //       file: pdf,
-    //       name: `Statement - ${formattedDate}.pdf`,
-    //     },
-    //   },
-    //   `Statement - ${formattedDate} - Capital M`
-    // );
+    await statementEmail(
+      {
+        firstName,
+        lastName,
+        email,
+        clientCode,
+        month,
+        year,
+        id,
+        attachment: {
+          file: pdf,
+          name: `Statement - ${formattedDate}.pdf`,
+        },
+      },
+      `Statement - ${formattedDate} - Capital M`
+    );
 
     return sendSuccessResponse(201, "Statement added successfully!", statement);
   } catch (error) {

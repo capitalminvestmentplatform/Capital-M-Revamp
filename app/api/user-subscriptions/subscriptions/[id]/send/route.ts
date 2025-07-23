@@ -45,16 +45,16 @@ export async function PUT(
       timestamp: new Date(),
     });
     const subscriptionId = id;
-    // await subscriptionSendToClientEmail(
-    //   {
-    //     username,
-    //     email,
-    //     title,
-    //     productId,
-    //     subscriptionId,
-    //   },
-    //   `New Subscription form has been added for your signatures - Capital M`
-    // );
+    await subscriptionSendToClientEmail(
+      {
+        username,
+        email,
+        title,
+        productId,
+        subscriptionId,
+      },
+      `New Subscription form has been added for your signatures - Capital M`
+    );
 
     return sendSuccessResponse(
       200,

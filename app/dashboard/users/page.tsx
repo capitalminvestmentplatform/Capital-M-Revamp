@@ -106,7 +106,7 @@ const UsersPage = () => {
             "Email",
             "Phone",
             "Role",
-            "Send Email",
+            // "Send Email",
             "Actions",
           ]}
           tableRows={users}
