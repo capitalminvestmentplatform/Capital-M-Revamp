@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import CustomButton from "@/app/components/Button";
 import RichTextEditor from "@/app/components/textEditor/RichTextEditor";
-import { processTiptapImages, uploadFileToCloudinary } from "@/utils/client";
+import { processTiptapImages } from "@/utils/client";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -89,13 +89,13 @@ const AddNewsletterPage = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/users", {
+      const res = await fetch("/api/users?all=true", {
         method: "GET",
         credentials: "include",
       });
       const response = await res.json();
       if (response.statusCode !== 200) throw new Error(response.message);
-      setUsers(response.data);
+      setUsers(response.data.users);
     } catch (error) {
       setError((error as Error).message);
     }
@@ -109,7 +109,7 @@ const AddNewsletterPage = () => {
       // Process images in the description
       description = await processTiptapImages(
         description,
-        "newsletters/description"
+        `newsletters/${data.subject}/description`
       );
     }
 

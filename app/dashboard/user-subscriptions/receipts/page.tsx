@@ -53,7 +53,7 @@ const ReceiptsPage = () => {
       const { email, username, title, commitmentAmount, createdAt, receiptId } =
         data;
       const receiptPdf =
-        (await uploadFileToCloudinary(receiptFile, "receipts")) ?? "";
+        (await uploadFileToCloudinary(receiptFile, `receipts/${email}`)) ?? "";
 
       const res = await fetch(
         `/api/user-subscriptions/receipts/${data._id}/send`,

@@ -45,7 +45,7 @@ const DistributionNoticesPage = () => {
   };
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/users");
+      const res = await fetch("/api/users?all=true");
 
       const response = await res.json();
       if (response.statusCode !== 200) {
@@ -53,7 +53,7 @@ const DistributionNoticesPage = () => {
         throw new Error(response.message);
       }
 
-      const users = response.data;
+      const users = response.data.users;
       setUsers(users);
     } catch (error) {
       setError((error as Error).message);

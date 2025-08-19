@@ -145,7 +145,8 @@ const ReceiptPage = () => {
         type: "application/pdf",
       });
 
-      const receiptPdf = (await uploadFileToCloudinary(file, "receipts")) ?? "";
+      const receiptPdf =
+        (await uploadFileToCloudinary(file, `receipts/${receipt.email}`)) ?? "";
 
       return receiptPdf;
       // Use the uploaded URL

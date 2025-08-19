@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import CustomButton from "@/app/components/Button";
 import RichTextEditor from "@/app/components/textEditor/RichTextEditor";
-import { processTiptapImages, uploadFileToCloudinary } from "@/utils/client";
+import { processTiptapImages } from "@/utils/client";
 
 const formSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
@@ -70,13 +70,13 @@ const EditNewsletterPage = () => {
         await fetchInvestments();
 
         // ✅ Fetch users and store locally
-        const resUsers = await fetch("/api/users", {
+        const resUsers = await fetch("/api/users?all=true", {
           credentials: "include",
         });
         const userResponse = await resUsers.json();
         if (userResponse.statusCode !== 200)
           throw new Error(userResponse.message);
-        const fetchedUsers = userResponse.data;
+        const fetchedUsers = userResponse.data.users;
         setUsers(fetchedUsers); // ✅ still update UI state
 
         // ✅ Fetch newsletter
@@ -143,7 +143,7 @@ const EditNewsletterPage = () => {
     if (data.description) {
       description = await processTiptapImages(
         description,
-        "newsletters/description"
+        `newsletters/${data.subject}/description`
       );
     }
 

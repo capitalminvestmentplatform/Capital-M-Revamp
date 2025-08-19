@@ -1,5 +1,5 @@
 "use client";
-import { getLoggedInUser, uploadFileToCloudinary } from "@/utils/client";
+import { getLoggedInUser } from "@/utils/client";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import DataTable from "./DataTable";

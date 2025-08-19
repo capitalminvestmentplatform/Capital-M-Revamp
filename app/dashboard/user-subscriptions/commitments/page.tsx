@@ -52,7 +52,7 @@ const CommitmentsPage = () => {
   };
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/users", {
+      const res = await fetch("/api/users?all=true", {
         method: "GET",
         credentials: "include", // Ensure cookies are sent if authentication is needed
       });
@@ -64,7 +64,7 @@ const CommitmentsPage = () => {
         throw new Error(response.message);
       }
 
-      const users = response.data;
+      const users = response.data.users;
       setUsers(users);
     } catch (error) {
       setError((error as Error).message);

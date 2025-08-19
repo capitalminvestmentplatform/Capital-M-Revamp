@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Table,
   TableBody,
@@ -7,106 +8,135 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { getLoggedInUser } from "@/utils/client";
 import { ConfirmModal } from "@/app/components/modals/ConfirmModal";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
-interface DataTableProps {
-  tableCols: string[]; // Array of column headers
-  tableRows: Record<string, any>[]; // Array of objects with dynamic keys
+interface BaseProps {
+  tableCols: string[];
+  tableRows: Record<string, any>[];
   handleDelete: (id: string) => Promise<boolean> | boolean;
-  searchValue: string;
+  onRowClick?: (row: any) => void; // used in latest mode
+}
+
+type Mode = "latest" | "user";
+
+interface DataTableProps extends BaseProps {
+  mode: Mode;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
+  mode,
   tableCols,
   tableRows,
   handleDelete,
-  searchValue,
+  onRowClick,
 }) => {
   const loggedInUser = getLoggedInUser();
-  const role = loggedInUser ? loggedInUser.role : null;
+  const isAdmin = loggedInUser?.role === "Admin";
 
-  const normalizedSearch = searchValue.toLowerCase().trim();
-
-  const filteredRows = tableRows?.filter((row) => {
-    const monthMatch = row.month?.toLowerCase().includes(normalizedSearch);
-    const yearMatch = row.year?.toString().includes(normalizedSearch); // ✅ convert number to string
-    const clientCodeMatch = row.clientCode
-      ?.toLowerCase()
-      .includes(normalizedSearch);
-    return monthMatch || yearMatch || clientCodeMatch;
-  });
-
-  if (filteredRows.length === 0) {
-    return <p className="text-center text-gray-500">No matching results</p>;
+  if (!tableRows || tableRows.length === 0) {
+    return (
+      <p className="text-center text-muted-foreground">No matching results</p>
+    );
   }
 
   return (
-    <Table
-      style={{
-        fontSize: "13px",
-        whiteSpace: "nowrap",
-        width: "max-content",
-        minWidth: "100%",
-      }}
-    >
-      <TableHeader>
-        <TableRow>
-          {tableCols.map((col, index) => (
-            <TableHead key={index}>{col}</TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {filteredRows.map((row, index) => (
-          <TableRow key={index}>
-            {role === "Admin" && (
-              <TableCell>
-                {row.clientCode ? `${row.clientCode} ${row.username}` : "-"}
-              </TableCell>
-            )}
-            <TableCell>{row.month ? row.month : "-"}</TableCell>
-            <TableCell>{row.year ? row.year : "-"}</TableCell>
+    <div className="overflow-x-auto">
+      <Table className="text-sm">
+        <TableHeader>
+          <TableRow>
+            {tableCols.map((col, index) => (
+              <TableHead key={index}>{col}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
 
-            <TableCell>
-              {row.pdf ? (
-                <Link
-                  href={row.pdf}
-                  target="_blank"
-                  className="text-xs bg-green-200 text-green-600 px-3 py-1 rounded-md"
-                >
-                  Preview
-                </Link>
-              ) : (
-                <div className="text-xs bg-red-200 text-red-600 px-3 py-1 rounded-md w-fit">
-                  Not found
-                </div>
-              )}
-            </TableCell>
-            <TableCell className="">
-              <div className="flex gap-2">
-                {role === "Admin" && (
+        <TableBody>
+          {tableRows.map((row, index) => {
+            const clickable = mode === "latest" && !!onRowClick;
+            return (
+              <TableRow
+                key={index}
+                className={clickable ? "cursor-pointer hover:bg-muted/50" : ""}
+                onClick={() => {
+                  if (clickable) onRowClick?.(row);
+                }}
+              >
+                {mode === "latest" ? (
                   <>
-                    <ConfirmModal
-                      title="Delete Statement?"
-                      description="Are you sure you want to delete this statement? This action cannot be undone."
-                      onConfirm={() => handleDelete(row._id)}
-                    >
-                      <button className="bg-white/80 p-1 rounded hover:bg-red-200">
-                        <Trash size={16} className="text-red-600" />
-                      </button>
-                    </ConfirmModal>
+                    {isAdmin && (
+                      <TableCell className="max-w-[280px]">
+                        {row.username ? `${row.username}` : "-"}
+                        {row.email ? (
+                          <span className="text-xs text-muted-foreground">
+                            {" "}
+                            ({row.email})
+                          </span>
+                        ) : null}
+                      </TableCell>
+                    )}
+                    <TableCell>{row.clientCode || "-"}</TableCell>
+                    <TableCell>{row.latestMonth || "-"}</TableCell>
+                    <TableCell>{row.latestYear ?? "-"}</TableCell>
+                    <TableCell>{row.statementsCount ?? "-"}</TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      {row.latestPdf ? (
+                        <Link
+                          href={row.latestPdf}
+                          target="_blank"
+                          className="text-xs bg-green-200 text-green-600 px-3 py-1 rounded-md"
+                        >
+                          Preview
+                        </Link>
+                      ) : (
+                        <Badge variant="destructive">Not found</Badge>
+                      )}
+                    </TableCell>
+                  </>
+                ) : (
+                  // mode === "user"
+                  <>
+                    <TableCell>{row.month ?? "-"}</TableCell>
+                    <TableCell>{row.year ?? "-"}</TableCell>
+                    <TableCell>
+                      {row.pdf ? (
+                        <Link
+                          href={row.pdf}
+                          target="_blank"
+                          className="text-xs bg-green-200 text-green-600 px-3 py-1 rounded-md"
+                        >
+                          Preview
+                        </Link>
+                      ) : (
+                        <Badge variant="destructive">Not found</Badge>
+                      )}
+                    </TableCell>
+                    {isAdmin && (
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <ConfirmModal
+                          title="Delete Statement?"
+                          description="Are you sure you want to delete this statement? This action cannot be undone."
+                          onConfirm={() => handleDelete(row._id)}
+                        >
+                          <button className="bg-white/80 p-1 rounded hover:bg-red-200">
+                            <Trash size={16} className="text-red-600" />
+                          </button>
+                        </ConfirmModal>
+                      </TableCell>
+                    )}
                   </>
                 )}
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

@@ -47,7 +47,7 @@ const EditInvestmentPage = () => {
 
   const fetchInitialData = async () => {
     try {
-      const response = await fetch(`/api/products/${id}`);
+      const response = await fetch(`/api/investments/${id}`);
 
       const result = await response.json();
 
@@ -124,14 +124,17 @@ const EditInvestmentPage = () => {
       if (featuredImage instanceof File) {
         featuredImage = await uploadFileToCloudinary(
           featuredImage,
-          "products/featured"
+          `investments/${data.title}/featured`
         );
       }
 
       // Upload video if it's a File
       let video = data.video;
       if (video instanceof File) {
-        video = await uploadFileToCloudinary(video, "products/videos");
+        video = await uploadFileToCloudinary(
+          video,
+          `investments/${data.title}/videos`
+        );
       }
 
       // Upload galleryImages if any are Files
@@ -140,7 +143,10 @@ const EditInvestmentPage = () => {
         const uploaded = await Promise.all(
           data.galleryImages.map(async (item: any) =>
             item instanceof File
-              ? await uploadFileToCloudinary(item, "products/gallery")
+              ? await uploadFileToCloudinary(
+                  item,
+                  `investments/${data.title}/gallery`
+                )
               : item
           )
         );
@@ -153,7 +159,10 @@ const EditInvestmentPage = () => {
         const uploaded = await Promise.all(
           data.docs.map(async (item: any) =>
             item instanceof File
-              ? await uploadFileToCloudinary(item, "products/docs")
+              ? await uploadFileToCloudinary(
+                  item,
+                  `investments/${data.title}/docs`
+                )
               : item
           )
         );
@@ -185,7 +194,7 @@ const EditInvestmentPage = () => {
       };
 
       // Submit via PUT
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(`/api/investments/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),

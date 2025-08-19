@@ -3,18 +3,19 @@ import MalcoAsset from "../models/MalcoAsset";
 import { connectToDatabase } from "../lib/db";
 import Category from "../models/Category";
 import Subcategory from "../models/SubCategory";
-import { categories } from "../data/data";
+import { categories, users } from "../data/data";
+import User from "../models/User";
 
 async function seed() {
   try {
     await connectToDatabase();
 
-    await Category.deleteMany({});
+    await User.deleteMany({});
     // await Subcategory.deleteMany({});
     // await MalcoAsset.deleteMany({});
 
     // Insert categories
-    const createdCategories = await Category.insertMany(categories);
+    const createdCategories = await User.insertMany(users);
 
     // // Insert subcategories with category name as reference
     // const createdSubcategories = await Subcategory.insertMany(

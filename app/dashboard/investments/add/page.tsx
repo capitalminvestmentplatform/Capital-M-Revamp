@@ -50,7 +50,7 @@ const AddInvestmentPage = () => {
       // Process images in the description
       description = await processTiptapImages(
         description,
-        "investments/description"
+        `investments/${data.title}/description`
       );
     }
 
@@ -80,7 +80,7 @@ const AddInvestmentPage = () => {
       if (formattedData.featuredImage instanceof File) {
         const uploadedUrl = await uploadFileToCloudinary(
           formattedData.featuredImage,
-          "investments/featured"
+          `investments/${formattedData.title}/featured`
         );
         if (uploadedUrl) {
           formattedData.featuredImage = uploadedUrl;
@@ -91,7 +91,7 @@ const AddInvestmentPage = () => {
       if (formattedData.video instanceof File) {
         const uploadedUrl = await uploadFileToCloudinary(
           formattedData.video,
-          "investments/videos"
+          `investments/${formattedData.title}/videos`
         );
         if (uploadedUrl) {
           formattedData.video = uploadedUrl;
@@ -104,7 +104,10 @@ const AddInvestmentPage = () => {
           formattedData.galleryImages.map(async (file: any) =>
             (typeof window !== "undefined" && file instanceof window.File) ||
             (file && file.constructor && file.constructor.name === "File")
-              ? await uploadFileToCloudinary(file, "investments/gallery")
+              ? await uploadFileToCloudinary(
+                  file,
+                  `investments/${formattedData.title}/gallery`
+                )
               : file
           )
         );
@@ -117,7 +120,10 @@ const AddInvestmentPage = () => {
           formattedData.docs.map(async (file: any) =>
             (typeof window !== "undefined" && file instanceof window.File) ||
             (file && file.constructor && file.constructor.name === "File")
-              ? await uploadFileToCloudinary(file, "investments/docs")
+              ? await uploadFileToCloudinary(
+                  file,
+                  `investments/${formattedData.title}/docs`
+                )
               : file
           )
         );

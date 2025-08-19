@@ -133,8 +133,10 @@ export async function processTiptapImages(
     const src = match[1];
     if (src.startsWith("data:image")) {
       try {
+        const folderName = process.env.CLOUDINARY_FOLDER_NAME + folder;
+
         const result = await cloudinary.uploader.upload(src, {
-          folder,
+          folderName,
         });
         uploads.push({ original: src, uploaded: result.secure_url });
       } catch (err) {

@@ -2,10 +2,6 @@ import { connectToDatabase } from "@/lib/db";
 import Product from "@/models/Product";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 
-import {
-  uploadFileToCloudinary,
-  uploadMultipleFilesToCloudinary,
-} from "@/lib/upload";
 import { parseForm, processTiptapImages } from "@/utils/server";
 import { NextRequest } from "next/server";
 import Category from "@/models/Category";
@@ -129,7 +125,7 @@ export async function PUT(
     if (typeof cleanedDescription === "string") {
       cleanedDescription = await processTiptapImages(
         cleanedDescription,
-        "investments/description"
+        `investments/${title}/description`
       );
     }
 

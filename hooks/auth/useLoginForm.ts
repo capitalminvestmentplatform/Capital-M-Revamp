@@ -9,7 +9,7 @@ import { useLoginMutation } from "@/hooks/auth/useLoginMutation";
 import { error, log } from "@/lib/logger";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email").min(1, "Required"),
+  email: z.string().min(1, "Required"),
   password: z.string().min(1, "Pin is required"),
 });
 

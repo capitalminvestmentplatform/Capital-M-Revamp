@@ -42,7 +42,7 @@ const KYCPage = () => {
   };
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/users");
+      const res = await fetch("/api/users?all=true");
 
       const response = await res.json();
       if (response.statusCode !== 200) {
@@ -50,7 +50,7 @@ const KYCPage = () => {
         throw new Error(response.message);
       }
 
-      const users = response.data;
+      const users = response.data.users;
       setUsers(users);
     } catch (error) {
       setError((error as Error).message);
@@ -61,37 +61,52 @@ const KYCPage = () => {
 
   const handleAddKycDocs = async (data: any) => {
     try {
+      let nationalIdUrl;
+      let nationalPassportUrl;
+      let residenceProofUrl;
+      let clientId;
+
+      let payload: Record<string, any> = {
+        userId: "",
+        nationalId: "",
+        nationalPassport: "",
+        residenceProof: "",
+      };
+
+      if (!isAdmin) {
+        payload.userId = userId;
+        clientId = userId;
+      } else {
+        payload.userId = data.userId;
+        clientId = data.userId;
+      }
+
       // 1. Upload files conditionally
       const uploadField = async (fileData: any, label: string) => {
         if (fileData?.[0] instanceof File) {
           const file = new File([fileData[0]], `${label}.pdf`, {
             type: "application/pdf",
           });
-          return await uploadFileToCloudinary(file, `kyc-docs/${label}`);
+          return await uploadFileToCloudinary(
+            file,
+            `kyc-docs/${clientId}/${label}`
+          );
         }
         return "";
       };
 
-      const nationalIdUrl = await uploadField(data.nationalId, "national-id");
-      const nationalPassportUrl = await uploadField(
+      nationalIdUrl = await uploadField(data.nationalId, "national-id");
+      nationalPassportUrl = await uploadField(
         data.nationalPassport,
         "national-passport"
       );
-      const residenceProofUrl = await uploadField(
+      residenceProofUrl = await uploadField(
         data.residenceProof,
         "residence-proof"
       );
 
-      const payload: Record<string, any> = {
-        nationalId: nationalIdUrl || "",
-        nationalPassport: nationalPassportUrl || "",
-        residenceProof: residenceProofUrl || "",
-      };
-      debugger;
       // 2. Handle role-specific logic
       if (!isAdmin) {
-        payload.userId = userId;
-
         // Check if KYC already exists for this client
         const existingKyc: any = kycDocs.find(
           (doc: any) => doc.userId === userId
@@ -120,7 +135,6 @@ const KYCPage = () => {
       }
 
       // 3. Admin path (always create new entry)
-      payload.userId = data.userId;
 
       const res = await fetch(`/api/kyc`, {
         method: "POST",
@@ -167,14 +181,14 @@ const KYCPage = () => {
     }
   };
 
-  const handleEditKycDocs = async (id: string, data: any) => {
+  const handleEditKycDocs = async (userId: string, id: string, data: any) => {
     try {
       let nationalIdUrl = undefined;
       if (data.nationalId?.[0] instanceof File) {
         const file = data.nationalId[0];
         const uploaded = await uploadFileToCloudinary(
           file,
-          "kyc-docs/national-id"
+          `kyc-docs/${userId}/national-id`
         );
         nationalIdUrl = uploaded ?? "";
       }
@@ -184,7 +198,7 @@ const KYCPage = () => {
         const file = data.nationalPassport[0];
         const uploaded = await uploadFileToCloudinary(
           file,
-          "kyc-docs/national-passport"
+          `kyc-docs/${userId}/national-passport`
         );
         nationalPassportUrl = uploaded ?? "";
       }
@@ -194,7 +208,7 @@ const KYCPage = () => {
         const file = data.residenceProof[0];
         const uploaded = await uploadFileToCloudinary(
           file,
-          "kyc-docs/residence-proof"
+          `kyc-docs/${userId}/residence-proof`
         );
         residenceProofUrl = uploaded ?? "";
       }

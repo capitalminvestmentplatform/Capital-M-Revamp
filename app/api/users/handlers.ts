@@ -7,12 +7,70 @@ import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
 import { NextRequest } from "next/server";
 import { pusherServer } from "@/lib/pusher-server";
 
-export async function getUsers() {
+export async function getUsers(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    const users = await User.find({}, "-password"); // Exclude passwords from response
-    return sendSuccessResponse(200, "Users fetched successfully", users);
+    const sp = req.nextUrl.searchParams;
+    const page = Math.max(1, Number(sp.get("page") || 1));
+    const limitParam = Number(sp.get("limit") || 10);
+    const limit = Math.max(1, Math.min(100, limitParam));
+    const search = (sp.get("search") || "").trim();
+    const sortBy = sp.get("sortBy") || "createdAt";
+    const sortOrder = sp.get("sortOrder") === "asc" ? 1 : -1;
+
+    const all = sp.get("all") === "true";
+
+    // ✅ If all=true → return ALL users, no search/pagination
+    if (all) {
+      const users = await User.find({}, "-password")
+        .sort({ createdAt: -1 }) // always sort by createdAt desc
+        .lean();
+
+      return sendSuccessResponse(200, "Users fetched successfully", {
+        users,
+        pagination: {
+          total: users.length,
+          page: 1,
+          limit: users.length,
+          totalPages: 1,
+          all: true,
+        },
+      });
+    }
+
+    // ✅ Normal mode: with search & pagination
+    const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    let filter: Record<string, any> = {};
+    if (search) {
+      const rx = new RegExp(esc(search), "i");
+      filter = {
+        $or: [{ clientCode: rx }, { firstName: rx }, { lastName: rx }],
+      };
+    }
+
+    const total = await User.countDocuments(filter);
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const safePage = Math.min(page, totalPages);
+    const skip = (safePage - 1) * limit;
+
+    const users = await User.find(filter, "-password")
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return sendSuccessResponse(200, "Users fetched successfully", {
+      users,
+      pagination: {
+        total,
+        page: safePage,
+        limit,
+        totalPages,
+        all: false,
+      },
+    });
   } catch (error) {
     return sendErrorResponse(500, "Internal server error", error);
   }

@@ -22,9 +22,11 @@ export async function POST(req: NextRequest) {
 
     // If the provided "email" is not a valid email, treat it as a clientCode
     if (email && isValidEmail(email)) {
-      user = await User.findOne({ email }).select("-verificationToken");
+      user = await User.findOne({ email: email.toLowerCase() }).select(
+        "-verificationToken"
+      );
     } else {
-      user = await User.findOne({ clientCode: email }).select(
+      user = await User.findOne({ clientCode: email.toUpperCase() }).select(
         "-verificationToken"
       );
     }

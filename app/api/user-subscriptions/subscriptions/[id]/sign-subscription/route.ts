@@ -1,6 +1,5 @@
 import { connectToDatabase } from "@/lib/db";
 import { pusherServer } from "@/lib/pusher-server";
-import { uploadFileToCloudinary } from "@/lib/upload";
 import Subscription from "@/models/Subscription";
 import User from "@/models/User";
 import { signedSubscriptionSendToClientEmail } from "@/templates/emails";

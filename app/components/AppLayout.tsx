@@ -62,11 +62,14 @@ export default function DashboardLayout({
         if (i > 0 && /^[a-f\d]{24}$/i.test(current)) {
           try {
             let url = "";
+            console.log("prev", prev);
             if (prev === "investments") url = `/api/products/${current}`;
             else if (
               ["subscriptions", "capital-calls", "receipts"].includes(prev)
             )
               url = `/api/user-subscriptions/${prev}/${current}`;
+            else if (prev === "statements")
+              url = `/api/statements/user/${current}`;
             else url = `/api/${prev}/${current}`;
 
             const res = await fetch(url);
@@ -80,9 +83,13 @@ export default function DashboardLayout({
               names.push(`${data.firstName} ${data.lastName}`);
             } else if (prev === "newsletters") {
               names.push(data.subject);
+            } else if (prev === "statements") {
+              names.push(`${data.items[0].username}`);
             } else {
               names.push(data.title);
             }
+
+            console.log("data.title", data);
           } catch (err) {
             names.push(current); // fallback on error
           }

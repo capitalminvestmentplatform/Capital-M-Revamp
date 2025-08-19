@@ -189,7 +189,10 @@ const CapitalCallPage = () => {
       });
 
       const capitalCallPdf =
-        (await uploadFileToCloudinary(file, "capital-calls")) ?? "";
+        (await uploadFileToCloudinary(
+          file,
+          `capital-calls/${capitalCall.email}`
+        )) ?? "";
 
       return capitalCallPdf;
       // Use the uploaded URL

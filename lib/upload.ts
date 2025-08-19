@@ -2,6 +2,25 @@ import cloudinary from "@/lib/cloudinary";
 import fs from "fs";
 import { File } from "formidable";
 
+export const uploadFileToCloudinaryNew = async (
+  file: string,
+  folder: string,
+  publicId: string
+) => {
+  try {
+    const upload = await cloudinary.uploader.upload(file, {
+      folder,
+      public_id: publicId,
+      resource_type: "auto",
+    });
+
+    fs.unlinkSync(file); // Clean up temp file
+    return upload.secure_url;
+  } catch (error) {
+    console.error("Error uploading file to Cloudinary:", error);
+    throw new Error("File upload failed");
+  }
+};
 export const uploadFileToCloudinary = async (file: File, folder: string) => {
   try {
     const isLargeFile = file.size > 100 * 1024 * 1024; // >100MB

@@ -18,7 +18,7 @@ interface DataTableProps {
   tableCols: string[]; // Array of column headers
   tableRows: Record<string, any>[]; // Array of objects with dynamic keys
   handleDelete: (id: string, type: string) => Promise<boolean> | boolean;
-  handleEdit: (id: string, data: any) => Promise<boolean>;
+  handleEdit: (userId: string, id: string, data: any) => Promise<boolean>;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -182,7 +182,7 @@ const DataTable: React.FC<DataTableProps> = ({
                         nationalPassport: row.nationalPassport,
                         residenceProof: row.residenceProof,
                       }}
-                      onSubmit={(data) => handleEdit(row._id, data)}
+                      onSubmit={(data) => handleEdit(row.userId, row._id, data)}
                     />
                   </>
                 )}

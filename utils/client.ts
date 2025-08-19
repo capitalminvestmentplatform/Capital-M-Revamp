@@ -63,8 +63,11 @@ export const processTiptapImages = async (
       continue;
 
     try {
+      const folderName =
+        process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER_NAME + folder;
+
       const file = base64ToFile(src, "editor-image.png"); // name can be dynamic
-      const uploadedUrl = await uploadFileToCloudinary(file, folder);
+      const uploadedUrl = await uploadFileToCloudinary(file, folderName);
 
       if (uploadedUrl) {
         uploads.push({ original: src, uploaded: uploadedUrl });
@@ -94,7 +97,9 @@ export const uploadFileToCloudinary = async (
     "upload_preset",
     process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || ""
   );
-  formData.append("folder", folder);
+
+  const folderName = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER_NAME + folder;
+  formData.append("folder", folderName);
 
   try {
     const response = await fetch(url, {

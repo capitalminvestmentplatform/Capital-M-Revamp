@@ -7,7 +7,7 @@ import Statement from "@/models/Statement";
 import User from "@/models/User";
 import { newsletterEmail, statementEmail } from "@/templates/emails";
 import { sendErrorResponse, sendSuccessResponse } from "@/utils/apiResponse";
-import { processTiptapImages, sendNotification } from "@/utils/server";
+import { sendNotification } from "@/utils/server";
 import { NextRequest } from "next/server";
 
 export async function GET() {

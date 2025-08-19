@@ -179,7 +179,10 @@ const SubscriptionPage = () => {
       const file = new File([blob], "signature.png", { type: "image/png" });
 
       const signatureUrl =
-        (await uploadFileToCloudinary(file, "signatures")) ?? "";
+        (await uploadFileToCloudinary(
+          file,
+          `signatures/${subscription.email}`
+        )) ?? "";
 
       generateAndUploadPDF(username, signatureUrl, title);
     } catch (err) {
@@ -227,7 +230,10 @@ const SubscriptionPage = () => {
       });
 
       const signedSubscription =
-        (await uploadFileToCloudinary(file, "signed-subscriptions")) ?? "";
+        (await uploadFileToCloudinary(
+          file,
+          `signed-subscriptions/${subscription.email}`
+        )) ?? "";
 
       const res = await fetch(
         `/api/user-subscriptions/subscriptions/${id}/sign-subscription`,
