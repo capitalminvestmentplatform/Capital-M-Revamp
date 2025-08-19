@@ -30,11 +30,11 @@ export const useLoginForm = () => {
       log("Login payload", payload);
       const res = await loginMutation.mutateAsync(payload);
 
+      console.log("res", res);
       if (res.statusCode !== 200) {
         toast.error(res.message);
         return;
       }
-
       toast.success(res.message);
       setUser(res.data);
 
@@ -42,7 +42,7 @@ export const useLoginForm = () => {
         router.push(res.data.firstLogin ? "/auth/set-pin" : "/dashboard");
       }, 2000);
     } catch (err: any) {
-      toast.error(err?.message || "Login failed");
+      toast.error(err.response.data?.message || "Login failed");
       error("Login error", err);
     }
   };
